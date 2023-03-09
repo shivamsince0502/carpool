@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CarPool</title>
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+      integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700"
+      rel="stylesheet"
+    />
+    <style>
+      html,
+      body {
+        min-height: 100%;
+        padding: 0;
+        margin: 0;
+        font-family: Roboto, Arial, sans-serif;
+        font-size: 14px;
+        color: #666;
+      }
+
+      .btn-reg-log {
+        appearance: none;
+        background-color: transparent;
+        border: 0.125em solid #1a1a1a;
+        border-radius: 0.9375em;
+        box-sizing: border-box;
+        color: #3b3b3b;
+        cursor: pointer;
+        display: inline-block;
+        font-family: Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+          "Segoe UI Symbol";
+        font-size: 16px;
+        font-weight: 600;
+        line-height: normal;
+        margin: 0;
+        min-height: 3.75em;
+        min-width: 0;
+        outline: none;
+        padding: 1em 2.3em;
+        text-align: center;
+        text-decoration: none;
+        transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        will-change: transform;
+      }
+
+      .btn-reg-log:disabled {
+        pointer-events: none;
+      }
+
+      .btn-reg-log:hover {
+        color: #fff;
+        background-color: #100730;
+        box-shadow: rgba(94, 121, 218, 0.25) 0 8px 15px;
+        transform: translateY(-2px);
+      }
+
+      .btn-reg-log:active {
+        box-shadow: none;
+        transform: translateY(0);
+      }
+      .left-part{
+        display: inline;
+        float: left;
+      }
+      .right-part{
+        display: inline;
+        float: right;
+        margin-right: 75px;
+        margin-top: 315px;
+      }
+
+      .own-btn{
+        margin-top: 20px;
+      }
+
+      
+
+    </style>
+  </head>
+  <body>
+    <div class="main-block">
+      <div class="left-part">
+        <img src="images/carpool-vector.jpg" class="" alt="" />
+      </div>
+      <div class="right-part">
+        <div class="pool-btn">
+            <button
+          class="btn-reg-log pooler"
+          style="margin-top: 10px"
+          onclick="window.location='PoolerRegistration.html';"
+        >POOLER</button>
+        </div>
+        <div class="own-btn">
+            <button
+          class="btn-reg-log owner"
+          style="margin-top: 10px"
+          onclick="window.location='OwnerRegistration.html';"
+        >OWNER</button>
+        </div>
+      </div>
+    </div>
+    <script src="scripts/OwnerRegister.js"></script>
+  </body>
+</html>
