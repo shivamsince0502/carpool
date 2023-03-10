@@ -143,7 +143,6 @@ public class RideServiceImpl implements RideService{
     public Ride createRide(OwnerRidePayload ownerRidePayload) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-
         long millis=System.currentTimeMillis();
         java.sql.Date date = new java.sql.Date(millis);
         Ride ride = new Ride();
@@ -169,12 +168,26 @@ public class RideServiceImpl implements RideService{
         Integer len = rides.size();
         Ride ride1 = rides.get(len-1);
         int rideId = ride1.getRideId();
-        int sp = citiesMap.get(ownerRidePayload.getStartPoint());
-        int rp1 = citiesMap.get(ownerRidePayload.getInter1Point());
-        int rp2 = citiesMap.get(ownerRidePayload.getInter2Point());
-        int rp3 = citiesMap.get(ownerRidePayload.getInter3Point());
-        int rp4 = citiesMap.get(ownerRidePayload.getInter4Point());
-        int ep = citiesMap.get(ownerRidePayload.getEndPoint());
+        int sp = 0;
+        if(ownerRidePayload.getStartPoint() != "")
+            sp = citiesMap.get(ownerRidePayload.getStartPoint());
+        int rp1 = 0;
+        if(ownerRidePayload.getInter1Point() != "")
+                rp1 = citiesMap.get(ownerRidePayload.getInter1Point());
+        int rp2 = 0;
+        if(ownerRidePayload.getInter2Point() != "")
+            rp2 = citiesMap.get(ownerRidePayload.getInter2Point());
+        int rp3 = 0;
+        if(ownerRidePayload.getInter3Point() != "")
+            rp3 = citiesMap.get(ownerRidePayload.getInter3Point());
+
+        int rp4 = 0;
+        if(ownerRidePayload.getInter4Point() != "")
+        rp4 = citiesMap.get(ownerRidePayload.getInter4Point());
+
+        int ep = 0;
+        if(ownerRidePayload.getEndPoint() != "")
+            ep = citiesMap.get(ownerRidePayload.getEndPoint());
 
         ArrayList<Integer> citiesId = new ArrayList<>();
         citiesId.add(sp);
@@ -184,10 +197,13 @@ public class RideServiceImpl implements RideService{
         citiesId.add(rp4);
         citiesId.add(ep);
         for(int i = 0; i < citiesId.size(); i++) {
+
             int cId = citiesId.get(i);
-            String sql = "insert into ride_cities (ride_id, city_id) values ("+rideId+", "+cId+")";
-            SQLQuery query = session.createSQLQuery(sql);
-            query.executeUpdate();
+            if(cId > 0) {
+                String sql = "insert into ride_cities (ride_id, city_id) values (" + rideId + ", " + cId + ")";
+                SQLQuery query = session.createSQLQuery(sql);
+                query.executeUpdate();
+            }
         }
         transaction.commit();
         session.close();

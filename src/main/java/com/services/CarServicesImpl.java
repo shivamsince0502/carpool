@@ -52,6 +52,13 @@ public class CarServicesImpl implements CarServices {
         String carColor = ownerCarPayload.getCarColor();
         String carNumber = ownerCarPayload.getCarNumber();
         if(carName == null) return null;
+        List<Car> carList1 = session.createQuery("from Car", Car.class).list();
+        for(Car car : carList1) {
+            if(car.getCarNumber().equals(carNumber)){
+                Car car1 = new Car();
+                return car1;
+            }
+        }
         Car car = new Car();
         car.setCarName(carName);
         car.setCarColor(carColor);
@@ -80,13 +87,5 @@ public class CarServicesImpl implements CarServices {
         return car;
     }
 
-    @Override
-    public Car addCar(Car car) {
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        session.save(car);
-        transaction.commit();
-        session.close();
-        return car;
-    }
+
 }

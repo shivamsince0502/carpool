@@ -13,6 +13,5 @@ public interface CarServices {
 
     Car getCarById(int id);
 
-    Car addCar(Car car);
 
 }

@@ -45,11 +45,6 @@ public class OwnerServiceImpl implements OwnerService{
         List<Owner> ownerList1 = getAllOwners();
         int len = ownerList1.size();
         Owner owner1 = ownerList1.get(len-1);
-        Car car = new Car();
-        car.setCarName("Select");
-        car.setCarNumber("xxxxxx");
-        car.setCarColor("xxxx");
-        carServices.addCar(car);
         transaction.commit();
         session.close();
         return owner1;
