@@ -1,5 +1,5 @@
 
-let userName = sessionStorage.getItem("userName");
+let userName = sessionStorage.getItem("username");
 let ownerName = sessionStorage.getItem("ownerName")
 let ownerEmail = sessionStorage.getItem("ownerEmail")
 let ownerMob = sessionStorage.getItem("ownerMob");
@@ -18,87 +18,14 @@ logout.addEventListener('click', () => {
 });
 
 const startJournery = document.getElementById("st-jn");
-startJournery.addEventListener('submit', (e) => {
+startJournery.addEventListener('click', (e) => {
 
-  e.preventDefault();
-
-  var formHTML = 
-  `<form id="journey">
-                <input type="hidden" id="ownerid" name="ownerId" value='${ownerId}'>
-				<label for="noOfSeats">No of Seats</label>
-				<input type="number" id="seats" name="noOfSeats">
-
-            <div class="form-group fg3">
-            <label for="car">Cars</label>
-            <div class="dropdown">
-              <select id="carsdropdown">
-              </select>
-            </div>
-            <input type="text" name="carName" class="form-control" id="car" placeholder="Car">
-          </div>
-
-                <div class="form-group fg1">
-                      <label for="start">Start Point</label>
-                      <div class="dropdown">
-                        <select id="citiesdropdown1">
-                        </select>
-                      </div>
-                      <input type="text" name="startPoint" class="form-control" id="start" placeholder="Start Location">
-                    </div>
-                    <div class="form-group fg2">
-                    <label for="inter1">Intermediate Point</label>
-                    <div class="dropdown">
-                      <select id="citiesdropdown2">
-                      </select>
-                    </div>
-                    <input type="text" name="inter1Point" class="form-control" id="inter1" placeholder="Intermediary Location">
-                  </div>
-                
-                  <div class="form-group fg3">
-                  <label for="inter2">Intermediate Point</label>
-                  <div class="dropdown">
-                    <select id="citiesdropdown3">
-                    </select>
-                  </div>
-                  <input type="text" name="inter2Point" class="form-control" id="inter2" placeholder="Intermediary Location">
-                </div>
-
-                <div class="form-group fg4">
-                      <label for="inter3">Intermediate Point</label>
-                      <div class="dropdown">
-                        <select id="citiesdropdown4">
-                        </select>
-                      </div>
-                      <input type="text" name="inter3Point" class="form-control" id="inter3" placeholder="Intermediary Location">
-                    </div>
-
-                    <div class="form-group fg5">
-                      <label for="inter3">Intermediate Point</label>
-                      <div class="dropdown">
-                        <select id="citiesdropdown5">
-                        </select>
-                      </div>
-                      <input type="text" name="inter4Point" class="form-control" id="inter4" placeholder="Intermediary Location">
-                    </div>
-                
-                    <div class="form-group fg6">
-                    <label for="end">End Point</label>
-                    <div class="dropdown">
-                      <select id="citiesdropdown6">
-                      </select>
-                    </div>
-                    <input type="text" name="endPoint" class="form-control" id="end" placeholder="End Location">
-                  </div>
-                
-                <button type="submit"class="btn btn-primary">Begin</button>
-			</form>
-		`;
-  document.getElementById("create-journery").innerHTML = formHTML;
-  document.getElementById("ownerid").value = ownerId;
 
   const startj = document.getElementById("journey");
-startj.addEventListener('submit', (e) => {
+  const startI = document.getElementById("start-modal-ride")
   e.preventDefault();
+  startI.addEventListener('click', (e) => {
+    e.preventDefault();
   const formData = new FormData(startj);
   let formDataObject = Object.fromEntries(formData.entries());
   formDataObject.ownerId = ownerId;
@@ -295,35 +222,11 @@ startj.addEventListener('submit', (e) => {
 })
 
 
-
-
-
-
-const addcar = document.getElementById("add-car")
-addcar.addEventListener('submit', (e)=>{
+const addcarform = document.getElementById("add-car-form")
+  const addcaraction = document.getElementById("add-car-modal")
+addcaraction.addEventListener('click', (e) => {
   e.preventDefault();
-
-  const addcarform = 
-`<form id="add-car-form">
-    <div class="form-group">
-      <label for="carname">Car Name</label>
-      <input type="text" name="carName" class="form-control" id="carname" aria-describedby="carname" placeholder="Car Name">
-    </div>
-    <div class="form-group">
-      <label for="carcolor">Car Color</label>
-      <input type="text" name="carColor" class="form-control" id="carcolor" placeholder="Car Color">
-    </div>
-    <div class="form-group">
-      <label for="carnumber">Car Number</label>
-      <input type="text" name="carNumber" class="form-control" id="carnumber" placeholder="Car Number">
-    </div>
-    <button type="submit" class="btn btn-dark">Submit</button> 
-</form>`
-  document.getElementById("addcar").innerHTML = addcarform;
-  const addcaraction = document.getElementById("add-car-form")
-addcaraction.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const formData = new FormData(addcaraction);
+  const formData = new FormData(addcarform);
   let formDataObject = Object.fromEntries(formData.entries());
   formDataObject.ownerId = ownerId;
   let formDataJsonString = JSON.stringify(formDataObject);
@@ -349,7 +252,43 @@ addcaraction.addEventListener('submit', (e) => {
     alert('please fill credentials')
   }
 });
+
+
+
+const editUser = document.getElementById("editDetails")
+editUser.addEventListener('click', (e)=>{
+    e.preventDefault();
+    document.getElementById("user-name").value = userName;
+    document.getElementById("user-email").value = ownerEmail
+    document.getElementById("user-mob").value = ownerMob
+    document.getElementById("pooler-name").value = ownerName
 })
 
+const saveChages = document.getElementById("saveChanges")
+const updateuser = document.getElementById("updateUser")
+saveChages.addEventListener('click', (e)=>{
+    const formData = new FormData(updateuser);
+    let formDataObject = Object.fromEntries(formData.entries());
+    let formDataJsonString = JSON.stringify(formDataObject);
+    const updateuserurl = "http://localhost:8080/CarPool/owner/updateowner/" + ownerId;
+    fetch(updateuserurl, {
+        method:'POST', 
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+        },
+        body: formDataJsonString
+    }).then(res => res.json())
+      .then((res)=>{
+        sessionStorage.setItem("ownerName", res.ownerName);
+        sessionStorage.setItem("ownerEmail", res.ownerEmail);
+        sessionStorage.setItem("ownerMob", res.ownerMob);
+        sessionStorage.setItem("username", res.userName)
+        sessionStorage.setItem("ownerId", res.ownerId)
+        alert('user update')
+        console.log(res);
+        
+      }).catch(err => alert(err))
+})
 
 

@@ -10,77 +10,323 @@
       integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="styles/PoolerDashBoard.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="styles/PoolerDashBoard.css" />
     <title>Pooler Dashboard</title>
   </head>
   <body>
     <div class="container">
       <nav class="navbar navbar-dark bg-primary">
         <a class="navbar-brand" href="HomePage.html">CARPOOL</a>
-        <a href="PoolerLogin.html" class="navbar-brand">POOLER</a>
-        <button type="button" id="editDetail" class="btn btn-dark">Edit Profile</button>
-        <button type="button" id="logoutbtn" class="btn btn-dark">Logout</button>
-        
+        <!-- <a href="PoolerLogin.html" class="navbar-brand">POOLER</a> -->
+        <button
+          type="button"
+          id="editDetail"
+          class="btn btn-dark"
+          data-toggle="modal"
+          data-target="#editDetailModal"
+        >
+          Edit Profile
+        </button>
+        <button type="button" id="logoutbtn" class="btn btn-dark">
+          Logout
+        </button>
       </nav>
     </div>
+
+
+    <!-- Button trigger modal-->
+<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCart">Launch modal</button> -->
+
+<!-- Modal: after Booking -->
+<div class="modal fade" id="modalCart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!--Header-->
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Your cart</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <!--Body-->
+      <div class="modal-body">
+
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Product name</th>
+              <th>Price</th>
+              <th>Remove</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>Product 1</td>
+              <td>100$</td>
+              <td><a><i class="fas fa-times"></i></a></td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>Product 2</td>
+              <td>100$</td>
+              <td><a><i class="fas fa-times"></i></a></td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td>Product 3</td>
+              <td>100$</td>
+              <td><a><i class="fas fa-times"></i></a></td>
+            </tr>
+            <tr>
+              <th scope="row">4</th>
+              <td>Product 4</td>
+              <td>100$</td>
+              <td><a><i class="fas fa-times"></i></a></td>
+            </tr>
+            <tr class="total">
+              <th scope="row">5</th>
+              <td>Total</td>
+              <td>400$</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+      <!--Footer-->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
+        <button class="btn btn-primary">Checkout</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal: modalCart -->
+
+
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="editDetailModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editDetailModalTitle">
+              Change User Details
+            </h5>
+          </div>
+          <div class="modal-body">
+            <form id="updateUser">
+              <div class="form-group">
+                <label for="pooler-mame">Pooler Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="poolerName"
+                  id="pooler-name"
+                  placeholder="pooler name"
+                />
+              </div>
+              <div class="form-group">
+                <label for="user-mame">User Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="userName"
+                  id="user-name"
+                  placeholder="user name"
+                />
+              </div>
+              <div class="form-group">
+                <label for="user-email">Email address</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  name="poolerEmail"
+                  id="user-email"
+                  aria-describedby="emailHelp"
+                  placeholder="Email"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="user-mob">Mobile Number</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="poolerMob"
+                  id="user-mob"
+                  placeholder="Mobile Number"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              id="saveChanges"
+              data-dismiss="modal"
+              class="btn btn-primary"
+            >
+              Update Pooler
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- search Modal -->
+    <div
+      class="modal fade right"
+      id="searchmodal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Search Rides</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form method="POST" id="search-form">
+              <div class="form-group fg1">
+                <label for="startpoint">Start Point</label>
+                <div class="dropdown">
+                  <select id="citiesdropdown"></select>
+                </div>
+                <input
+                  type="text"
+                  name="start"
+                  class="form-control"
+                  id="start"
+                  placeholder="Start Location"
+                />
+              </div>
+              <div class="form-group fg2">
+                <label for="endpoint">End Point</label>
+                <div class="dropdown">
+                  <select id="citiesdropdown1"></select>
+                </div>
+                <input
+                  type="text"
+                  name="end"
+                  class="form-control"
+                  id="end"
+                  placeholder="End Location"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-dismiss="modal"
+              id="search-rides"
+            >
+              Searh Rides
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="section container">
-        <div class="userdetails">
-            <section class="vh-100" style="background-color: #f4f5f7;">
-                <div class="container py-5 h-100">
-                  <div class="row d-flex justify-content-center align-items-center h-100">
-                    <div class="col col-lg-6 mb-4 mb-lg-0">
-                      <div class="card mb-3" style="border-radius: .5rem;">
-                        <div class="row g-0">
-                          <div class="col-md-4 gradient-custom text-center text-white"
-                            style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
-                            <h5 style="margin-top: 50%;" id="poolerName"></h5>
-                            <p id="username"></p>
+      <div class="userdetails">
+        <section class="vh-100" style="background-color: #f4f5f7">
+          <div class="container py-5 h-100">
+            <div
+              class="row d-flex justify-content-center align-items-center h-100"
+            >
+              <div class="col col-lg-6 mb-4 mb-lg-0">
+                <div class="card mb-3" style="border-radius: 0.5rem">
+                  <div class="row g-0">
+                    <div
+                      class="col-md-4 gradient-custom text-center text-white"
+                      style="
+                        border-top-left-radius: 0.5rem;
+                        border-bottom-left-radius: 0.5rem;
+                      "
+                    >
+                      <!-- <h3 class="entityname">Pooler</h3> -->
+                      <h3 style="margin-top: 30% ">Pooler</h3>
+                      <h5 style="margin-top: 20%" id="poolerName"></h5>
+                      <p id="username"></p>
+                    </div>
+                    <div class="col-md-8">
+                      <div class="card-body p-4">
+                        <hr class="mt-0 mb-4" />
+                        <div class="row pt-1">
+                          <div class="col-6 mb-3">
+                            <h6>Email</h6>
+                            <p id="poolerEmail" class="text-muted"></p>
                           </div>
-                          <div class="col-md-8">
-                            <div class="card-body p-4">
-                              <hr class="mt-0 mb-4">
-                              <div class="row pt-1">
-                                <div class="col-6 mb-3">
-                                  <h6 >Email</h6>
-                                  <p id="poolerEmail" class="text-muted"></p>
-                                </div>
-                                <div class="col-6 mb-3">
-                                  <h6>Phone</h6>
-                                  <p id="poolerMob" class="text-muted"></p>
-                                </div>
-                              </div>
-                            </div>
+                          <div class="col-6 mb-3">
+                            <h6>Phone</h6>
+                            <p id="poolerMob" class="text-muted"></p>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>     
-              </section>
-              <div class="container col-sm-12 jumbotron">
-                <form method="POST" id="search-form">
-                    <div class="form-group fg1">
-                      <label for="startpoint">Start Point</label>
-                      <div class="dropdown">
-                        <select id="citiesdropdown">
-                        </select>
-                      </div>
-                      <input type="text" name="start" class="form-control" id="start" placeholder="Start Location">
-                    </div>
-                    <div class="form-group fg2">
-                      <label for="endpoint">End Point</label>
-                      <div class="dropdown">
-                        <select id="citiesdropdown1">
-                        </select>
-                      </div>
-                      <input type="text" name="end" class="form-control" id="end" placeholder="End Location">
-                    </div>
-                    <button type="submit" class="btn btn-primary fgb">Search Rides</button>
-                  </form>
-                  <div id="select-ride">
-                  </div>
-              </div>              
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="container col-sm-12 jumbotron">
+          <div id="select-ride"></div>
         </div>
+        <div class="container button">
+          <button
+            type="button"
+            data-toggle="modal"
+            data-target="#searchmodal"
+            class="btn btn-secondary search-btn-ride"
+          >
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+      </div>
     </div>
     <script src="scripts/PoolerDashboard.js"></script>
     <script
@@ -98,6 +344,5 @@
       integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
       crossorigin="anonymous"
     ></script>
-    
   </body>
 </html>

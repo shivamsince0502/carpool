@@ -4,10 +4,11 @@ var ridecitiesMap = new Map();
 var rideMap = new Map();
 var rides;
 
-let userName = sessionStorage.getItem("userName");
+let userName = sessionStorage.getItem("username");
 let poolerName = sessionStorage.getItem("poolerName")
 let poolerEmail = sessionStorage.getItem("poolerEmail")
 let poolerMob = sessionStorage.getItem("poolerMob");
+let poolerId = sessionStorage.getItem("poolerId")
 
 // console.log(userName);
 document.getElementById("poolerName").innerHTML = poolerName;
@@ -98,7 +99,7 @@ cd2.addEventListener(`change`, (e) => {
     }).then((ridesList) => {
         console.log('response json data', ridesList);
 
-        
+
         ridesList.forEach((item) => {
 
             let ownerId = item.ownerId;
@@ -144,71 +145,73 @@ cd2.addEventListener(`change`, (e) => {
                 })
         });
         rides = ridesList;
-    }).catch((err)=>{
+    }).catch((err) => {
         console.log(err);
     })
 });
 
+const searchridesmoda = document.getElementById("search-rides")
 
-form.addEventListener('submit', (e) => {
+searchridesmoda.addEventListener('click', (e) => {
     e.preventDefault();
 
-        const showData = document.getElementById("select-ride")
-        var allRides = document.createElement('table');
-        allRides.setAttribute('id', 'ridestable');
-        showData.appendChild(allRides);
+    const showData = document.getElementById("select-ride")
+    var allRides = document.createElement('table');
+    allRides.setAttribute('id', 'ridestable');
+    showData.appendChild(allRides);
 
-        var tableHeadRow = allRides.insertRow(0);
+    var tableHeadRow = allRides.insertRow(0);
 
-        var tableHeadArray = new Array();
-        tableHeadArray = ['Ride no', 'Owner Name', 'Car Name', 'Car Color', 'Start Location', 'End Location','Number of Seats', 'Book Now'];
+    var tableHeadArray = new Array();
+    tableHeadArray = ['Ride no', 'Owner Name', 'Car Name', 'Car Color', 'Start Location', 'End Location', 'Number of Seats', 'Date', 'Book Now'];
 
-        for (var i = 0; i < tableHeadArray.length; i++) {
-            var th = document.createElement('th');
-            th.innerHTML = tableHeadArray[i];
-            tableHeadRow.appendChild(th);
-        }
-        //add border
-        allRides.setAttribute('border', '1');
+    for (var i = 0; i < tableHeadArray.length; i++) {
+        var th = document.createElement('th');
+        th.innerHTML = tableHeadArray[i];
+        tableHeadRow.appendChild(th);
+    }
+    //add border
+    allRides.setAttribute('border', '1');
 
-        //add cell padding
-        allRides.setAttribute('cellpadding', '10px');
+    //add cell padding
+    allRides.setAttribute('cellpadding', '10px');
 
-        rides.forEach((item)=>{
-            console.log(item);
-            let tr = allRides.insertRow(-1);
-            let ownerId = item.ownerId;
-            let carId = item.carId;
-            let rideId = item.rideId;
-            rideMap.set(rideId, item)
-            let owner = ownerMap.get(ownerId) 
-            let car = carMap.get(carId)
-            let cities = ridecitiesMap.get(rideId)
-            let no_of_seats = item.noOfSeats
-            var tableDataArray = new Array();
-            tableDataArray = [rideId, owner.ownerName, car.carName, car.carColor, cities[0], cities[cities.length-1], no_of_seats];
-           
-            for (var i = 0; i < tableDataArray.length; i++) {
-                
-                var td = tr.insertCell(-1);
-                td.innerHTML = tableDataArray[i];
-            }
-            
+    rides.forEach((item) => {
+        console.log(item);
+        let tr = allRides.insertRow(-1);
+        let ownerId = item.ownerId;
+        let carId = item.carId;
+        let rideId = item.rideId;
+        rideMap.set(rideId, item)
+        let owner = ownerMap.get(ownerId)
+        let car = carMap.get(carId)
+        let cities = ridecitiesMap.get(rideId)
+        let no_of_seats = item.noOfSeats
+        let rideDate = item.rideDate;
+        var tableDataArray = new Array();
+        tableDataArray = [rideId, owner.ownerName, car.carName, car.carColor, cities[0], cities[cities.length - 1], no_of_seats, rideDate];
+
+        for (var i = 0; i < tableDataArray.length; i++) {
+
             var td = tr.insertCell(-1);
-            
-            // add a button
-            var button = document.createElement('button');
+            td.innerHTML = tableDataArray[i];
+        }
 
-            // set button attributes.
-            button.setAttribute('type', 'button');
-            button.setAttribute('class', 'btn btn-dark')
-            button.innerHTML = 'Book';
-            // set onclick event.
-            button.setAttribute('onclick', 'bookRide(this)');
-            td.appendChild(button);
-        })
+        var td = tr.insertCell(-1);
 
+        // add a button
+        var button = document.createElement('button');
 
+        // set button attributes.
+        button.setAttribute('type', 'button');
+        button.setAttribute('class', 'btn btn-dark')
+        button.innerHTML = 'Book';
+        // set onclick event.
+        button.setAttribute('onclick', 'bookRide(this)');
+        td.appendChild(button);
+    })
+
+    // console.log(rideMap )
 });
 
 function bookRide(el) {
@@ -220,49 +223,93 @@ function bookRide(el) {
     console.log(oCells)
     let rideId = oCells[0].innerHTML;
     let noOfSeats = oCells[6].innerHTML;
-    if(noOfSeats > 0){
-    let poolerId = sessionStorage.getItem("poolerId");
-    var payload = {
-        rideId : rideId, 
-        poolerId : poolerId
-    }
-    payload = JSON.stringify(payload);
-    // console.log(rideId);
-    // console.log(rideMap)
-    // let ride = rideMap.get(rideId);
-    // console.log(ride)
-    // let owner = ownerMap.get(ride.ownerId);
-    // let car = carMap.get(ride.carId);
-    
-    // sessionStorage.setItem("owner", owner);
-    // sessionStorage.setItem("ride", ride);
-    // sessionStorage.setItem("car", car);
-    // alert("Booked Successfully")
-    // window.location.href = 'PoolerAfterBooking.html'
-    // console.log(rideId)
-    // console.log(poolerId)
-    // console.log(payload)
+    if (noOfSeats > 0 && rideMap.size > 0) {
+        let poolerId = sessionStorage.getItem("poolerId");
+        var payload = {
+            rideId: rideId,
+            poolerId: poolerId
+        }
+        payload = JSON.stringify(payload); // last 
 
-    const requrl = "http://localhost:8080/CarPool/ride/bookrequest";
-    fetch(requrl, {
+
+
+
+
+        const requrl = "http://localhost:8080/CarPool/ride/bookrequest";
+        fetch(requrl, {
+            method: 'POST',
+            //Set the headers that specify you're sending a JSON body request and accepting JSON response
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            body: payload
+        }).then(res => res.json())
+            .then((data) => {
+                alert('Booking Confirmed')
+                let ride;
+                console.log(rideId)
+                console.log(rideMap);
+
+                for (const [key, value] of rideMap.entries()) {
+                    if(key === rideId){
+                        console.log('Key: ' + key + '. Value: ' + a_hashMap[key]);
+                        ride = value;
+                        break;
+                    }
+                 }
+                
+                let owner = ownerMap.get(ride.ownerId);
+                let car = carMap.get(ride.carId);
+                 console.log(owner)
+                sessionStorage.setItem("owner", owner);
+                sessionStorage.setItem("ride", ride);
+                sessionStorage.setItem("car", car);
+
+                location.reload();
+                console.log(data)
+            }).catch((err) => {
+                alert(err);
+                console.log(err);
+            })
+    } else {
+        alert('no seats available')
+    }
+
+}
+
+const editUser = document.getElementById("editDetail")
+editUser.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById("user-name").value = userName;
+    document.getElementById("user-email").value = poolerEmail
+    document.getElementById("user-mob").value = poolerMob
+    document.getElementById("pooler-name").value = poolerName
+})
+
+const saveChages = document.getElementById("saveChanges")
+const updateuser = document.getElementById("updateUser")
+saveChages.addEventListener('click', (e) => {
+    const formData = new FormData(updateuser);
+    let formDataObject = Object.fromEntries(formData.entries());
+    let formDataJsonString = JSON.stringify(formDataObject);
+    const updateuserurl = "http://localhost:8080/CarPool/pooler/updatepooler/" + poolerId;
+    fetch(updateuserurl, {
         method: 'POST',
-        //Set the headers that specify you're sending a JSON body request and accepting JSON response
         headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
         },
-        body: payload
+        body: formDataJsonString
     }).then(res => res.json())
-      .then((data)=>{
-        alert('Booking Confirmed')
-        location.reload();
-        console.log(data)
-      }).catch((err)=>{
-        alert(err);
-        console.log(err);
-      })
-    }else{
-        alert('no seats available')
-    }
-    
-}
+        .then((res) => {
+            sessionStorage.setItem("poolerName", res.poolerName);
+            sessionStorage.setItem("poolerEmail", res.poolerEmail);
+            sessionStorage.setItem("poolerMob", res.poolerMob);
+            sessionStorage.setItem("username", res.userName)
+            sessionStorage.setItem("poolerId", res.poolerId)
+            alert('user update')
+            console.log(res);
+
+        }).catch(err => alert(err))
+})

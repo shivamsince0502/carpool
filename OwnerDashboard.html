@@ -10,65 +10,408 @@
       integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="styles/OwnerDashBoard.css">
+    <link rel="stylesheet" href="styles/OwnerDashBoard.css" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script
+      src="https://kit.fontawesome.com/a076d05399.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!--Get your own code at fontawesome.com-->
     <title>Owner Dashboard</title>
   </head>
   <body>
     <div class="container">
-      <nav class="navbar navbar-dark bg-primary">
+      <nav class="navbar navbar-light" style="background-color: #f6f7f8;">
         <a class="navbar-brand" href="HomePage.html">CARPOOL</a>
-        <a href="PoolerLogin.html" class="navbar-brand">OWNER</a>
-        <button type="button" id="editDetails" class="btn btn-dark">Edit profile</button>
-        <button type="button" id="logoutbtn" class="btn btn-dark">Logout</button>
-        
+        <!-- <a href="#" class="navbar-brand">OWNER</a> -->
+        <button
+          type="button"
+          id="editDetails"
+          class="btn btn-dark"
+          data-toggle="modal"
+          data-target="#editDetailModal"
+        >
+          Edit profile
+        </button>
+        <button type="button" id="logoutbtn" class="btn btn-dark">
+          Logout
+        </button>
       </nav>
     </div>
+    <!-- update owner Modal -->
+    <div
+      class="modal fade"
+      id="editDetailModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editDetailModalTitle">
+              Change User Details
+            </h5>
+          </div>
+          <div class="modal-body">
+            <form id="updateUser">
+              <div class="form-group">
+                <label for="pooler-mame">Owner Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="ownerName"
+                  id="pooler-name"
+                  placeholder="owner name"
+                />
+              </div>
+              <div class="form-group">
+                <label for="user-mame">User Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="userName"
+                  id="user-name"
+                  placeholder="user name"
+                />
+              </div>
+              <div class="form-group">
+                <label for="user-email">Email address</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  name="ownerEmail"
+                  id="user-email"
+                  aria-describedby="emailHelp"
+                  placeholder="Email"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="user-mob">Mobile Number</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="ownerMob"
+                  id="user-mob"
+                  placeholder="Mobile Number"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              id="saveChanges"
+              data-dismiss="modal"
+              class="btn btn-primary"
+            >
+              Save changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Add car Modal -->
+    <div
+      class="modal fade"
+      id="addcar"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add Car</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="add-car-form">
+              <div class="form-group">
+                <label for="carname">Car Name</label>
+                <input
+                  type="text"
+                  name="carName"
+                  class="form-control"
+                  id="carname"
+                  aria-describedby="carname"
+                  placeholder="Car Name"
+                />
+              </div>
+              <div class="form-group">
+                <label for="carcolor">Car Color</label>
+                <input
+                  type="text"
+                  name="carColor"
+                  class="form-control"
+                  id="carcolor"
+                  placeholder="Car Color"
+                />
+              </div>
+              <div class="form-group">
+                <label for="carnumber">Car Number</label>
+                <input
+                  type="text"
+                  name="carNumber"
+                  class="form-control"
+                  id="carnumber"
+                  placeholder="Car Number"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              id="add-car-modal"
+              data-dismiss="modal"
+              class="btn btn-primary"
+            >
+              Add Car
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Journey Modal -->
+    <div
+      class="modal fade"
+      id="addjourney"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Create Journey</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="journey">
+              <!-- <input type="hidden" id="ownerid" name="ownerId" value='${ownerId}'> -->
+              <label for="noOfSeats">No of Seats</label>
+              <input type="number" id="seats" name="noOfSeats" />
+
+              <div class="form-group fg3">
+                <label for="car">Cars</label>
+                <div class="dropdown">
+                  <select id="carsdropdown"></select>
+                </div>
+                <input
+                  type="text"
+                  name="carName"
+                  class="form-control"
+                  id="car"
+                  placeholder="Car"
+                />
+              </div>
+
+              <div class="form-group fg1">
+                <label for="start">Start Point</label>
+                <div class="dropdown">
+                  <select id="citiesdropdown1"></select>
+                </div>
+                <input
+                  type="text"
+                  name="startPoint"
+                  class="form-control"
+                  id="start"
+                  placeholder="Start Location"
+                />
+              </div>
+              <div class="form-group fg2">
+                <label for="inter1">Intermediate Point</label>
+                <div class="dropdown">
+                  <select id="citiesdropdown2"></select>
+                </div>
+                <input
+                  type="text"
+                  name="inter1Point"
+                  class="form-control"
+                  id="inter1"
+                  placeholder="Intermediary Location"
+                />
+              </div>
+
+              <div class="form-group fg3">
+                <label for="inter2">Intermediate Point</label>
+                <div class="dropdown">
+                  <select id="citiesdropdown3"></select>
+                </div>
+                <input
+                  type="text"
+                  name="inter2Point"
+                  class="form-control"
+                  id="inter2"
+                  placeholder="Intermediary Location"
+                />
+              </div>
+
+              <div class="form-group fg4">
+                <label for="inter3">Intermediate Point</label>
+                <div class="dropdown">
+                  <select id="citiesdropdown4"></select>
+                </div>
+                <input
+                  type="text"
+                  name="inter3Point"
+                  class="form-control"
+                  id="inter3"
+                  placeholder="Intermediary Location"
+                />
+              </div>
+
+              <div class="form-group fg5">
+                <label for="inter3">Intermediate Point</label>
+                <div class="dropdown">
+                  <select id="citiesdropdown5"></select>
+                </div>
+                <input
+                  type="text"
+                  name="inter4Point"
+                  class="form-control"
+                  id="inter4"
+                  placeholder="Intermediary Location"
+                />
+              </div>
+
+              <div class="form-group fg6">
+                <label for="end">End Point</label>
+                <div class="dropdown">
+                  <select id="citiesdropdown6"></select>
+                </div>
+                <input
+                  type="text"
+                  name="endPoint"
+                  class="form-control"
+                  id="end"
+                  placeholder="End Location"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              data-dismiss="modal"
+              id="start-modal-ride"
+              class="btn btn-primary"
+            >
+              Start Ride
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="section container">
-        <div class="userdetails">
-            <section class="vh-100" style="background-color: #f4f5f7;">
-                <div class="container py-5 h-100">
-                  <div class="row d-flex justify-content-center align-items-center h-100">
-                    <div class="col col-lg-6 mb-4 mb-lg-0">
-                      <div class="card mb-3" style="border-radius: .5rem;">
-                        <div class="row g-0">
-                          <div class="col-md-4 gradient-custom text-center text-white"
-                            style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
-                            <h5 style="margin-top: 50%;" id="ownerName"></h5>
-                            <p id="username"></p>
+      <div class="userdetails">
+        <section class="vh-100" style="background-image: url('images/ownertrip.jpg');">
+          <div class="container py-5 h-100">
+            <div
+              class="row d-flex justify-content-center align-items-center h-100"
+            >
+              <div class="col col-lg-6 mb-4 mb-lg-0">
+                <div class="card mb-3" style="border-radius: 0.5rem">
+                  <div class="row g-0">
+                    <div
+                      class="col-md-4 gradient-custom text-center text-white"
+                      style="
+                        border-top-left-radius: 0.5rem;
+                        border-bottom-left-radius: 0.5rem;
+                      "
+                    >
+                    <h3 style="margin-top: 30%">Owner</h3>
+                      <h5 style="margin-top: 20%" id="ownerName"></h5>
+                      <p id="username"></p>
+                    </div>
+                    <div class="col-md-8">
+                      <div class="card-body p-4">
+                        <hr class="mt-0 mb-4" />
+                        <div class="row pt-1">
+                          <div class="col-6 mb-3">
+                            <h6>Email</h6>
+                            <p id="ownerEmail" class="text-muted"></p>
                           </div>
-                          <div class="col-md-8">
-                            <div class="card-body p-4">
-                              <hr class="mt-0 mb-4">
-                              <div class="row pt-1">
-                                <div class="col-6 mb-3">
-                                  <h6 >Email</h6>
-                                  <p id="ownerEmail" class="text-muted"></p>
-                                </div>
-                                <div class="col-6 mb-3">
-                                  <h6>Phone</h6>
-                                  <p id="ownerMob" class="text-muted"></p>
-                                </div>
-                              </div>
-                            </div>
+                          <div class="col-6 mb-3">
+                            <h6>Phone</h6>
+                            <p id="ownerMob" class="text-muted"></p>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>     
-              </section>
-
-              <div class="add-car-div">
-                <form id="add-car">
-                  <button type="submit" class="btn btn-info">Add Car</button>
-                </form>
+                </div>
               </div>
-              <div id="addcar" class="jumbotron container-fluid"></div>
-              <form id="st-jn">
-                <button type="submit" class="btn btn-primary">Start Journey</button>
-              </form>              
-              <div id="create-journery" class="jumbotron container-fluid ct-jr"></div>
-        </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="add-car-div" style="display: block">
+        <button
+          type="button"
+          class="btn-add-car"
+          data-toggle="modal"
+          data-target="#addcar"
+        >
+          Add Car
+        </button>
+      </div>
+      <div class="start-journey">
+        <button
+          id="st-jn"
+          type="button"
+          data-toggle="modal"
+          data-target="#addjourney"
+          class="btn btn-primary"
+        >
+          Start Journey
+        </button>
+      </div>
     </div>
     <script src="scripts/OwnerDashboard.js"></script>
     <script
