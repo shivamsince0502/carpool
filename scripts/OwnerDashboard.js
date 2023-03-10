@@ -19,7 +19,7 @@ logout.addEventListener('click', () => {
 
 const startJournery = document.getElementById("st-jn");
 startJournery.addEventListener('click', (e) => {
-
+  // location.onload();
 
   const startj = document.getElementById("journey");
   const startI = document.getElementById("start-modal-ride")
@@ -31,6 +31,8 @@ startJournery.addEventListener('click', (e) => {
   formDataObject.ownerId = ownerId;
   let formDataJsonString = JSON.stringify(formDataObject);
   console.log(formDataJsonString);
+  console.log(formDataObject)
+  if(formDataObject.noOfSeats && formDataObject.startPoint && formDataObject.endPoint && formDataObject.carName){
   fetch('http://localhost:8080/CarPool/ride/createride', {
     method: 'POST',
     //Set the headers that specify you're sending a JSON body request and accepting JSON response
@@ -46,6 +48,9 @@ startJournery.addEventListener('click', (e) => {
   }).catch((err)=>{
     alert(err);
   })
+}else {
+  alert('Please fill start point, end point and no of seats and car')
+}
 })
   
   const citiesdrop1 = document.getElementById("citiesdropdown1")
@@ -244,6 +249,8 @@ addcaraction.addEventListener('click', (e) => {
     .then((data)=>{
       if(data.carName)
         alert("Car Added")
+      else 
+        alert('Car Details wrong or already exists')
         console.log(data)
     }).catch((err)=>{
       alert(err);

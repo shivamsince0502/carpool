@@ -13,17 +13,17 @@
     <link rel="stylesheet" href="styles/OwnerDashBoard.css" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script
-      src="https://kit.fontawesome.com/a076d05399.js"
-      crossorigin="anonymous"
-    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
 
     <!--Get your own code at fontawesome.com-->
     <title>Owner Dashboard</title>
   </head>
   <body>
     <div class="container">
-      <nav class="navbar navbar-light" style="background-color: #f6f7f8;">
+      <nav class="navbar navbar-light" style="background-color: #f6f7f8">
         <a class="navbar-brand" href="HomePage.html">CARPOOL</a>
         <!-- <a href="#" class="navbar-brand">OWNER</a> -->
         <button
@@ -350,7 +350,10 @@
 
     <div class="section container">
       <div class="userdetails">
-        <section class="vh-100" style="background-image: url('images/ownertrip.jpg');">
+        <section
+          class="vh-100"
+          style="background-image: url('images/ownertrip.jpg')"
+        >
           <div class="container py-5 h-100">
             <div
               class="row d-flex justify-content-center align-items-center h-100"
@@ -365,7 +368,7 @@
                         border-bottom-left-radius: 0.5rem;
                       "
                     >
-                    <h3 style="margin-top: 30%">Owner</h3>
+                      <h3 style="margin-top: 30%">Owner</h3>
                       <h5 style="margin-top: 20%" id="ownerName"></h5>
                       <p id="username"></p>
                     </div>
@@ -399,6 +402,7 @@
           data-target="#addcar"
         >
           Add Car
+          <i class="fas fa-car-side"></i>
         </button>
       </div>
       <div class="start-journey">
@@ -410,6 +414,7 @@
           class="btn btn-primary"
         >
           Start Journey
+          <i class="fa fa-plus"></i>
         </button>
       </div>
     </div>

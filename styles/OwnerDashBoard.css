@@ -27,14 +27,59 @@
         margin-left: 700px;
     }
 
-.create-journery{
+/* .create-journery{
     background-color: #f6d365;
-}
+} */
     /* #add-car-form{
         position: absolute;
         z-index: 3;
         background-color: #998fc7;
     } */
+
+
+    /* body {
+        background-image: url("images/carpoolhome.jpg");
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+      } */
+
+    .form-control{
+        border: none;
+        box-shadow: 0px 1px 5px 2px rgb(216, 216, 232);
+        border-radius: 10px;
+        height: 35px;
+        margin: 8px 0;
+        font-family: Arial, sans-serif;
+    }
+    #seats{
+        border: none;
+            box-shadow: 0px 1px 5px 2px rgb(216, 216, 232);
+            border-radius: 10px;
+            height: 30px;
+            margin-left: 10px;
+            font-family: Arial, sans-serif;
+            width: 80px;
+    }
+    label{
+        font-family: "Arial";
+    }
+    .form-grid{
+        display: flex;
+        align-items: center;
+    
+    }
+    .input-box{
+        flex-basis: 95%;
+        margin: 0 10px;
+    }
+    .btn{
+        border-radius: 10px;
+    }
+    .dropdown select{
+        
+        width: 20px;
+    }
 
 .entityname{
     margin-top: 20px;

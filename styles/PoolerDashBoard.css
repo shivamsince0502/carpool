@@ -9,6 +9,8 @@
     background: linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1))
     }
 
+
+
     #editDetail{
         margin-left: 700px;
     }
@@ -17,7 +19,12 @@
         float: right;
     }
 
-
+body {
+        background-image: url("images/carpoolhome.jpg");
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+      }
 
     .search-btn-ride {
         padding: 15px 25px;
@@ -58,3 +65,45 @@
        .search-btn-ride:hover::before {
         width: 100%;
        }
+
+       tr:nth-child(even){
+        background-color: #f4f4f5;
+       }
+       
+
+       .form-control{
+        border: none;
+        box-shadow: 0px 1px 5px 2px rgb(216, 216, 232);
+        border-radius: 10px;
+        height: 35px;
+        margin: 8px 0;
+        font-family: Arial, sans-serif;
+    }
+    #seats{
+        border: none;
+            box-shadow: 0px 1px 5px 2px rgb(216, 216, 232);
+            border-radius: 10px;
+            height: 30px;
+            margin-left: 10px;
+            font-family: Arial, sans-serif;
+            width: 80px;
+    }
+    label{
+        font-family: "Arial";
+    }
+    .form-grid{
+        display: flex;
+        align-items: center;
+    
+    }
+    .input-box{
+        flex-basis: 95%;
+        margin: 0 10px;
+    }
+    .btn{
+        border-radius: 10px;
+    }
+    .dropdown select{
+        
+        width: 20px;
+    }

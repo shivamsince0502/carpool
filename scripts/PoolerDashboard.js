@@ -171,10 +171,12 @@ searchridesmoda.addEventListener('click', (e) => {
         tableHeadRow.appendChild(th);
     }
     //add border
-    allRides.setAttribute('border', '1');
+    // allRides.setAttribute('border', '');
 
     //add cell padding
     allRides.setAttribute('cellpadding', '10px');
+    
+    
 
     rides.forEach((item) => {
         console.log(item);
@@ -247,27 +249,27 @@ function bookRide(el) {
         }).then(res => res.json())
             .then((data) => {
                 alert('Booking Confirmed')
-                let ride;
-                console.log(rideId)
-                console.log(rideMap);
+                // let ride;
+                // console.log(rideId)
+                // console.log(rideMap);
 
-                for (const [key, value] of rideMap.entries()) {
-                    if(key === rideId){
-                        console.log('Key: ' + key + '. Value: ' + a_hashMap[key]);
-                        ride = value;
-                        break;
-                    }
-                 }
+                // for (const [key, value] of rideMap.entries()) {
+                //     if(key === rideId){
+                //         console.log('Key: ' + key + '. Value: ' + a_hashMap[key]);
+                //         ride = value;
+                //         break;
+                //     }
+                //  }
                 
-                let owner = ownerMap.get(ride.ownerId);
-                let car = carMap.get(ride.carId);
-                 console.log(owner)
-                sessionStorage.setItem("owner", owner);
-                sessionStorage.setItem("ride", ride);
-                sessionStorage.setItem("car", car);
+                // let owner = ownerMap.get(ride.ownerId);
+                // let car = carMap.get(ride.carId);
+                //  console.log(owner)
+                // sessionStorage.setItem("owner", owner);
+                // sessionStorage.setItem("ride", ride);
+                // sessionStorage.setItem("car", car);
 
-                location.reload();
-                console.log(data)
+                // location.reload();
+                // console.log(data)
             }).catch((err) => {
                 alert(err);
                 console.log(err);

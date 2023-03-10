@@ -19,7 +19,7 @@ form.addEventListener('submit', (e) => {
       Accept: "application/json",
     },
     body: formDataJsonString
-  }).then(res => res.json)
+  }).then(res => res.json())
     .then((res) => {
       if (res.poolerName) {
         alert("Registered Successfully")
@@ -28,7 +28,7 @@ form.addEventListener('submit', (e) => {
         alert("User already exist or wrong data")
         window.location.href = 'PoolerRegistration.html'
       }
-      console.log(data)
+      console.log(res)
     })
     .catch((err) => {
       alert(err);

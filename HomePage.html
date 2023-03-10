@@ -67,44 +67,49 @@
         box-shadow: none;
         transform: translateY(0);
       }
-      .left-part{
-        display: inline;
+      .left-part {
+        display: inline-flex;
         float: left;
       }
-      .right-part{
-        display: inline;
-        float: right;
-        margin-right: 75px;
-        margin-top: 315px;
+      .right-part {
+        display: inline-flex;
+        float: left;
+        margin-left: 94px;
+        margin-top: 572px;
       }
 
-      .own-btn{
-        margin-top: 20px;
+      .own-btn {
+        margin-left: 58px;
       }
-
-      
-
+      body {
+        background-image: url("images/carpoolhome.jpg");
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+      }
     </style>
   </head>
   <body>
     <div class="main-block">
-      <div class="left-part">
-        <img src="images/carpool-vector.jpg" class="" alt="" />
-      </div>
+      <div class="left-part"></div>
       <div class="right-part">
         <div class="pool-btn">
-            <button
-          class="btn-reg-log pooler"
-          style="margin-top: 10px"
-          onclick="window.location='PoolerRegistration.html';"
-        >POOLER</button>
+          <button
+            class="btn-reg-log pooler"
+            style="margin-top: 10px"
+            onclick="window.location='PoolerRegistration.html';"
+          >
+            POOLER
+          </button>
         </div>
         <div class="own-btn">
-            <button
-          class="btn-reg-log owner"
-          style="margin-top: 10px"
-          onclick="window.location='OwnerRegistration.html';"
-        >OWNER</button>
+          <button
+            class="btn-reg-log owner"
+            style="margin-top: 10px"
+            onclick="window.location='OwnerRegistration.html';"
+          >
+            OWNER
+          </button>
         </div>
       </div>
     </div>
