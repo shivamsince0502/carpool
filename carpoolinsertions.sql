@@ -24,12 +24,12 @@ values(1, 1, 1, 2, true, now()),
 	  (2, 2, 2, 2, true, now());
 	
 insert into city(city_id, city_name)
-values(1, "Patna"),
-	  (2, "Kankarbagh"),
-	  (3, "Gandhi Maindan"),
-	  (4, "Boring Road"),
-	  (5, "Phulwari Sarif"),
-	  (6, "NIT Ghat");
+values(1, "Gachibowli"),
+	  (2, "Shamshabad"),
+	  (3, "Mallapur"),
+	  (4, "Kukatpally"),
+	  (5, "Hi-Tech City"),
+	  (6, "Habsiguda");
 	 
 insert into ride_cities(ride_cities_id, ride_id, city_id)
 values(1, 1, 1),
@@ -44,19 +44,19 @@ values(1, 1, 1),
 	  (11, 2, 3),
 	  (12, 2, 5);
 	 
-insert into ride_pooler(ride_pooler_id, ride_id, pooler_id, seat_no, is_active)
-values(1, 1,  1, 2, true),
-	  (2, 1,  2, 3, true),
-	  (3, 2,  3, 4, true);
+insert into ride_pooler(ride_pooler_id, ride_id, pooler_id, start_id, end_id, seat_no, is_active)
+values(1, 1,  1, 2, 4, 2, true),
+	  (2, 1,  2, 3, 5, 3, true),
+	  (3, 2,  3, 4, 3, 4, true);
 	 
 	 
 insert into city(city_id, city_name)
-	values(7, "Bermo"),
-		  (8, "Sector4"),
-		  (9, "Sector5"),
-		  (10, "Chass"),
-		  (11, "Banaras"),
-		  (12, "Darbhanga");
+	values(7, "Jubilee Hills"),
+		  (8, "Banjara Hills"),
+		  (9, "Manikonda"),
+		  (10, "Uppal Kalan"),
+		  (11, "Quthbullapur"),
+		  (12, "Shamirpet");
 		 
 insert into city(city_id, city_name)
 	values(13, "Hyderabad"),

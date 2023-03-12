@@ -5,22 +5,22 @@ use carpool;
 drop table if exists pooler;
 create table pooler(
 	pooler_id int  auto_increment, 
-	pooler_name varchar(255) not null, 
-	pooler_email varchar(255) not null unique, 
+	pooler_name varchar(655) not null, 
+	pooler_email varchar(655) not null unique, 
 	pooler_mob varchar(10) not null unique,
-	pooler_username varchar(255) not null unique, 
-	pooler_password varchar(255) not null, 
+	pooler_username varchar(655) not null unique, 
+	pooler_password varchar(655) not null, 
 	primary key(pooler_id)
 );
 
 drop table if exists owner;
 create table owner(
 	owner_id int auto_increment, 
-	owner_name varchar(255), 
-	owner_email varchar(255) not null unique, 
+	owner_name varchar(655), 
+	owner_email varchar(655) not null unique, 
 	owner_mob varchar(10) not null unique,
-	owner_username varchar(255) not null unique, 
-	owner_password varchar(255) not null, 
+	owner_username varchar(655) not null unique, 
+	owner_password varchar(655) not null, 
 	primary key(owner_id)
 );
 
@@ -28,11 +28,11 @@ create table owner(
 drop table if exists admin;
 create table admin(
 	admin_id int  auto_increment, 
-	admin_name varchar(255), 
-	admin_email varchar(255) not null unique, 
+	admin_name varchar(655), 
+	admin_email varchar(655) not null unique, 
 	admin_mob varchar(10) not null unique,
-	admin_username varchar(255) not null unique, 
-	admin_password varchar(255) not null, 
+	admin_username varchar(655) not null unique, 
+	admin_password varchar(655) not null, 
 	primary key(admin_id)
 );
 
@@ -40,7 +40,7 @@ create table admin(
 drop table if exists cities;
 create table city(
 	city_id int auto_increment,
-	city_name varchar(255), 
+	city_name varchar(655), 
 	primary key(city_id)
 );
 
@@ -48,9 +48,9 @@ create table city(
 drop table if exists car;
 create table car(
 	car_id int  auto_increment,
-	car_name varchar(255) not null, 
-	car_color varchar(255) not null, 
-	car_number varchar(255) not null,
+	car_name varchar(655) not null, 
+	car_color varchar(655) not null, 
+	car_number varchar(655) not null,
 	primary key(car_id)
 );
 
@@ -92,14 +92,31 @@ create table ride_pooler(
 	ride_pooler_id int auto_increment, 
 	ride_id int not null, 
 	pooler_id int not null, 
+	start_id int not null,
+	end_id int not null,
 	seat_no int, 
 	is_active bool,
 	primary key(ride_pooler_id),
 	foreign key (ride_id) references ride(ride_id), 
-	foreign key (pooler_id) references pooler(pooler_id)
+	foreign key (pooler_id) references pooler(pooler_id),
+	foreign key (start_id) references city(city_id),
+	foreign key (end_id) references city(city_id)
 	
 );
 
+drop table if exists deletedride;
+create table deletedride(
+	deleteride_id int auto_increment primary key,
+	ride_id int not null,
+	foreign key (ride_id) references ride(ride_id)
+);
+
+drop table if exists deletepoolerride;
+create table deletepoolerride(
+	deletepoolerride_id int auto_increment primary key, 
+	ride_pooler_id int not null unique,
+	foreign key (ride_pooler_id) references ride_pooler(ride_pooler_id)
+);
 
 
 
