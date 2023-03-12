@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
@@ -17,13 +22,28 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round"
+    />
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"> -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 
     <!--Get your own code at fontawesome.com-->
     <title>Owner Dashboard</title>
   </head>
   <body>
     <div class="container">
-      <nav class="navbar navbar-light" style="background-color: #f6f7f8">
+      <nav class="navbar navbar-dark bg-primary" style="background-color: #f6f7f8">
         <a class="navbar-brand" href="HomePage.html">CARPOOL</a>
         <!-- <a href="#" class="navbar-brand">OWNER</a> -->
         <button
@@ -40,6 +60,151 @@
         </button>
       </nav>
     </div>
+
+    <!-- Modal for edit ride -->
+    <div
+      class="modal fade"
+      id="editride"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit Journey</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="edit-journey">
+              <!-- <input type="hidden" id="ownerid" name="ownerId" value='${ownerId}'> -->
+              <label for="noOfSeats">No of Seats</label>
+              <input type="number" id="editseats" name="noOfSeats" />
+              <input type="hidden" id="editRideId" name="rideId" />
+
+              <div class="form-group fg3">
+                <label for="car">Car</label>
+                <div class="dropdown">
+                  <select
+                    id="editcarsdropdown"
+                    class="edit-cities-drop"
+                  ></select>
+                </div>
+                <input
+                  type="text"
+                  name="carName"
+                  class="form-control"
+                  id="editcar"
+                  placeholder="Car"
+                />
+              </div>
+
+              <div class="form-group fg2">
+                <label for="edit-doj">Date</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="edit-doj"
+                  name="dateOfJourney"
+                  placeholder="Date of Journey"
+                />
+              </div>
+            </form>
+            <div id="edit-cities"></div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" id="edit-modal-btn" data-dismiss="modal" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- after booking Modal HTML -->
+    <div id="modalAfterBooking" class="modal fade">
+      <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="icon-box">
+              <i class="material-icons">&#xE876;</i>
+            </div>
+            <h4 class="modal-title w-100">Awesome!</h4>
+          </div>
+          <div class="modal-body" id="showbooking">
+            <p class="text-center">Your Journey has been created.</p>
+            <p class="text-center" id="owner-name"></p>
+            <p class="text-center" id="owner-number"></p>
+            <p class="text-center" id="car-name"></p>
+            <p class="text-center" id="car-color"></p>
+            <p class="text-center" id="car-number"></p>
+            <p class="text-center" id="dateofjourney"></p>
+            <p class="text-center text-capitalize" >Journey route cities are : </p>
+            <ul id="listofcitiesride"></ul>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-success btn-block" data-dismiss="modal">
+              OK
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: after Booking -->
+    <div
+      class="modal fade"
+      id=""
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <!--Header-->
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">Journey Created</h4>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <!--Body-->
+          <div id="after-jr-cr-modal-body" ></div>
+          <!--Footer-->
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-primary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal: modalCart -->
+
     <!-- update owner Modal -->
     <div
       class="modal fade"
@@ -230,9 +395,9 @@
               <input type="number" id="seats" name="noOfSeats" />
 
               <div class="form-group fg3">
-                <label for="car">Cars</label>
+                <label for="car">Car</label>
                 <div class="dropdown">
-                  <select id="carsdropdown"></select>
+                  <select id="carsdropdown" class="cities-drop"></select>
                 </div>
                 <input
                   type="text"
@@ -243,10 +408,21 @@
                 />
               </div>
 
+              <div class="form-group fg2">
+                <label for="doj">Date</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="doj"
+                  name="dateOfJourney"
+                  placeholder="Date of Journey"
+                />
+              </div>
+
               <div class="form-group fg1">
-                <label for="start">Start Point</label>
+                <label for="start">Locations</label>
                 <div class="dropdown">
-                  <select id="citiesdropdown1"></select>
+                  <select id="citiesdropdown1" class="cities-drop"></select>
                 </div>
                 <input
                   type="text"
@@ -256,76 +432,8 @@
                   placeholder="Start Location"
                 />
               </div>
-              <div class="form-group fg2">
-                <label for="inter1">Intermediate Point</label>
-                <div class="dropdown">
-                  <select id="citiesdropdown2"></select>
-                </div>
-                <input
-                  type="text"
-                  name="inter1Point"
-                  class="form-control"
-                  id="inter1"
-                  placeholder="Intermediary Location"
-                />
-              </div>
-
-              <div class="form-group fg3">
-                <label for="inter2">Intermediate Point</label>
-                <div class="dropdown">
-                  <select id="citiesdropdown3"></select>
-                </div>
-                <input
-                  type="text"
-                  name="inter2Point"
-                  class="form-control"
-                  id="inter2"
-                  placeholder="Intermediary Location"
-                />
-              </div>
-
-              <div class="form-group fg4">
-                <label for="inter3">Intermediate Point</label>
-                <div class="dropdown">
-                  <select id="citiesdropdown4"></select>
-                </div>
-                <input
-                  type="text"
-                  name="inter3Point"
-                  class="form-control"
-                  id="inter3"
-                  placeholder="Intermediary Location"
-                />
-              </div>
-
-              <div class="form-group fg5">
-                <label for="inter3">Intermediate Point</label>
-                <div class="dropdown">
-                  <select id="citiesdropdown5"></select>
-                </div>
-                <input
-                  type="text"
-                  name="inter4Point"
-                  class="form-control"
-                  id="inter4"
-                  placeholder="Intermediary Location"
-                />
-              </div>
-
-              <div class="form-group fg6">
-                <label for="end">End Point</label>
-                <div class="dropdown">
-                  <select id="citiesdropdown6"></select>
-                </div>
-                <input
-                  type="text"
-                  name="endPoint"
-                  class="form-control"
-                  id="end"
-                  placeholder="End Location"
-                />
-              </div>
             </form>
+            <div id="cities-select"></div>
           </div>
           <div class="modal-footer">
             <button
@@ -349,12 +457,12 @@
     </div>
 
     <div class="section container">
-      <div class="userdetails">
+      <div class="userdetails jumbotron">
         <section
           class="vh-100"
           style="background-image: url('images/ownertrip.jpg')"
         >
-          <div class="container py-5 h-100">
+          <div class="container py-5 h-100" style="background-color: rgb(233,236,239);">
             <div
               class="row d-flex justify-content-center align-items-center h-100"
             >
@@ -394,10 +502,14 @@
           </div>
         </section>
       </div>
-      <div class="add-car-div" style="display: block">
+
+      <div class="container col-sm-12 jumbotron" id="up-journeys">
+        <p class="text-center text-capitalize" id="tabletitle"></p>
+      </div>
+      <div class="add-car-div">
         <button
           type="button"
-          class="btn-add-car"
+          class="btn-add-car btns"
           data-toggle="modal"
           data-target="#addcar"
         >
@@ -411,11 +523,17 @@
           type="button"
           data-toggle="modal"
           data-target="#addjourney"
-          class="btn btn-primary"
+          class="btn btns"
         >
           Start Journey
           <i class="fa fa-plus"></i>
         </button>
+      </div>
+      <div class="my-journey">
+        <button id="my-jn" type="button" class="btn btns">Previous Journeys</button>
+      </div>
+      <div class="up-journey">
+        <button id="up-jn" type="button" class="btn btns">Upcoming Journeys</button>
       </div>
     </div>
     <script src="scripts/OwnerDashboard.js"></script>

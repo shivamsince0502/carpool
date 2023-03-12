@@ -34,6 +34,8 @@ form.addEventListener('submit', (e) => {
             sessionStorage.setItem("poolerMob", res.poolerMob);
             sessionStorage.setItem("username", res.userName)
             sessionStorage.setItem("poolerId", res.poolerId)
+            sessionStorage.setItem("loggedIn", "true"); 
+            
             alert("Logged In Successfully")
             window.location.href = 'PoolerDashboard.html'
         }else {

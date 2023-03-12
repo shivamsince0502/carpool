@@ -15,6 +15,24 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round"
+    />
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"> -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
     <link rel="stylesheet" href="styles/PoolerDashBoard.css" />
     <title>Pooler Dashboard</title>
   </head>
@@ -38,82 +56,7 @@
       </nav>
     </div>
 
-
-    <!-- Button trigger modal-->
-<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCart">Launch modal</button> -->
-
-<!-- Modal: after Booking -->
-<div class="modal fade" id="modalCart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <!--Header-->
-      <div class="modal-header">
-        <h4 class="modal-title" id="myModalLabel">Your cart</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      <!--Body-->
-      <div class="modal-body">
-
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Product name</th>
-              <th>Price</th>
-              <th>Remove</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Product 1</td>
-              <td>100$</td>
-              <td><a><i class="fas fa-times"></i></a></td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Product 2</td>
-              <td>100$</td>
-              <td><a><i class="fas fa-times"></i></a></td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Product 3</td>
-              <td>100$</td>
-              <td><a><i class="fas fa-times"></i></a></td>
-            </tr>
-            <tr>
-              <th scope="row">4</th>
-              <td>Product 4</td>
-              <td>100$</td>
-              <td><a><i class="fas fa-times"></i></a></td>
-            </tr>
-            <tr class="total">
-              <th scope="row">5</th>
-              <td>Total</td>
-              <td>400$</td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
-
-      </div>
-      <!--Footer-->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
-        <button class="btn btn-primary">Checkout</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Modal: modalCart -->
-
-
-
-    <!-- Modal -->
+    <!-- edit user detail Modal -->
     <div
       class="modal fade"
       id="editDetailModal"
@@ -220,6 +163,16 @@
           </div>
           <div class="modal-body">
             <form method="POST" id="search-form">
+              <div class="form-group fg2">
+                <label for="doj">Date</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="doj"
+                  name="dateOfJourney"
+                  placeholder="Date of Journey"
+                />
+              </div>
               <div class="form-group fg1">
                 <label for="startpoint">Start Point</label>
                 <div class="dropdown">
@@ -287,7 +240,7 @@
                       "
                     >
                       <!-- <h3 class="entityname">Pooler</h3> -->
-                      <h3 style="margin-top: 30% ">Pooler</h3>
+                      <h3 style="margin-top: 30%">Pooler</h3>
                       <h5 style="margin-top: 20%" id="poolerName"></h5>
                       <p id="username"></p>
                     </div>
@@ -326,8 +279,56 @@
             <i class="fa fa-search"></i>
           </button>
         </div>
+        <div class="container button">
+          <button
+            type="button"
+            class="btn btn-secondary search-btn-ride"
+            id="prev-rides"
+          >
+            Previous Rides
+          </button>
+        </div>
+        <div class="container button">
+          <button
+            type="button"
+            class="btn btn-secondary search-btn-ride"
+            id="curr-rides"
+          >
+            Current Rides
+          </button>
+        </div>
       </div>
     </div>
+
+    <!-- after booking Modal HTML -->
+    <div id="afterbooking" class="modal fade">
+      <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="icon-box">
+              <i class="material-icons">&#xE876;</i>
+            </div>
+            <h4 class="modal-title w-100">Awesome!</h4>
+          </div>
+          <div class="modal-body" id="showbooking">
+            <p class="text-center">Your booking has been confirmed.</p>
+            <p class="text-center" id="owner-name"></p>
+            <p class="text-center" id="owner-number"></p>
+            <p class="text-center" id="car-name"></p>
+            <p class="text-center" id="car-color"></p>
+            <p class="text-center" id="car-number"></p>
+            <p class="text-center">Journey route cities are : </p>
+            <ul id="listofcitiesride"></ul>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-success btn-block" data-dismiss="modal">
+              OK
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="scripts/PoolerDashboard.js"></script>
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
