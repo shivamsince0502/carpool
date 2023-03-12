@@ -18,11 +18,14 @@ com\payload\BookRequestPayload.class
 com\payload\NewRidePayload.class
 com\payload\OwnerPayLoad.class
 com\payload\PoolerUpdatePayload.class
+com\model\DeletePoolerRide.class
 com\services\CityServicesImpl.class
 com\payload\PoolerJourneyPayload.class
 com\model\Ride.class
+com\model\DeleteRide.class
 com\model\RidePooler.class
 com\model\OwnerCar.class
+com\payload\RidePayloadResponse.class
 com\services\RideServiceImpl.class
 com\controller\OwnerController.class
 com\services\CarServicesImpl.class
@@ -32,6 +35,7 @@ com\model\Car.class
 com\controller\OwnerCarController.class
 com\payload\OwnerRidePayload.class
 com\services\OwnerServiceImpl.class
+com\payload\UpdateRidePayload.class
 com\services\PoolerServiceImpl.class
 com\model\City.class
 com\payload\OwnerUpdatePayload.class

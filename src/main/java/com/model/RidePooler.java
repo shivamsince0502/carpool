@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.sql.Date;
 
 @Entity
 @Table(name = "ride_pooler")
@@ -24,6 +25,13 @@ public class RidePooler {
 
     @Column(name = "is_active")
     private Boolean isActive;
+
+    @Column(name = "start_id")
+    private int startCityId;
+
+    @Column(name = "end_id")
+    private int endCityId;
+
 
     public int getRidePoolerId() {
         return ridePoolerId;
@@ -65,11 +73,32 @@ public class RidePooler {
         isActive = active;
     }
     public RidePooler(){}
-    public RidePooler(int ridePoolerId, int rideId, int poolerId, int seatNo, Boolean isActive) {
+
+    public int getStartCityId() {
+        return startCityId;
+    }
+
+    public void setStartCityId(int startCityId) {
+        this.startCityId = startCityId;
+    }
+
+    public int getEndCityId() {
+        return endCityId;
+    }
+
+    public void setEndCityId(int endCityId) {
+        this.endCityId = endCityId;
+    }
+
+
+
+    public RidePooler(int ridePoolerId, int rideId, int poolerId, int seatNo, Boolean isActive, int startCityId, int endCityId) {
         this.ridePoolerId = ridePoolerId;
         this.rideId = rideId;
         this.poolerId = poolerId;
         this.seatNo = seatNo;
         this.isActive = isActive;
+        this.startCityId = startCityId;
+        this.endCityId = endCityId;
     }
 }

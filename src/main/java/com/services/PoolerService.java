@@ -1,6 +1,7 @@
 package com.services;
 
 import com.model.Pooler;
+import com.model.RidePooler;
 import com.payload.LoginPayload;
 import com.payload.PoolerUpdatePayload;
 
@@ -20,4 +21,9 @@ public interface PoolerService {
     Pooler isPooler(LoginPayload loginPayload);
 
     Pooler updatePooler(PoolerUpdatePayload poolerUpdatePayload, int id);
+
+    List<RidePooler> allUpRideByPoolerId(int id);
+    List<RidePooler> allPrevRideByPoolerId(int id);
+
+    RidePooler deleteRidePooler(int rideId, int poolerId);
 }

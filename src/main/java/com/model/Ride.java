@@ -7,6 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "ride")
+
 public class Ride {
     @Id
     @Column(name = "ride_id")

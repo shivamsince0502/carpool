@@ -11,13 +11,17 @@ C:\Users\shivamk_700042\IdeaProjects\CarPool\src\main\java\com\model\City.java
 C:\Users\shivamk_700042\IdeaProjects\CarPool\src\main\java\com\controller\RideCitiesController.java
 C:\Users\shivamk_700042\IdeaProjects\CarPool\src\main\java\com\model\RidePooler.java
 C:\Users\shivamk_700042\IdeaProjects\CarPool\src\main\java\com\payload\PoolerPayLoad.java
+C:\Users\shivamk_700042\IdeaProjects\CarPool\src\main\java\com\payload\RidePayloadResponse.java
+C:\Users\shivamk_700042\IdeaProjects\CarPool\src\main\java\com\model\DeleteRide.java
 C:\Users\shivamk_700042\IdeaProjects\CarPool\src\main\java\com\services\CityServicesImpl.java
 C:\Users\shivamk_700042\IdeaProjects\CarPool\src\main\java\com\payload\LoginPayload.java
 C:\Users\shivamk_700042\IdeaProjects\CarPool\src\main\java\com\payload\NewRidePayload.java
 C:\Users\shivamk_700042\IdeaProjects\CarPool\src\main\java\com\model\Owner.java
 C:\Users\shivamk_700042\IdeaProjects\CarPool\src\main\java\com\model\RideCities.java
+C:\Users\shivamk_700042\IdeaProjects\CarPool\src\main\java\com\payload\UpdateRidePayload.java
 C:\Users\shivamk_700042\IdeaProjects\CarPool\src\main\java\com\payload\PoolerJourneyPayload.java
 C:\Users\shivamk_700042\IdeaProjects\CarPool\src\main\java\com\controller\RideController.java
+C:\Users\shivamk_700042\IdeaProjects\CarPool\src\main\java\com\model\DeletePoolerRide.java
 C:\Users\shivamk_700042\IdeaProjects\CarPool\src\main\java\com\controller\CarController.java
 C:\Users\shivamk_700042\IdeaProjects\CarPool\src\main\java\com\controller\OwnerCarController.java
 C:\Users\shivamk_700042\IdeaProjects\CarPool\src\main\java\com\controller\PoolerController.java

@@ -34,6 +34,8 @@
                 <value>com.model.RidePooler</value>
                 <value>com.model.Ride</value>
                 <value>com.model.RideCities</value>
+                <value>com.model.DeleteRide</value>
+                <value>com.model.DeletePoolerRide</value>
             </list>
         </property>
         <property name="hibernateProperties" >

@@ -1,6 +1,7 @@
 package com.controller;
 
 import com.model.Pooler;
+import com.model.RidePooler;
 import com.payload.LoginPayload;
 import com.payload.PoolerUpdatePayload;
 import com.services.PoolerService;
@@ -47,4 +48,18 @@ public class PoolerController {
         return poolerService.updatePooler(poolerUpdatePayload, id);
     }
 
+    @GetMapping("getallupridebypoolerid/{id}")
+    List<RidePooler> getAllUpRideByPoolerId(@PathVariable int id) {
+        return poolerService.allUpRideByPoolerId(id);
+    }
+
+    @GetMapping("getallprevridebypoolerid/{id}")
+    List<RidePooler> getAllPrevRideByPoolerId(@PathVariable int id) {
+        return poolerService.allPrevRideByPoolerId(id);
+    }
+
+    @PostMapping("deleteride/{rid}/{pid}")
+    RidePooler deleteRidePooler(@PathVariable("rid") int rideId, @PathVariable("pid") int poolerId) {
+        return poolerService.deleteRidePooler(rideId, poolerId);
+    }
 }

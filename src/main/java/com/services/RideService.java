@@ -3,10 +3,9 @@ package com.services;
 import com.model.City;
 import com.model.Ride;
 import com.model.RideCities;
-import com.payload.BookRequestPayload;
-import com.payload.NewRidePayload;
-import com.payload.OwnerRidePayload;
-import com.payload.PoolerJourneyPayload;
+import com.model.RidePooler;
+import com.payload.*;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -20,7 +19,17 @@ public interface RideService {
 
     List<String> allCitiesOfRide(int id);
 
-    Ride bookingRequest(BookRequestPayload bookRequestPayload);
+    RidePooler bookingRequest(BookRequestPayload bookRequestPayload);
 
     Ride createRide(OwnerRidePayload ownerRidePayload);
+    Ride deleteRideById(int id);
+
+    Ride getRideByRideId(int id);
+
+    Ride finishRideById(int id);
+
+    Ride updateRide(UpdateRidePayload updateRidePayload);
+
+    RidePooler findRideForPooler(int rideId, int poolerId);
+    RidePooler unBookRide(int rideId, int poolerId);
 }

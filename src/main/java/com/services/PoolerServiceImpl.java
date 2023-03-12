@@ -1,7 +1,6 @@
 package com.services;
 
-import com.model.Owner;
-import com.model.Pooler;
+import com.model.*;
 import com.payload.LoginPayload;
 import com.payload.PoolerUpdatePayload;
 import org.hibernate.Session;
@@ -10,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.hibernate.Transaction;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 @Service
 public class PoolerServiceImpl implements PoolerService {
@@ -104,5 +105,70 @@ public class PoolerServiceImpl implements PoolerService {
         transaction.commit();
         session.close();
         return pooler;
+    }
+
+    @Override
+    public List<RidePooler> allUpRideByPoolerId(int id) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        List<RidePooler> ridePoolerList = session.createQuery("from RidePooler", RidePooler.class).list();
+        List<RidePooler> requiredList = new ArrayList<>();
+        long millis=System.currentTimeMillis();
+        java.sql.Date date=new java.sql.Date(millis);
+        for(RidePooler ridePooler : ridePoolerList) {
+            int rideId = ridePooler.getRideId();
+            int poolerId = ridePooler.getPoolerId();
+            Ride ride = session.get(Ride.class, rideId);
+            if(poolerId == id && ridePooler.getActive() && ride.getRideDate().compareTo(date) >= 0) {
+                requiredList.add(ridePooler);
+            }
+        }
+        transaction.commit();
+        session.close();
+        return requiredList;
+    }
+
+    @Override
+    public List<RidePooler> allPrevRideByPoolerId(int id) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        List<RidePooler> ridePoolerList = session.createQuery("from RidePooler", RidePooler.class).list();
+        List<RidePooler> requiredList = new ArrayList<>();
+        long millis=System.currentTimeMillis();
+        java.sql.Date date=new java.sql.Date(millis);
+
+        ArrayList<Integer> delRidePool = new ArrayList<>();
+        List<DeletePoolerRide> deletePoolerRides = session.createQuery("from DeletePoolerRide", DeletePoolerRide.class).list();
+        for(DeletePoolerRide deletePoolerRide : deletePoolerRides) {
+            delRidePool.add(deletePoolerRide.getRidePoolerId());
+        }
+
+        for(RidePooler ridePooler : ridePoolerList) {
+            Ride ride = session.get(Ride.class, ridePooler.getRideId());
+            if(ridePooler.getPoolerId() == id && delRidePool.contains(ridePooler.getRidePoolerId()) == false && (ride.getRideDate().compareTo(date) < 0 || !ride.getActive())) {
+                requiredList.add(ridePooler);
+            }
+        }
+        transaction.commit();
+        session.close();
+        return requiredList;
+    }
+
+    @Override
+    public RidePooler deleteRidePooler(int rideId, int poolerId) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        List<RidePooler> ridePoolerList = session.createQuery("from RidePooler", RidePooler.class).list();
+        for(RidePooler ridePooler : ridePoolerList) {
+            if(ridePooler.getPoolerId() == poolerId && ridePooler.getRideId() == rideId){
+                DeletePoolerRide deletePoolerRide = new DeletePoolerRide();
+                deletePoolerRide.setRidePoolerId(ridePooler.getRidePoolerId());
+                session.save(deletePoolerRide);
+                transaction.commit();
+                session.close();
+                return ridePooler;
+            }
+        }
+        return null;
     }
 }

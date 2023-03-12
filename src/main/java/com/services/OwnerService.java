@@ -1,6 +1,7 @@
 package com.services;
 
 import com.model.Owner;
+import com.model.Ride;
 import com.payload.LoginPayload;
 import com.payload.OwnerUpdatePayload;
 
@@ -19,5 +20,9 @@ public interface OwnerService {
     Owner isOwner(LoginPayload loginPayload);
 
     Owner updateOwner(OwnerUpdatePayload ownerUpdatePayload, int id);
+
+    List<Ride> getAllPrevRidesByOwnerId(int id);
+
+    List<Ride> getAllUpRides(int id);
 
 }

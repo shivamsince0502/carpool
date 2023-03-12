@@ -1,45 +1,34 @@
 package com.payload;
 
+import java.util.List;
+
 public class OwnerRidePayload {
-    private int ownerId;
     private int noOfSeats;
     private String startPoint;
-    private String inter1Point;
-    private String inter2Point;
-    private String inter3Point;
-    private String inter4Point;
-    private String endPoint;
     private String carName;
+    private int ownerId;
+    private List<String> citiesList;
 
-    public String getCarName() {
-        return carName;
+    private String dateOfJourney;
+
+    public String getDateOfJourney() {
+        return dateOfJourney;
     }
 
-    public void setCarName(String carName) {
-        this.carName = carName;
+    public void setDateOfJourney(String dateOfJourney) {
+        this.dateOfJourney = dateOfJourney;
     }
 
     public OwnerRidePayload() {
     }
 
-    public OwnerRidePayload(int ownerId, int noOfSeats, String startPoint, String inter1Point, String inter2Point, String inter3Point, String inter4Point, String endPoint, String carName) {
-        this.ownerId = ownerId;
+    public OwnerRidePayload(int noOfSeats, String startPoint, String carName, int ownerId, List<String> citiesList, String dateOfJourney) {
         this.noOfSeats = noOfSeats;
         this.startPoint = startPoint;
-        this.inter1Point = inter1Point;
-        this.inter2Point = inter2Point;
-        this.inter3Point = inter3Point;
-        this.inter4Point = inter4Point;
-        this.endPoint = endPoint;
         this.carName = carName;
-    }
-
-    public int getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(int ownerId) {
         this.ownerId = ownerId;
+        this.citiesList = citiesList;
+        this.dateOfJourney = dateOfJourney;
     }
 
     public int getNoOfSeats() {
@@ -58,43 +47,27 @@ public class OwnerRidePayload {
         this.startPoint = startPoint;
     }
 
-    public String getInter1Point() {
-        return inter1Point;
+    public String getCarName() {
+        return carName;
     }
 
-    public void setInter1Point(String inter1Point) {
-        this.inter1Point = inter1Point;
+    public void setCarName(String carName) {
+        this.carName = carName;
     }
 
-    public String getInter2Point() {
-        return inter2Point;
+    public int getOwnerId() {
+        return ownerId;
     }
 
-    public void setInter2Point(String inter2Point) {
-        this.inter2Point = inter2Point;
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
     }
 
-    public String getInter3Point() {
-        return inter3Point;
+    public List<String> getCitiesList() {
+        return citiesList;
     }
 
-    public void setInter3Point(String inter3Point) {
-        this.inter3Point = inter3Point;
-    }
-
-    public String getInter4Point() {
-        return inter4Point;
-    }
-
-    public void setInter4Point(String inter4Point) {
-        this.inter4Point = inter4Point;
-    }
-
-    public String getEndPoint() {
-        return endPoint;
-    }
-
-    public void setEndPoint(String endPoint) {
-        this.endPoint = endPoint;
+    public void setCitiesList(List<String> citiesList) {
+        this.citiesList = citiesList;
     }
 }

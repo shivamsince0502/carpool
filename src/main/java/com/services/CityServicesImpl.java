@@ -33,4 +33,14 @@ public class CityServicesImpl implements CityServices{
         session.close();
         return cities;
     }
+
+    @Override
+    public City getCityById(int id) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        City city = session.get(City.class, id);
+        transaction.commit();
+        session.close();
+        return city;
+    }
 }

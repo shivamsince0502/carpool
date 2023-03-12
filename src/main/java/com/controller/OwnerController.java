@@ -2,10 +2,12 @@ package com.controller;
 
 import com.model.Owner;
 import com.model.Pooler;
+import com.model.Ride;
 import com.payload.LoginPayload;
 import com.payload.OwnerUpdatePayload;
 import com.payload.PoolerUpdatePayload;
 import com.services.OwnerService;
+import com.services.RideService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/owner")
 public class OwnerController {
+
+    @Autowired
+    RideService rideService;
     @Autowired
     OwnerService ownerService;
     @GetMapping("/getAllOwners")
@@ -47,6 +52,16 @@ public class OwnerController {
     @PostMapping("/updateowner/{id}")
     Owner updateOwner(@RequestBody OwnerUpdatePayload ownerUpdatePayload, @PathVariable int id){
         return ownerService.updateOwner(ownerUpdatePayload, id);
+    }
+
+    @GetMapping("/getallprevrides/{id}")
+    List<Ride> getAllPrevRidesByOwner(@PathVariable int id) {
+        return ownerService.getAllPrevRidesByOwnerId(id);
+    }
+
+    @GetMapping("/getAllUpRides/{id}")
+    List<Ride> getAllUpRides(@PathVariable int id){
+        return ownerService.getAllUpRides(id);
     }
 
 }

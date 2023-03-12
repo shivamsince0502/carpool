@@ -1,8 +1,6 @@
 package com.services;
 
-import com.model.Car;
-import com.model.Owner;
-import com.model.Pooler;
+import com.model.*;
 import com.payload.LoginPayload;
 import com.payload.OwnerUpdatePayload;
 import org.hibernate.SQLQuery;
@@ -14,11 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLData;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 @Service
 public class OwnerServiceImpl implements OwnerService{
 
 
+    @Autowired
+    private RideService rideService;
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -112,6 +114,46 @@ public class OwnerServiceImpl implements OwnerService{
         transaction.commit();
         session.close();
         return owner;
+    }
+
+    @Override
+    public List<Ride> getAllPrevRidesByOwnerId(int id) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        List<Ride> rideList = rideService.getAllRides();
+
+        List<DeleteRide> deleteRideList = session.createQuery("from DeleteRide", DeleteRide.class).list();
+        ArrayList<Integer> delRides = new ArrayList<>();
+        for(DeleteRide deleteRide : deleteRideList){
+           delRides.add(deleteRide.getRideId());
+        }
+        List<Ride> requiredRides = new ArrayList<>();
+        for(Ride ride : rideList) {
+            if(ride.getOwnerId() == id && ride.getActive() == false && !delRides.contains(ride.getRideId())) {
+                requiredRides.add(ride);
+            }
+        }
+        transaction.commit();
+        session.close();
+        return requiredRides;
+    }
+
+    @Override
+    public List<Ride> getAllUpRides(int id) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        List<Ride> rides= rideService.getAllRides();
+        List<Ride> requiredList = new ArrayList<>();
+        long millis=System.currentTimeMillis();
+        java.sql.Date date=new java.sql.Date(millis);
+        for(Ride ride : rides) {
+            if(ride.getActive() && ride.getRideDate().compareTo(date) >= 0 && ride.getOwnerId() == id) {
+                requiredList.add(ride);
+            }
+        }
+        transaction.commit();
+        session.close();
+        return requiredList;
     }
 
 
