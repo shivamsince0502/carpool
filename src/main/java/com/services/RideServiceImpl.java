@@ -38,6 +38,11 @@ public class RideServiceImpl implements RideService{
 
     @Autowired
     CarServices carServices;
+
+    @Autowired
+    PoolerService poolerService;
+
+
     private static final Logger logger = LoggerFactory.getLogger(RideServiceImpl.class);
     @Override
     public List<Ride> getAllActiveRides() {
@@ -137,6 +142,12 @@ public class RideServiceImpl implements RideService{
         Transaction transaction = session.beginTransaction();
         int rideId = bookRequestPayload.getRideId();
         int poolerId = bookRequestPayload.getPoolerId();
+        List<RidePooler> ridePoolerList1 = poolerService.allUpRideByPoolerId(poolerId);
+        for(RidePooler ridePooler : ridePoolerList1) {
+            if(ridePooler.getRideId() == rideId) {
+                return null;
+            }
+        }
         Ride ride = session.get(Ride.class, rideId);
         ride.setNoOfSeats(ride.getNoOfSeats()-1);
         session.saveOrUpdate(ride);
@@ -239,6 +250,7 @@ public class RideServiceImpl implements RideService{
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         Ride ride = session.get(Ride.class, id);
+        ride.setNoOfSeats(ride.getNoOfSeats()+1);
         ride.setActive(false);
         session.save(ride);
         transaction.commit();
@@ -299,6 +311,9 @@ public class RideServiceImpl implements RideService{
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         List<RidePooler> ridePoolerList = session.createQuery("from RidePooler", RidePooler.class).list();
+        Ride ride = session.get(Ride.class, rideId);
+        ride.setNoOfSeats(ride.getNoOfSeats()+1);
+        session.saveOrUpdate(ride);
         for(RidePooler ridePooler : ridePoolerList) {
             if(ridePooler.getPoolerId() == poolerId && ridePooler.getRideId() == rideId){
                 session.delete(ridePooler);

@@ -85,20 +85,14 @@ public class OwnerServiceImpl implements OwnerService{
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         List<Owner> ownerList = session.createQuery("from Owner", Owner.class).list();
-        Owner owner1 = new Owner();
         for(Owner owner : ownerList) {
             String un = owner.getUserName();
             String pw = owner.getPassword();
             if(un.equals(loginPayload.getUsername()) && pw.equals(loginPayload.getPassword())){
-                owner1.setOwnerId(owner.getOwnerId());
-                owner1.setOwnerEmail(owner.getOwnerEmail());
-                owner1.setUserName(owner.getUserName());
-                owner1.setOwnerName(owner.getOwnerName());
-                owner1.setOwnerMob(owner.getOwnerMob());
-                break;
+                return owner;
             }
         }
-        return owner1;
+        return null;
     }
 
     @Override
