@@ -10,6 +10,16 @@ form.addEventListener('submit', (e)=>{
     // Format the plain form data as JSON
     let formDataJsonString = JSON.stringify(formDataObject);
 
+    if(formDataObject.ownerName === " " || formDataObject.ownerName === "   " || formDataObject.ownerName === "      ") {
+      document.getElementById("err-details").innerHTML = "Name can't be Empty";
+      // $("#error-modal").modal('show');
+      alert("Name can't be empty.")
+    }else if(formDataObject.ownerMob.length != 10) {
+      alert("Phone number should be of equal to 10")
+    }else if(formDataObject.userName === " " || formDataObject.userName === "   " || formDataObject.userName === "      "){
+      alert("Username can't be empty.")
+    }
+    else {
 
     fetch('http://localhost:8080/CarPool/owner/create', {
         method:'POST', 
@@ -32,4 +42,7 @@ form.addEventListener('submit', (e)=>{
       
       })
       .catch(err => console.log(err));
+    }
 });
+
+

@@ -23,6 +23,7 @@ form.addEventListener('submit', (e)=>{
       return res.json();
   }).then((res) => {
       console.log('response json data', res);
+      console.log(res)
       if(res.ownerName) {
           sessionStorage.setItem("ownerName", res.ownerName);
           sessionStorage.setItem("ownerEmail", res.ownerEmail);
@@ -38,7 +39,7 @@ form.addEventListener('submit', (e)=>{
       }
   })
       .catch((err) => {
-          alert(err);
+          alert("username or password is wrong");
           console.log(err)
       });
 });

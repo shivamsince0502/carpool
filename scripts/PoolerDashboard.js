@@ -296,7 +296,7 @@ async function bookRide(el) {
                 $("#afterbooking").modal('show');
                 // after booking
             }).catch((err) => {
-                alert(err);
+                alert('You cant book same ride again');
                 console.log(err);
             })
     } else {

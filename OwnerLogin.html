@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Contact form</title>
+    <title>Owner Login</title>
     <link
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
@@ -135,6 +135,55 @@
         <button style="margin-top: 10px" onclick="window.location='OwnerRegistration.html';">Register</button>
       </form>
     </div>
+
+
+    <!-- modals -->
+
+
+
+<!--Modal: modalConfirmDelete-->
+<div class="modal fade" id="error-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Error Occured</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <p id="err-details"></p>
+        <i class="fas fa-times fa-4x animated rotateIn"></i>
+        
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+<!--Modal: modalConfirmDelete-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <script src="scripts/LoginOwner.js"></script>
   </body>
 </html>

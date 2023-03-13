@@ -42,8 +42,6 @@ startJournery.addEventListener('click', async (e) => {
     formDataObject.ownerId = ownerId;
     formDataObject.citiesList = citiesofride;
     let formDataJsonString = JSON.stringify(formDataObject);
-    console.log(formDataJsonString);
-    console.log(formDataObject)
 
     if (formDataObject.noOfSeats && formDataObject.carName && citiesofride.length > 1) {
       await fetch('http://localhost:8080/CarPool/ride/createride', {
@@ -71,11 +69,11 @@ startJournery.addEventListener('click', async (e) => {
             let citiesinfourl = 'http://localhost:8080/CarPool/ridecities/getallcitiesbyride/' + rideId;
             let respci = await fetch(citiesinfourl, { method: "GET" })
             let allcitiesofride = await respci.json();
-            let ownerurlride = 'http://localhost:8080/CarPool/owner/owner:' + ownerId;
-            let ownerofride = await fetch(ownerurlride, { method: 'GET' })
-            let owner = await ownerofride.json()
-            document.getElementById("owner-name").innerHTML = "Owner Name : " + owner.ownerName;
-            document.getElementById("owner-number").innerHTML = "Owner Number : " + owner.ownerMob;
+            // let ownerurlride = 'http://localhost:8080/CarPool/owner/owner:' + ownerId;
+            // let ownerofride = await fetch(ownerurlride, { method: 'GET' })
+            // let owner = await ownerofride.json()
+            document.getElementById("owner-name").innerHTML = "Owner Name : " + ownerName;
+            document.getElementById("owner-number").innerHTML = "Owner Number : " + ownerMob;
             document.getElementById("car-name").innerHTML = "Car Name : " + carofride.carName;
             document.getElementById("car-color").innerHTML = "Car Color : " + carofride.carColor
             document.getElementById("car-number").innerHTML = "Car Number : " + carofride.carNumber
