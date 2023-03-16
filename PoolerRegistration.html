@@ -13,13 +13,12 @@
       rel="stylesheet"
     />
     <style>
-
-.alert {
-  padding: 20px;
-  background-color: #f44336; /* Red */
-  color: white;
-  margin-bottom: 15px;
-}
+      .alert {
+        padding: 20px;
+        background-color: #f44336; /* Red */
+        color: white;
+        margin-bottom: 15px;
+      }
 
       html,
       body {
@@ -33,7 +32,7 @@
       h1 {
         margin: 0 0 20px;
         font-weight: 400;
-        color: rgb(0,125,254);
+        color: rgb(0, 125, 254);
       }
       p {
         margin: 0 0 5px;
@@ -73,7 +72,7 @@
         width: calc(100% - 18px);
         padding: 8px;
         margin-bottom: 20px;
-        border: 1px solid rgb(0,125,254);
+        border: 1px solid rgb(0, 125, 254);
         outline: none;
       }
       input::placeholder {
@@ -83,7 +82,7 @@
         width: 100%;
         padding: 10px;
         border: none;
-        background: rgb(0,125,254);
+        background: rgb(0, 125, 254);
         font-size: 16px;
         font-weight: 400;
         color: #fff;
@@ -95,9 +94,11 @@
         .main-block {
           flex-direction: row;
         }
-        .left-part,
+        .left-part{
+          width: 70%;
+        }
         form {
-          width: 50%;
+          width: 30%;
         }
         .fa-envelope {
           margin-top: 0;
@@ -120,8 +121,7 @@
   <body>
     <div class="main-block">
       <div class="left-part">
-        
-        <img style="width: 100%;" src="images/carpoolconcept.jpg" alt="">
+        <img style="width: 100%" src="images/carpoolconcept.jpg" alt="" />
       </div>
       <form method="POST" id="register-form">
         <h1 style="font-weight: bold">Pooler Registration</h1>
@@ -131,35 +131,35 @@
             id="name"
             type="text"
             name="poolerName"
-            placeholder="Full name"
+            placeholder="Full name*"
             required="true"
           />
           <input
             type="email"
             id="mail"
             name="poolerEmail"
-            placeholder="Email"
+            placeholder="Email*"
             required="true"
           />
           <input
             type="number"
             id="number"
             name="poolerMob"
-            placeholder="Phone number"
+            placeholder="Phone number*"
             required="true"
           />
-          <input 
-            type="text" 
-            id="un" 
-            name="userName" 
-            placeholder="username" 
+          <input
+            type="text"
+            id="un"
+            name="userName"
+            placeholder="username*"
             required="true"
           />
           <input
             type="password"
             id="pw"
             name="password"
-            placeholder="password"
+            placeholder="password*"
             required="true"
           />
         </div>

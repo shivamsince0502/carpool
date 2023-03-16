@@ -46,3 +46,8 @@ form.addEventListener('submit', (e) => {
     });
   }
 });
+
+
+if(sessionStorage.getItem("loggedIn") == "true") {
+  window.location.href = "PoolerDashboard.html";
+}

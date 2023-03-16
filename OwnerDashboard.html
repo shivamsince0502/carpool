@@ -42,10 +42,9 @@
     <title>Owner Dashboard</title>
   </head>
   <body>
-    <div class="container">
+    <!-- <div class="container">
       <nav class="navbar navbar-dark bg-primary" style="background-color: #f6f7f8">
         <a class="navbar-brand" href="HomePage.html">CARPOOL</a>
-        <!-- <a href="#" class="navbar-brand">OWNER</a> -->
         <button
           type="button"
           id="editDetails"
@@ -59,7 +58,143 @@
           Logout
         </button>
       </nav>
+    </div> -->
+
+    <div class="header container-fluid" >
+      <div class="side-nav">
+        <div class="user">
+          <a data-toggle="modal" data-target="#editDetailModal" id="editDetailUser" style="display: inline;"><img src="images/user.png" class="user-img" alt=""></a>
+          <div>
+            <h2 id="side-username"></h2>
+            <p id="side-email"></p>
+          </div>
+          <img src="images/star.png" class="star-img" alt="">
+        </div>
+        <ul>
+          <li><a id="show-card-dash" style="display: inline-flex;"><img src="images/icons8-dashboard-layout-48.png" alt=""><p>Dashboard</p></a></li>
+          <li><a id="up-jn" style="display: inline-flex;"><img src="images/icons8-upcoming-64.png" alt=""><p>Upcoming Rides</p></a></li>
+          <li><a id="my-jn" style="display: inline-flex;"><img src="images/icons8-carpool-50.png" alt=""><p>Previous Rides</p></a></li>
+          <li><a  data-toggle="modal" data-target="#addcar" style="display: inline-flex;"><img src="images/icons8-taxicab-30.png" alt=""><p>Add Car</p></a></li>
+          <li><a id="editDetailUser" data-toggle="modal" data-target="#editDetailModal" style="display: inline-flex;"><img src="images/icons8-edit-user-32.png" alt=""><p>Edit User</p></a></li>
+        </ul>
+        <ul>
+          <li><a data-target=".bs-example-modal-sm" data-toggle="modal" style="display: inline-flex;"><img src="images/logout.png" alt=""><p>Logout</p></a></li>
+        </ul>
+      </div>
+      
+      <div class="div container-fluid" style="margin-left: 100px;">
+        <div class="container  py-5 h-100"  style="background: transparent" id="show-user-card">
+          <div
+            class="row d-flex justify-content-center align-items-center h-100"
+          >
+            <div class="col col-lg-6 mb-4 mb-lg-0 ">
+              <div class="card mb-3" style="border-radius: 0.5rem">
+                <div class="row g-0">
+                  <div
+                    class="col-md-4 gradient-custom text-center text-white"
+                    style="
+                      border-top-left-radius: 0.5rem;
+                      border-bottom-left-radius: 0.5rem;
+                    "
+                  >
+                    <!-- <h3 class="entityname">Pooler</h3> -->
+                    <h3 style="margin-top: 30%">Owner</h3>
+                    <h5 style="margin-top: 20%" id="ownerName"></h5>
+                    <p id="username"></p>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body p-4">
+                      <hr class="mt-0 mb-4" />
+                      <div class="row pt-1">
+                        <div class="col-6 mb-3">
+                          <h6>Email</h6>
+                          <p id="ownerEmail" class="text-muted"></p>
+                        </div>
+                        <div class="col-6 mb-3">
+                          <h6>Phone</h6>
+                          <p id="ownerMob" class="text-muted"></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+            
+          </div>
+          <div class="container">
+           <div
+          class="container col-sm-6 jumbotron"
+          style="background: transparent !important; float: left"
+        >
+          <img
+            src="images/car-bg-rem2.png"
+            class="img img-resposive img-rounded col-sm-12 rounded"
+            alt=""
+            style="object-fit: fill; width: 100%"
+          />
+        </div>
+        <div
+          class="container col-sm-6 jumbotron"
+          style="background: transparent !important; float: left"
+        >
+          <img
+            src="images/carpoolrembg.png"
+            class="img img-resposive img-rounded col-sm-12 rounded"
+            alt=""
+            style="object-fit: fill; width: 100%"
+          />
+        </div>
+        </div>
+          
+        </div>
+
+      <div class="row" id="show-data-curr">
+
+        <div
+          class="col-sm-10 jumbotron table-div"
+          style="background: transparent !important; float: left; margin-left: 130px;"
+        >
+          <div class="card">
+            <div class="card-header">
+              <strong class="card-title" id="head-tb-curr"></strong>
+            </div>
+            <div class="card-body" id="select-ride"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="row" id="search-rides-div">
+
+        <div
+          class="col-sm-10 jumbotron table-div"
+          style="background: transparent !important; float: left; margin-left: 130px;"
+        >
+          <div class="card">
+            <div class="card-header">
+              <strong class="card-title" id="head-tb-search-ride"></strong>
+            </div>
+            <div class="card-body" id="search-ride-tb"></div>
+          </div>
+        </div>
+      </div> -->
+
+    <div class="row "  id="show-data-prev">
+        <div
+          class="col-sm-10 jumbotron table-div"
+          style="background: transparent !important; float: left; margin-left: 130px;"
+        >
+          <div class="card">
+            <div class="card-header">
+              <strong class="card-title" id="head-tb-prev"></strong>
+            </div>
+            <div class="card-body" id="prev-rides"></div>
+          </div>
+        </div>
+      </div> 
     </div>
+  </div> 
 
     <!-- Modal for edit ride -->
     <div
@@ -224,7 +359,7 @@
           <div class="modal-body">
             <form id="updateUser">
               <div class="form-group">
-                <label for="pooler-mame">Owner Name</label>
+                <label for="pooler-name">Owner Name</label>
                 <input
                   type="text"
                   class="form-control"
@@ -234,7 +369,7 @@
                 />
               </div>
               <div class="form-group">
-                <label for="user-mame">User Name</label>
+                <label for="user-name">User Name</label>
                 <input
                   type="text"
                   class="form-control"
@@ -296,6 +431,7 @@
       role="dialog"
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
+      data-backdrop="static"
     >
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -374,6 +510,7 @@
       role="dialog"
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
+      data-backdrop="static"
     >
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -456,67 +593,6 @@
       </div>
     </div>
 
-    <div class="section container">
-      <div class="userdetails jumbotron">
-        <section
-          class="vh-100"
-          style="background-image: url('images/ownertrip.jpg')"
-        >
-          <div class="container py-5 h-100" style="background-color: rgb(233,236,239);">
-            <div
-              class="row d-flex justify-content-center align-items-center h-100"
-            >
-              <div class="col col-lg-6 mb-4 mb-lg-0">
-                <div class="card mb-3" style="border-radius: 0.5rem">
-                  <div class="row g-0">
-                    <div
-                      class="col-md-4 gradient-custom text-center text-white"
-                      style="
-                        border-top-left-radius: 0.5rem;
-                        border-bottom-left-radius: 0.5rem;
-                      "
-                    >
-                      <h3 style="margin-top: 30%">Owner</h3>
-                      <h5 style="margin-top: 20%" id="ownerName"></h5>
-                      <p id="username"></p>
-                    </div>
-                    <div class="col-md-8">
-                      <div class="card-body p-4">
-                        <hr class="mt-0 mb-4" />
-                        <div class="row pt-1">
-                          <div class="col-6 mb-3">
-                            <h6>Email</h6>
-                            <p id="ownerEmail" class="text-muted"></p>
-                          </div>
-                          <div class="col-6 mb-3">
-                            <h6>Phone</h6>
-                            <p id="ownerMob" class="text-muted"></p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <div class="container col-sm-12 jumbotron" id="up-journeys">
-        <p class="text-center text-capitalize" id="tabletitle"></p>
-      </div>
-      <div class="add-car-div">
-        <button
-          type="button"
-          class="btn-add-car btns"
-          data-toggle="modal"
-          data-target="#addcar"
-        >
-          Add Car
-          <i class="fas fa-car-side"></i>
-        </button>
-      </div>
       <div class="start-journey">
         <button
           id="st-jn"
@@ -524,19 +600,28 @@
           data-toggle="modal"
           data-target="#addjourney"
           class="btn btns"
-        >
-          Start Journey
+        >Add Ride
           <i class="fa fa-plus"></i>
         </button>
       </div>
-      <div class="my-journey">
+      <!-- <div class="my-journey">
         <button id="my-jn" type="button" class="btn btns">Previous Journeys</button>
       </div>
       <div class="up-journey">
         <button id="up-jn" type="button" class="btn btns">Upcoming Journeys</button>
       </div>
-    </div>
+    </div>  -->
 
+    <!-- logout modal -->
+    <div tabindex="-1" class="modal bs-example-modal-sm" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header"><h4>Logout <i class="fa fa-lock"></i></h4></div>
+          <div class="modal-body"><i class="fa fa-question-circle"></i> Are you sure you want to log-off?</div>
+          <div class="modal-footer"><a id="logoutbtn" class="btn btn-primary btn-block" href="javascript:;">Logout</a></div>
+        </div>
+      </div>
+    </div>
 
 
 <!--Modal: modalConfirmDelete-->

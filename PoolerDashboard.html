@@ -32,30 +32,225 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+      integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+      integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+      crossorigin="anonymous"
+    ></script>
 
     <link rel="stylesheet" href="styles/PoolerDashBoard.css" />
-    <title>Pooler Dashboard</title>
+    <title>Pooler Dfaashboard</title>
   </head>
   <body>
-    <div class="container">
-      <nav class="navbar navbar-dark bg-primary">
+    <!-- <div class="container-fluid">
+      <nav class="navbar navbar-dark" id="nav-id">
         <a class="navbar-brand" href="HomePage.html">CARPOOL</a>
-        <!-- <a href="PoolerLogin.html" class="navbar-brand">POOLER</a> -->
-        <button
-          type="button"
-          id="editDetail"
-          class="btn btn-dark"
-          data-toggle="modal"
-          data-target="#editDetailModal"
-        >
-          Edit Profile
-        </button>
-        <button type="button" id="logoutbtn" class="btn btn-dark">
-          Logout
-        </button>
+
+        <div class="dropdown dropleft" id="navbar-list-4">
+          <a
+            class="dropdown-toggle"
+            id="navbarDropdownMenuLink"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <img
+              src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg"
+              width="40"
+              height="40"
+              class="rounded-circle"
+            />
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="PoolerDashboard.html">Dashboard</a>
+            <a
+              class="dropdown-item"
+              data-toggle="modal"
+              data-target="#editDetailModal"
+              id="editDetail"
+              >Edit Profile</a
+            >
+            <a class="dropdown-item" id="logoutbtn">Log Out</a>
+          </div>
+        </div>
       </nav>
+    </div> -->
+
+
+
+    <div class="header container-fluid" >
+      <div class="side-nav">
+        <div class="user">
+          <a data-toggle="modal" data-target="#editDetailModal" id="editDetail" style="display: inline;"><img src="images/user.png" class="user-img" alt=""></a>
+          <div>
+            <h2 id="side-username"></h2>
+            <p id="side-email"></p>
+          </div>
+          <img src="images/star.png" class="star-img" alt="">
+        </div>
+        <ul>
+          <li><a id="show-card-dash" style="display: inline-flex;"><img src="images/icons8-dashboard-layout-48.png" alt=""><p>Dashboard</p></a></li>
+          <li><a id="curr-ride" style="display: inline-flex;"><img src="images/icons8-upcoming-64.png" alt=""><p>Upcoming Rides</p></a></li>
+          <li><a id="prev-ride" style="display: inline-flex;"><img src="images/icons8-carpool-50.png" alt=""><p>Previous Rides</p></a></li>
+          
+          <li><a id="editDetail" data-toggle="modal" data-target="#editDetailModal" style="display: inline-flex;"><img src="images/icons8-edit-user-32.png" alt=""><p>Edit User</p></a></li>
+        </ul>
+        <ul>
+          <li><a  data-target=".bs-example-modal-sm" data-toggle="modal" style="display: inline-flex;"><img src="images/logout.png" alt=""><p>Logout</p></a></li>
+        </ul>
+      </div>
+      
+      <div class="div container-fluid" style="margin-left: 100px;">
+        <div class="container  py-5 h-100"  style="background: transparent" id="show-user-card">
+          <div
+            class="row d-flex justify-content-center align-items-center h-100"
+          >
+            <div class="col col-lg-6 mb-4 mb-lg-0 ">
+              <div class="card mb-3" style="border-radius: 0.5rem">
+                <div class="row g-0">
+                  <div
+                    class="col-md-4 gradient-custom text-center text-white"
+                    style="
+                      border-top-left-radius: 0.5rem;
+                      border-bottom-left-radius: 0.5rem;
+                    "
+                  >
+                    <!-- <h3 class="entityname">Pooler</h3> -->
+                    <h3 style="margin-top: 30%">Pooler</h3>
+                    <h5 style="margin-top: 20%" id="poolerName"></h5>
+                    <p id="username"></p>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body p-4">
+                      <hr class="mt-0 mb-4" />
+                      <div class="row pt-1">
+                        <div class="col-6 mb-3">
+                          <h6>Email</h6>
+                          <p id="poolerEmail" class="text-muted"></p>
+                        </div>
+                        <div class="col-6 mb-3">
+                          <h6>Phone</h6>
+                          <p id="poolerMob" class="text-muted"></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+
+          <div class="container">
+            <div
+           class="container col-sm-6 jumbotron"
+           style="background: transparent !important; float: left"
+         >
+           <img
+             src="images/car-bg-rem2.png"
+             class="img img-resposive img-rounded col-sm-12 rounded"
+             alt=""
+             style="object-fit: fill; width: 100%"
+           />
+         </div>
+         <div
+           class="container col-sm-6 jumbotron"
+           style="background: transparent !important; float: left"
+         >
+           <img
+             src="images/carpoolrembg.png"
+             class="img img-resposive img-rounded col-sm-12 rounded"
+             alt=""
+             style="object-fit: fill; width: 100%"
+           />
+         </div>
+         </div>
+          
+        </div>
+
+      <div class="row" id="show-data-curr">
+        <!-- <div
+          class="container col-sm-4 jumbotron"
+          style="background: transparent !important; float: left"
+        >
+          <img
+            src="images/car-bg-rem2.png"
+            class="img img-resposive img-rounded col-sm-12 rounded"
+            alt=""
+            style="object-fit: fill; width: 100%"
+          />
+        </div> -->
+        <div
+          class="col-sm-10 jumbotron table-div"
+          style="background: transparent !important; float: left; margin-left: 130px;"
+        >
+          <div class="card">
+            <div class="card-header">
+              <strong class="card-title" id="head-tb-curr"></strong>
+            </div>
+            <div class="card-body" id="select-ride"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" id="search-rides-div">
+        <!-- <div
+          class="container col-sm-4 jumbotron"
+          style="background: transparent !important; float: left"
+        >
+          <img
+            src="images/car-bg-rem2.png"
+            class="img img-resposive img-rounded col-sm-12 rounded"
+            alt=""
+            style="object-fit: fill; width: 100%"
+          />
+        </div> -->
+        <div
+          class="col-sm-10 jumbotron table-div"
+          style="background: transparent !important; float: left; margin-left: 130px;"
+        >
+          <div class="card">
+            <div class="card-header">
+              <strong class="card-title" id="head-tb-search-ride"></strong>
+            </div>
+            <div class="card-body" id="search-ride-tb"></div>
+          </div>
+        </div>
+      </div>
+
+    <div class="row "  id="show-data-prev">
+        <div
+          class="col-sm-10 jumbotron table-div"
+          style="background: transparent !important; float: left; margin-left: 130px;"
+        >
+          <div class="card">
+            <div class="card-header">
+              <strong class="card-title" id="head-tb-prev"></strong>
+            </div>
+            <div class="card-body" id="prev-rides"></div>
+          </div>
+        </div>
+      </div> 
+    </div>
+  </div> 
+
+      
+      </div>
+      
     </div>
 
+
+    <!-- data-backdrop="static" -->
     <!-- edit user detail Modal -->
     <div
       class="modal fade"
@@ -147,6 +342,7 @@
       role="dialog"
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
+      data-backdrop="static"
     >
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -164,13 +360,23 @@
           <div class="modal-body">
             <form method="POST" id="search-form">
               <div class="form-group fg2">
-                <label for="doj">Date</label>
+                <label for="doj">Start Date</label>
                 <input
                   type="date"
                   class="form-control"
                   id="doj"
                   name="dateOfJourney"
                   placeholder="Date of Journey"
+                />
+              </div>
+              <div class="form-group fg2">
+                <label for="doj">End Date</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="edoj"
+                  name="endOfJourney"
+                  placeholder="End Date of Journey"
                 />
               </div>
               <div class="form-group fg1">
@@ -222,84 +428,17 @@
       </div>
     </div>
 
-    <div class="section container">
-      <div class="userdetails">
-        <section class="vh-100" style="background-color: #f4f5f7">
-          <div class="container py-5 h-100">
-            <div
-              class="row d-flex justify-content-center align-items-center h-100"
-            >
-              <div class="col col-lg-6 mb-4 mb-lg-0">
-                <div class="card mb-3" style="border-radius: 0.5rem">
-                  <div class="row g-0">
-                    <div
-                      class="col-md-4 gradient-custom text-center text-white"
-                      style="
-                        border-top-left-radius: 0.5rem;
-                        border-bottom-left-radius: 0.5rem;
-                      "
-                    >
-                      <!-- <h3 class="entityname">Pooler</h3> -->
-                      <h3 style="margin-top: 30%">Pooler</h3>
-                      <h5 style="margin-top: 20%" id="poolerName"></h5>
-                      <p id="username"></p>
-                    </div>
-                    <div class="col-md-8">
-                      <div class="card-body p-4">
-                        <hr class="mt-0 mb-4" />
-                        <div class="row pt-1">
-                          <div class="col-6 mb-3">
-                            <h6>Email</h6>
-                            <p id="poolerEmail" class="text-muted"></p>
-                          </div>
-                          <div class="col-6 mb-3">
-                            <h6>Phone</h6>
-                            <p id="poolerMob" class="text-muted"></p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+    <!-- <div class="section"> -->
+      <!-- <div class="userdetails"> -->
+        
 
-        <div class="container col-sm-12 jumbotron">
-          <div id="select-ride"></div>
-        </div>
-        <div class="container button">
-          <button
-            type="button"
-            data-toggle="modal"
-            data-target="#searchmodal"
-            class="btn btn-secondary search-btn-ride"
-          >
-            <i class="fa fa-search"></i>
-          </button>
-        </div>
-        <div class="container button">
-          <button
-            type="button"
-            class="btn btn-secondary search-btn-ride"
-            id="prev-rides"
-          >
-            Previous Rides
-          </button>
-        </div>
-        <div class="container button">
-          <button
-            type="button"
-            class="btn btn-secondary search-btn-ride"
-            id="curr-rides"
-          >
-            Current Rides
-          </button>
-        </div>
-      </div>
-    </div>
+        <!-- <div style="background:transparent !important" class="container jumbotron">
+          <h1>Welcome!</h1>
+          <p>We're an awesome company that creates virtual things for portable devices.</p>
+          <p><a class="btn btn-primary btn-lg" role="button">Learn more</a></p>
+      </div> -->
 
+        
     <!-- after booking Modal HTML -->
     <div id="afterbooking" class="modal fade">
       <div class="modal-dialog modal-confirm">
@@ -317,7 +456,7 @@
             <p class="text-center" id="car-name"></p>
             <p class="text-center" id="car-color"></p>
             <p class="text-center" id="car-number"></p>
-            <p class="text-center">Journey route cities are : </p>
+            <p class="text-center">Journey route cities are :</p>
             <ul id="listofcitiesride"></ul>
           </div>
           <div class="modal-footer">
@@ -328,6 +467,36 @@
         </div>
       </div>
     </div>
+    <div class="container button floating-search">
+      <button
+        type="button"
+        data-toggle="modal"
+        data-target="#searchmodal"
+        class="btn btn-secondary search-btn-ride"
+      >Search Ride
+        <i class="fa fa-search"></i>
+      </button>
+    </div>
+
+    <!-- Logout Modal -->
+    <div tabindex="-1" class="modal bs-example-modal-sm" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header"><h4>Logout <i class="fa fa-lock"></i></h4></div>
+          <div class="modal-body"><i class="fa fa-question-circle"></i> Are you sure you want to log-off?</div>
+          <div class="modal-footer"><a id="logoutbtn" class="btn btn-primary btn-block" href="javascript:;">Logout</a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <button
+      type="button"
+      id="prev-ride"
+      class="btn search-btn-ride btn-dark float-prev"
+    >
+      Previous Rides
+    </button>
+    <button type="button" id="curr-ride" class="btn search-btn-ride btn-dark float-curr">Current Rides</button> -->
 
     <script src="scripts/PoolerDashboard.js"></script>
     <script

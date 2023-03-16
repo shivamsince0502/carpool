@@ -5,6 +5,21 @@ var rideMap = new Map();
 var rides;
 
 
+const dashbtn = document.getElementById("show-card-dash")
+dashbtn.addEventListener('click', (e) =>{
+    document.getElementById('show-data-prev').style.display = "none"
+    document.getElementById('show-data-curr').style.display = "none"
+    document.getElementById('show-user-card').style.display = "block"
+    document.getElementById('search-rides-div').style.display = "none"
+
+})
+
+
+document.getElementById('doj').min = new Date().toISOString().split("T")[0];
+
+document.getElementById('edoj').min = new Date().toISOString().split("T")[0];
+
+
 if(sessionStorage.getItem("loggedIn") != "true"){
     window.location.href = "HomePage.html";
 }
@@ -20,6 +35,8 @@ document.getElementById("poolerName").innerHTML = poolerName;
 document.getElementById("poolerEmail").innerHTML = poolerEmail
 document.getElementById("poolerMob").innerHTML = poolerMob
 document.getElementById("username").innerHTML = userName;
+document.getElementById("side-username").innerHTML = poolerName;
+document.getElementById("side-email").innerHTML = poolerEmail;
 
 const form = document.getElementById('search-form');
 
@@ -34,6 +51,13 @@ window.onload = getallcities;
 const citiesdrop = document.getElementById("citiesdropdown")
 const citiesdrop1 = document.getElementById("citiesdropdown1")
 function getallcities() {
+
+    document.getElementById('show-data-prev').style.display = "none"
+    document.getElementById('show-data-curr').style.display = "none"
+    document.getElementById('search-rides-div').style.display = "none"
+    document.getElementById('show-user-card').style.display = "block"
+
+
     fetch('http://localhost:8080/CarPool/city/allcities', {
         method: 'GET',
     }).then(res => res.json())
@@ -94,6 +118,7 @@ cd2.addEventListener(`change`, (e) => {
     sessionStorage.setItem("startPoint", formDataObject.start)
     sessionStorage.setItem("endPoint", formDataObject.end);
     sessionStorage.setItem("dateOfJourney", formDataObject.dateOfJourney)
+    sessionStorage.setItem("endOfJourney", formDataObject.endOfJourney)
     console.log(formDataObject)
     let formDataJsonString = JSON.stringify(formDataObject);
 
@@ -161,13 +186,25 @@ cd2.addEventListener(`change`, (e) => {
     })
 });
 
+
 const searchridesmoda = document.getElementById("search-rides")
 
 searchridesmoda.addEventListener('click', async (e) => {
     e.preventDefault();
 
-    const showData = document.getElementById("select-ride")
+    
+    document.getElementById('show-data-curr').style.display = "none"
+    document.getElementById('show-data-prev').style.display = "none"
+    document.getElementById('show-user-card').style.display = "none"
+    document.getElementById('search-rides-div').style.display = "block"
+ 
+    const showData = document.getElementById("search-ride-tb")
     var allRides = document.createElement('table');
+    document.getElementById("head-tb-search-ride").innerHTML = "All Rides of your searched by " + poolerName;
+    allRides.setAttribute('class', 'table-striped')
+    allRides.setAttribute('class', 'table')
+    allRides.setAttribute('id', 'allprevrides');
+    
     allRides.setAttribute('id', 'ridestable');
     showData.appendChild(allRides);
 
@@ -190,6 +227,13 @@ searchridesmoda.addEventListener('click', async (e) => {
 
 
     rides.forEach((item) => {
+        if(rides.length === 0) {
+            document.getElementById('show-data-curr').style.display = "none"
+            document.getElementById('show-data-prev').style.display = "none"
+            document.getElementById('show-user-card').style.display = "none"
+            document.getElementById('search-rides-div').style.display = "block"
+            document.getElementById("head-tb-search-ride").innerHTML = "No rides four on your date. " + poolerName;
+        }
         console.log(item);
         let tr = allRides.insertRow(-1);
         let ownerId = item.ownerId;
@@ -241,13 +285,16 @@ async function bookRide(el) {
         let startP = sessionStorage.getItem("startPoint");
         let endP = sessionStorage.getItem("endPoint")
         let dateOfJourneyP = sessionStorage.getItem("dateOfJourney")
+        let endDateOfJourneyp = sessionStorage.getItem("endOfJourney")
         var payload = {
             rideId: rideId,
             poolerId: poolerId,
             start: startP,
             end: endP,
-            dateOfJourney: dateOfJourneyP
+            dateOfJourney: dateOfJourneyP,
+            endDateOfJourney : endDateOfJourneyp
         }
+        console.log(payload);
         payload = JSON.stringify(payload); // last 
 
         const requrl = "http://localhost:8080/CarPool/ride/bookrequest";
@@ -314,7 +361,6 @@ editUser.addEventListener('click', (e) => {
     document.getElementById("pooler-name").value = poolerName
 })
 
-document.getElementById('doj').min = new Date().toISOString().split("T")[0];
 
 
 const saveChages = document.getElementById("saveChanges")
@@ -339,6 +385,7 @@ saveChages.addEventListener('click', (e) => {
             sessionStorage.setItem("username", res.userName)
             sessionStorage.setItem("poolerId", res.poolerId)
             alert('user update')
+            window.location.href = "PoolerDashboard.html";
             console.log(res);
 
         }).catch(err => alert(err))
@@ -346,11 +393,20 @@ saveChages.addEventListener('click', (e) => {
 
 
 
-const currjourneybtn = document.getElementById("curr-rides")
+const currjourneybtn = document.getElementById("curr-ride")
 currjourneybtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    document.getElementById('show-user-card').style.display = "none"
+    document.getElementById('show-data-prev').style.display = "none"
+    document.getElementById('show-data-curr').style.display = "block"
+    
 
+    document.getElementById("head-tb-curr").innerHTML = "All Current Rides of the " + poolerName;
   const showuprides = document.getElementById("select-ride")
+  showuprides.innerHTML = ""
   var alluprides = document.createElement('table');
+  alluprides.setAttribute('class', 'table-striped')
+  alluprides.setAttribute('class', 'table')
   alluprides.setAttribute('id', 'alluprides');
   showuprides.appendChild(alluprides);
 
@@ -415,6 +471,7 @@ currjourneybtn.addEventListener('click', async (e) => {
         // set button attributes.
         button.setAttribute('type', 'button');
         button.setAttribute('class', 'btn btn-dark')
+        
         button.innerHTML = 'Un Book';
         // set onclick event.
         button.setAttribute('onclick', 'unBook(this)');
@@ -480,12 +537,21 @@ async function unBook(el) {
   
 
 
+const prevbtn = document.getElementById("prev-ride")
+prevbtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    console.log("prev ride pressed")
+    
+    document.getElementById('show-data-curr').style.display = "none"
+    document.getElementById('show-user-card').style.display = "none"
+    document.getElementById('show-data-prev').style.display = "block"
 
-const prevjourneybtn = document.getElementById("prev-rides")
-prevjourneybtn.addEventListener('click', async (e) => {
-
-  const showprevrides = document.getElementById("select-ride")
+  const showprevrides = document.getElementById("prev-rides")
+  showprevrides.innerHTML = ""
   var allprevrides = document.createElement('table');
+  document.getElementById("head-tb-prev").innerHTML = "All Previous Rides of " + poolerName;
+  allprevrides.setAttribute('class', 'table-striped')
+  allprevrides.setAttribute('class', 'table')
   allprevrides.setAttribute('id', 'allprevrides');
   showprevrides.appendChild(allprevrides);
 
@@ -577,3 +643,7 @@ async function delThisRide(el) {
     console.log(nres)
     alert('Ride Deleted')
   }
+
+
+
+  

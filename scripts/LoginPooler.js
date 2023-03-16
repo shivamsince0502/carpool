@@ -1,4 +1,8 @@
 
+if(sessionStorage.getItem("loggedIn") == "true") {
+    window.location.href = "PoolerDashboard.html";
+}
+
 const form = document.getElementById('login-form');
 form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -35,8 +39,6 @@ form.addEventListener('submit', (e) => {
             sessionStorage.setItem("username", res.userName)
             sessionStorage.setItem("poolerId", res.poolerId)
             sessionStorage.setItem("loggedIn", "true"); 
-            
-            alert("Logged In Successfully")
             window.location.href = 'PoolerDashboard.html'
         }else {
             alert("User not found")

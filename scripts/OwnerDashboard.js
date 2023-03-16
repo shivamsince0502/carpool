@@ -17,6 +17,8 @@ document.getElementById("ownerName").innerHTML = ownerName;
 document.getElementById("ownerEmail").innerHTML = ownerEmail
 document.getElementById("ownerMob").innerHTML = ownerMob
 document.getElementById("username").innerHTML = userName;
+document.getElementById("side-email").innerHTML = ownerEmail;
+document.getElementById("side-username").innerHTML = ownerName;
 
 const logout = document.getElementById("logoutbtn")
 logout.addEventListener('click', (e) => {
@@ -24,6 +26,21 @@ logout.addEventListener('click', (e) => {
   sessionStorage.clear()
   window.location.href = 'HomePage.html'
 });
+
+window.onload = onloadDOM
+
+async function onloadDOM() {
+  document.getElementById('show-data-curr').style.display = "none"
+  document.getElementById('show-data-prev').style.display = "none"
+  document.getElementById('show-user-card').style.display = "block"
+}
+
+const dashbtn = document.getElementById("show-card-dash")
+dashbtn.addEventListener('click', (e) =>{
+    document.getElementById('show-data-prev').style.display = "none"
+    document.getElementById('show-data-curr').style.display = "none"
+    document.getElementById('show-user-card').style.display = "block"
+})
 
 var citiesofride = [];
 
@@ -95,7 +112,15 @@ startJournery.addEventListener('click', async (e) => {
 
         })
     } else {
-      alert('Please fill start point, end point and no of seats and car')
+      if(formDataObject.noOfSeats === "0") {
+        alert("please fill no of seats.")
+      }else if(formDataObject.carName === ""){
+        alert('Please fill car details.')
+      }else if(citiesofride.length > 1){
+        alert('Please fill locations of your ride.')
+      }else {
+        alert("Please fill all the credentials")
+      }
     }
   })
 
@@ -241,9 +266,10 @@ addcaraction.addEventListener('click', async (e) => {
 
 
 
-const editUser = document.getElementById("editDetails")
+const editUser = document.getElementById("editDetailUser")
 editUser.addEventListener('click', (e) => {
   e.preventDefault();
+  console.log("edit detail user onlcick")
   document.getElementById("user-name").value = userName;
   document.getElementById("user-email").value = ownerEmail
   document.getElementById("user-mob").value = ownerMob
@@ -272,6 +298,7 @@ saveChages.addEventListener('click', async (e) => {
       sessionStorage.setItem("username", res.userName)
       sessionStorage.setItem("ownerId", res.ownerId)
       alert('user update')
+      window.location.href = "OwnerDashboard.html";
       console.log(res);
 
     }).catch(err => alert(err))
@@ -295,12 +322,20 @@ async function deletecity(el) {
 
 const myjourneybtn = document.getElementById("my-jn")
 myjourneybtn.addEventListener('click', async (e) => {
+  e.preventDefault();
 
-  const showprevride = document.getElementById("up-journeys")
+  document.getElementById('show-user-card').style.display = "none"
+  document.getElementById('show-data-curr').style.display = "none"
+  document.getElementById('show-data-prev').style.display = "block"
+
+  const showprevride = document.getElementById("prev-rides")
+  showprevride.innerHTML = ""
   var allprevrides = document.createElement('table');
+  allprevrides.setAttribute('class', 'table-striped')
+  allprevrides.setAttribute('class', 'table')
   allprevrides.setAttribute('id', 'allprevrides');
   showprevride.appendChild(allprevrides);
-  document.getElementById("tabletitle").innerHTML = 'All Previous Journeys of ' + ownerName
+  document.getElementById("head-tb-prev").innerHTML = 'All Previous Journeys of ' + ownerName
   var prevridetablehead = allprevrides.insertRow(0);
 
   var tableHeadArray = new Array();
@@ -388,10 +423,17 @@ async function delThisRide(el) {
 
 const currjourneybtn = document.getElementById("up-jn")
 currjourneybtn.addEventListener('click', async (e) => {
+  document.getElementById('show-user-card').style.display = "none"
+    document.getElementById('show-data-prev').style.display = "none"
+    document.getElementById('show-data-curr').style.display = "block"
 
-  const showuprides = document.getElementById("up-journeys")
-  document.getElementById("tabletitle").innerHTML = 'All current and upcoming journeys of ' + ownerName
+
+  const showuprides = document.getElementById("select-ride")
+  showuprides.innerHTML = "";
+  document.getElementById("head-tb-curr").innerHTML = 'All current and upcoming journeys of ' + ownerName
   var alluprides = document.createElement('table');
+  alluprides.setAttribute('class', 'table-striped')
+  alluprides.setAttribute('class', 'table')
   alluprides.setAttribute('id', 'alluprides');
   showuprides.appendChild(alluprides);
 
@@ -628,6 +670,8 @@ editmodalbtn.addEventListener('click', async (e) => {
 
 
 })
+
+
 
 
 

@@ -60,12 +60,12 @@
         pointer-events: none;
       }
 
-      /* .btn-reg-log:hover {
+      .btn-reg-log:hover {
         color: #fff;
         background-color: #100730;
         box-shadow: rgba(94, 121, 218, 0.25) 0 8px 15px;
         transform: translateY(-2px);
-      } */
+      }
 
       .btn-reg-log:active {
         box-shadow: none;
@@ -78,22 +78,26 @@
       .right-part {
         display: inline-flex;
         float: left;
-        margin-left: 94px;
-        margin-top: 572px;
+        margin-left: 100px;
+        margin-top: 700px;
       }
 
       .own-btn {
         margin-left: 58px;
       }
       body {
-        background-image: url("images/carpoolhome.jpg");
+        background-image: url("images/carpoolhome-overlay.jpg");
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-size: cover;
       }
+
+
+
     </style>
   </head>
   <body>
+
     <div class="main-block">
       <div class="left-part"></div>
       <div class="right-part">
@@ -101,7 +105,7 @@
           <button
             class="btn-reg-log pooler"
             style="margin-top: 10px"
-            onclick="window.location='PoolerRegistration.html';"
+            onclick="window.location='PoolerLogin.html';"
           >
             POOLER
           </button>
@@ -110,7 +114,7 @@
           <button
             class="btn-reg-log owner"
             style="margin-top: 10px"
-            onclick="window.location='OwnerRegistration.html';"
+            onclick="window.location='OwnerLogin.html';"
           >
             OWNER
           </button>
