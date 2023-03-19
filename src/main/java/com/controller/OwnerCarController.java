@@ -1,4 +1,3 @@
 package com.controller;
 
-public class OwnerCarController {
-}
+public class OwnerCarController {}

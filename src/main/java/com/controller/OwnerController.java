@@ -1,11 +1,10 @@
 package com.controller;
 
-import com.model.Owner;
-import com.model.Pooler;
-import com.model.Ride;
+import com.model.*;
 import com.payload.LoginPayload;
 import com.payload.OwnerUpdatePayload;
 import com.payload.PoolerUpdatePayload;
+import com.payload.ReqDecPayload;
 import com.services.OwnerService;
 import com.services.RideService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,18 +49,49 @@ public class OwnerController {
     }
 
     @PostMapping("/updateowner/{id}")
-    Owner updateOwner(@RequestBody OwnerUpdatePayload ownerUpdatePayload, @PathVariable int id){
+    Owner updateOwner(@RequestBody OwnerUpdatePayload ownerUpdatePayload, @PathVariable("id") int id){
         return ownerService.updateOwner(ownerUpdatePayload, id);
     }
 
     @GetMapping("/getallprevrides/{id}")
-    List<Ride> getAllPrevRidesByOwner(@PathVariable int id) {
+    List<Ride> getAllPrevRidesByOwner(@PathVariable("id") int id) {
         return ownerService.getAllPrevRidesByOwnerId(id);
     }
 
     @GetMapping("/getAllUpRides/{id}")
     List<Ride> getAllUpRides(@PathVariable int id){
         return ownerService.getAllUpRides(id);
+    }
+
+    @GetMapping("allpoolrequest/{oId}")
+    List<RidePooler> allPoolRequests(@PathVariable("oId") int ownerId) {
+        return ownerService.allPoolRequests(ownerId);
+    }
+
+    @PostMapping("/requestdecisionbyowner")
+    RidePooler decisionOfRequestByOwner(@RequestBody ReqDecPayload reqDecPayload) {
+        return ownerService.approvePoolRequest(reqDecPayload);
+    }
+
+    @GetMapping("allridesofowner/{id}")
+    List<Ride> getAllRidesOfOwner(@PathVariable("id") int ownerId) {
+        return ownerService.getAllRidesoFOwner(ownerId);
+    }
+
+    @PostMapping("removepoolerfromrride{id}")
+    RidePooler removePoolerFromRide(@PathVariable("id") int ridePoolerId) {
+        return ownerService.declineRidePooler(ridePoolerId);
+    }
+
+
+    @GetMapping("allactivenotifofowner/{id}")
+    List<OwnerNotification> allActiveNotification(@PathVariable("id") int ownerId) {
+        return ownerService.allActiveNotificationsofOwner(ownerId);
+    }
+
+    @PostMapping("readnotif/{notifid}")
+    OwnerNotification readNotif(@PathVariable("notifid") int notifId){
+        return ownerService.readNotification(notifId);
     }
 
 }

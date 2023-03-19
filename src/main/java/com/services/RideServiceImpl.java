@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.sql.Date;
 
 
@@ -51,6 +48,7 @@ public class RideServiceImpl implements RideService{
         for(Ride ride : allRides) {
             if(ride.getActive()) allActiveRides.add(ride);
         }
+
         return allActiveRides;
     }
 
@@ -94,20 +92,39 @@ public class RideServiceImpl implements RideService{
         }
         long millis=System.currentTimeMillis();
         java.sql.Date date=new java.sql.Date(millis);
+        java.sql.Date edate=new java.sql.Date(millis);
         if(!poolerJourneyPayload.getDateOfJourney().equals(""))
             date = java.sql.Date.valueOf(poolerJourneyPayload.getDateOfJourney());
+        if(!poolerJourneyPayload.getEndDateOfJourney().equals(""))
+            edate = java.sql.Date.valueOf(poolerJourneyPayload.getEndDateOfJourney());
+
+        HashMap<Integer, Integer> distMap = new HashMap<>();
+
         for(Ride ride : activeRides) {
             int rideId = ride.getRideId();
             if(rideCities.containsKey(rideId)){
                 List<String> cities = rideCities.get(rideId);
-                if(ride.getRideDate().compareTo(date) >= 0) {
+                if(ride.getRideDate().compareTo(date) >= 0 && ride.getRideDate().compareTo(edate) <= 0) {
                     if (cities.contains(start) && cities.contains(end)) {
-                        if (cities.indexOf(start) < cities.indexOf(end))
+                        if (cities.indexOf(start) < cities.indexOf(end)) {
+                            distMap.put(rideId ,cities.indexOf(start) - cities.indexOf(end));
                             requiredRides.add(ride);
+                        }
                     }
                 }
             }
         }
+        Collections.sort(requiredRides, new Comparator<Ride>() {
+            public int compare(Ride o1, Ride o2) {
+                return (distMap.get(o2.getRideId()) - distMap.get(o1.getRideId()));
+            }
+        });
+        Collections.sort(requiredRides, new Comparator<Ride>() {
+            public int compare(Ride o1, Ride o2) {
+                return o1.getRideDate().compareTo(o2.getRideDate());
+            }
+        });
+
         transaction.commit();
         session.close();
         return requiredRides;
@@ -140,34 +157,41 @@ public class RideServiceImpl implements RideService{
     public RidePooler bookingRequest(BookRequestPayload bookRequestPayload) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
+        java.sql.Date reqDate = java.sql.Date.valueOf(bookRequestPayload.getDateOfJourney());
         int rideId = bookRequestPayload.getRideId();
         int poolerId = bookRequestPayload.getPoolerId();
         List<RidePooler> ridePoolerList1 = poolerService.allUpRideByPoolerId(poolerId);
         for(RidePooler ridePooler : ridePoolerList1) {
-            if(ridePooler.getRideId() == rideId) {
-                return null;
+            Ride ride = session.get(Ride.class, ridePooler.getRideId());
+            if(ridePooler.getRideId() == rideId && ridePooler.getActive() && ride.getRideDate().compareTo(reqDate) == 0) {
+                return new RidePooler();
             }
         }
         Ride ride = session.get(Ride.class, rideId);
-        ride.setNoOfSeats(ride.getNoOfSeats()-1);
+        int seatNo = -1;
         session.saveOrUpdate(ride);
-        int seatNo = ride.getNoOfSeats();
 
         List<City> cities = cityServices.getAllCities();
-        int startId = 1, endId = 2;
+        int startId = 0, endId = 0;
         for(City city : cities) {
             if(city.getCityName().equals(bookRequestPayload.getStart()))
                 startId = city.getCityId();
 
             if(city.getCityName().equals(bookRequestPayload.getEnd()))
                 endId = city.getCityId();
+            if(startId != 0 && endId != 0) break;;
         }
-        String sql = "insert into ride_pooler(ride_id, pooler_id, start_id, end_id, seat_no, is_active) values("+rideId+", "+poolerId+", "+startId+","+endId+","+seatNo+", true)";
+        String sql = "insert into ride_pooler(ride_id, pooler_id, start_id, end_id, seat_no, is_active) values("+rideId+", "+poolerId+", "+startId+","+endId+","+seatNo+", false)";
         SQLQuery query = session.createSQLQuery(sql);
         query.addEntity(RidePooler.class);
         query.executeUpdate();
         List<RidePooler> ridePoolerList = session.createQuery("from RidePooler", RidePooler.class).list();
         RidePooler ridePooler1 = ridePoolerList.get(ridePoolerList.size()-1);
+        PoolRequest poolRequest = new PoolRequest();
+        poolRequest.setRidePoolerId(ridePooler1.getRidePoolerId());
+        poolRequest.setApproved(false);
+        poolRequest.setSeen(false);
+        session.save(poolRequest);
         transaction.commit();
         session.close();
         return ridePooler1;
@@ -249,6 +273,7 @@ public class RideServiceImpl implements RideService{
     public Ride finishRideById(int id) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
+
         Ride ride = session.get(Ride.class, id);
         ride.setNoOfSeats(ride.getNoOfSeats()+1);
         ride.setActive(false);
@@ -294,8 +319,11 @@ public class RideServiceImpl implements RideService{
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         List<RidePooler> ridePoolerList = session.createQuery("from RidePooler", RidePooler.class).list();
+        Ride ride = session.get(Ride.class, rideId);
+        ride.setNoOfSeats(ride.getNoOfSeats()+1);
+        session.saveOrUpdate(ride);
         for(RidePooler ridePooler : ridePoolerList) {
-            if(ridePooler.getPoolerId() == poolerId && ridePooler.getRideId() == rideId){
+            if(ridePooler.getPoolerId() == poolerId && ridePooler.getRideId() == rideId && ridePooler.getActive()){
                 ridePooler.setActive(false);
                 session.saveOrUpdate(ridePooler);
                 transaction.commit();
@@ -310,19 +338,57 @@ public class RideServiceImpl implements RideService{
     public RidePooler unBookRide(int rideId, int poolerId) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
+        Pooler pooler = session.get(Pooler.class, poolerId);
         List<RidePooler> ridePoolerList = session.createQuery("from RidePooler", RidePooler.class).list();
         Ride ride = session.get(Ride.class, rideId);
         ride.setNoOfSeats(ride.getNoOfSeats()+1);
         session.saveOrUpdate(ride);
         for(RidePooler ridePooler : ridePoolerList) {
-            if(ridePooler.getPoolerId() == poolerId && ridePooler.getRideId() == rideId){
-                session.delete(ridePooler);
+            if(ridePooler.getPoolerId() == poolerId && ridePooler.getRideId() == rideId && ridePooler.getActive()){
+                ridePooler.setActive(false);
+                session.saveOrUpdate(ridePooler);
+                OwnerNotification ownerNotification = new OwnerNotification();
+
+                String msg = "Hey Owner "+ pooler.getPoolerName() +" has unbooked the ride ride no "+ rideId + " from "+
+                        cityServices.getCityById(ridePooler.getStartCityId()).getCityName() + " to " +
+                        cityServices.getCityById(ridePooler.getEndCityId()).getCityName() + " on " + ride.getRideDate();
+                ownerNotification.setMessage(msg);
+                ownerNotification.setOwnerId(ride.getOwnerId());
+                ownerNotification.setRead(false);
+                session.save(ownerNotification);
+
                 transaction.commit();
                 session.close();
                 return ridePooler;
             }
         }
         return null;
+    }
+
+    @Override
+    public List<Date> getCurrDate() {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        long millis=System.currentTimeMillis();
+        java.sql.Date date=new java.sql.Date(millis);
+        Ride ride = session.get(Ride.class, 2);
+        List<Date> dates = new ArrayList<>();
+        dates.add(ride.getRideDate());
+        dates.add(date);
+        return dates;
+    }
+
+    @Override
+    public List<RidePooler> allPoolersOfRide(int rideId) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        String sql = "select * from ride_pooler where ride_id = " +rideId;
+        SQLQuery query = session.createSQLQuery(sql);
+        query.addEntity(RidePooler.class);
+        List result = query.list();
+        transaction.commit();
+        session.close();
+        return result;
     }
 
 

@@ -36,6 +36,9 @@
                 <value>com.model.RideCities</value>
                 <value>com.model.DeleteRide</value>
                 <value>com.model.DeletePoolerRide</value>
+                <value>com.model.PoolerNotification</value>
+                <value>com.model.OwnerNotification</value>
+                <value>com.model.PoolRequest</value>
             </list>
         </property>
         <property name="hibernateProperties" >

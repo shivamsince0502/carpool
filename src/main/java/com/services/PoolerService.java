@@ -1,6 +1,7 @@
 package com.services;
 
 import com.model.Pooler;
+import com.model.PoolerNotification;
 import com.model.RidePooler;
 import com.payload.LoginPayload;
 import com.payload.PoolerUpdatePayload;
@@ -26,4 +27,9 @@ public interface PoolerService {
     List<RidePooler> allPrevRideByPoolerId(int id);
 
     RidePooler deleteRidePooler(int rideId, int poolerId);
+
+    List<PoolerNotification> allNotifOfPoolerById(int poolerId);
+
+    PoolerNotification readNotificationByPooler(int notifId);
+
 }

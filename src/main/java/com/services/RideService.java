@@ -7,6 +7,7 @@ import com.model.RidePooler;
 import com.payload.*;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.sql.Date;
 import java.util.List;
 
 public interface RideService {
@@ -32,4 +33,9 @@ public interface RideService {
 
     RidePooler findRideForPooler(int rideId, int poolerId);
     RidePooler unBookRide(int rideId, int poolerId);
+
+    List<Date> getCurrDate();
+
+    List<RidePooler> allPoolersOfRide(int rideId);
+
 }

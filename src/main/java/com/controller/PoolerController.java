@@ -1,6 +1,7 @@
 package com.controller;
 
 import com.model.Pooler;
+import com.model.PoolerNotification;
 import com.model.RidePooler;
 import com.payload.LoginPayload;
 import com.payload.PoolerUpdatePayload;
@@ -62,4 +63,15 @@ public class PoolerController {
     RidePooler deleteRidePooler(@PathVariable("rid") int rideId, @PathVariable("pid") int poolerId) {
         return poolerService.deleteRidePooler(rideId, poolerId);
     }
+
+    @GetMapping("allnotifofpooler/{id}")
+    List<PoolerNotification> allNotificationOfPooler(@PathVariable("id") int poolerId) {
+        return poolerService.allNotifOfPoolerById(poolerId);
+    }
+
+    @PostMapping("msgread/{id}")
+    PoolerNotification poolerReadMsg(@PathVariable("id") int id) {
+        return poolerService.readNotificationByPooler(id);
+    }
+
 }

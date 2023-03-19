@@ -1,5 +1,6 @@
 package com.controller;
 
+import com.model.PoolerNotification;
 import com.model.Ride;
 import com.model.RideCities;
 import com.model.RidePooler;
@@ -11,6 +12,7 @@ import com.services.RideService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.List;
 
 @CrossOrigin(origins = "http://127.0.0.1:5500")
@@ -70,9 +72,19 @@ public class RideController {
         return rideService.findRideForPooler(rideId, poolerId);
     }
 
-    @DeleteMapping("unbookride/{rid}/{pid}")
+    @PostMapping("unbookride/{rid}/{pid}")
     RidePooler unBookRideForPooler(@PathVariable("rid") int rideId, @PathVariable("pid") int poolerId){
         return rideService.unBookRide(rideId, poolerId);
+    }
+
+    @GetMapping("getcurrdate")
+    List<Date> getCurrDate() {
+        return rideService.getCurrDate();
+    }
+
+    @GetMapping("allpoolersinride/{id}")
+    List<RidePooler> allPoolersOfRide(@PathVariable("id") int rideId) {
+        return rideService.allPoolersOfRide(rideId);
     }
 
 }
