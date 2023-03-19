@@ -118,5 +118,33 @@ create table deletepoolerride(
 	foreign key (ride_pooler_id) references ride_pooler(ride_pooler_id)
 );
 
+drop table if exists pool_request;
+create table pool_request(
+	poolrequest_id int auto_increment primary key,
+	ride_pooler_id int not null,
+	is_approved bool not null,
+	is_seen bool not null default false,
+	foreign key (ride_pooler_id) references ride_pooler(ride_pooler_id)
+);
+
+drop table if exists poolernotification;
+create table poolernotification(
+	notification_id int auto_increment primary key, 
+	pooler_id int not null,
+	message text, 
+	is_read bool not null default false,
+	foreign key (pooler_id) references pooler(pooler_id)
+);
+
+
+drop table if exists ownernotification;
+create table ownernotification(
+	notification_id int auto_increment primary key, 
+	owner_id int not null,
+	message text, 
+	is_read bool not null default false,
+	foreign key (owner_id) references owner(owner_id)
+);
+
 
 
