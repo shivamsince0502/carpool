@@ -39,6 +39,7 @@ form.addEventListener('submit', (e) => {
             sessionStorage.setItem("username", res.userName)
             sessionStorage.setItem("poolerId", res.poolerId)
             sessionStorage.setItem("loggedIn", "true"); 
+            sessionStorage.setItem("profileurl", "images/user.png");
             window.location.href = 'PoolerDashboard.html'
         }else {
             alert("User not found")

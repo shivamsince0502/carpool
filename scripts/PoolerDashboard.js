@@ -5,6 +5,8 @@ var rideMap = new Map();
 var rides;
 
 
+// document.getElementById('title').value = poolerName
+
 const dashbtn = document.getElementById("show-card-dash")
 dashbtn.addEventListener('click', (e) =>{
     document.getElementById('show-data-prev').style.display = "none"
@@ -14,10 +16,11 @@ dashbtn.addEventListener('click', (e) =>{
 
 })
 
-
 document.getElementById('doj').min = new Date().toISOString().split("T")[0];
 
 document.getElementById('edoj').min = new Date().toISOString().split("T")[0];
+console.log(sessionStorage.getItem('profileurl'))
+document.getElementById("myImage").setAttribute('src', sessionStorage.getItem('profileurl'))
 
 
 if(sessionStorage.getItem("loggedIn") != "true"){
@@ -38,6 +41,7 @@ document.getElementById("username").innerHTML = userName;
 document.getElementById("side-username").innerHTML = poolerName;
 document.getElementById("side-email").innerHTML = poolerEmail;
 
+
 const form = document.getElementById('search-form');
 
 const logout = document.getElementById("logoutbtn")
@@ -50,15 +54,27 @@ logout.addEventListener('click', (e) => {
 window.onload = getallcities;
 const citiesdrop = document.getElementById("citiesdropdown")
 const citiesdrop1 = document.getElementById("citiesdropdown1")
-function getallcities() {
+async function getallcities() {
 
     document.getElementById('show-data-prev').style.display = "none"
     document.getElementById('show-data-curr').style.display = "none"
     document.getElementById('search-rides-div').style.display = "none"
     document.getElementById('show-user-card').style.display = "block"
 
+    const today = new Date();
+const myDateInput = document.getElementById("doj");
+myDateInput.value = today.toISOString().slice(0, 10);
 
-    fetch('http://localhost:8080/CarPool/city/allcities', {
+const myDateInput1 = document.getElementById("edoj");
+myDateInput1.value = today.toISOString().slice(0, 10);
+
+let allnotifurl = 'http://localhost:8080/CarPool/pooler/allnotifofpooler/' + poolerId;
+  let data = await fetch(allnotifurl);
+  let allnotif = await data.json();
+  document.getElementById("no-of-notif").innerHTML = allnotif.length
+
+
+    await fetch('http://localhost:8080/CarPool/city/allcities', {
         method: 'GET',
     }).then(res => res.json())
         .then((data) => {
@@ -199,11 +215,13 @@ searchridesmoda.addEventListener('click', async (e) => {
     document.getElementById('search-rides-div').style.display = "block"
  
     const showData = document.getElementById("search-ride-tb")
+    showData.innerHTML = ""
     var allRides = document.createElement('table');
-    document.getElementById("head-tb-search-ride").innerHTML = "All Rides of your searched by " + poolerName;
+    document.getElementById("head-tb-search-ride").innerHTML = "All Rides of your search " + poolerName;
     allRides.setAttribute('class', 'table-striped')
+
     allRides.setAttribute('class', 'table')
-    allRides.setAttribute('id', 'allprevrides');
+    allRides.setAttribute('id', 'allprevrides1');
     
     allRides.setAttribute('id', 'ridestable');
     showData.appendChild(allRides);
@@ -223,8 +241,9 @@ searchridesmoda.addEventListener('click', async (e) => {
 
     //add cell padding
     allRides.setAttribute('cellpadding', '10px');
-
-
+    if(rides.length == 0) {
+        document.getElementById("allprevrides1").style.backgroundImage="url('no-result.jpg')";
+    }else{
 
     rides.forEach((item) => {
         if(rides.length === 0) {
@@ -267,7 +286,7 @@ searchridesmoda.addEventListener('click', async (e) => {
         button.setAttribute('onclick', 'bookRide(this)');
         td.appendChild(button);
     })
-
+}
     // console.log(rideMap )
 });
 
@@ -336,6 +355,7 @@ async function bookRide(el) {
                 let citieslistride = document.getElementById("listofcitiesride")
                 for (i = 0; i < allcitiesofride.length; ++i) {
                     var li = document.createElement('li');
+                    li.setAttribute('class', 'list-group-item')
                     li.innerText = allcitiesofride[i].cityName;
                     citieslistride.appendChild(li);
                 }
@@ -406,6 +426,7 @@ currjourneybtn.addEventListener('click', async (e) => {
   showuprides.innerHTML = ""
   var alluprides = document.createElement('table');
   alluprides.setAttribute('class', 'table-striped')
+  alluprides.setAttribute('class', 'table-striped1')
   alluprides.setAttribute('class', 'table')
   alluprides.setAttribute('id', 'alluprides');
   showuprides.appendChild(alluprides);
@@ -431,8 +452,8 @@ currjourneybtn.addEventListener('click', async (e) => {
   await fetch(uprideurl, {
     method: "GET"
   }).then((res) => res.json())
-    .then((uprides) => {
-      uprides.forEach(async (item) => {
+    .then(async(uprides) => {
+        for(const item of uprides) {
         let rideId = item.rideId;
         let ridefetchurl = 'http://localhost:8080/CarPool/ride/getridebyrideid/' + rideId;
         let rideInfo = await fetch(ridefetchurl, { method: 'GET' })
@@ -491,7 +512,7 @@ currjourneybtn.addEventListener('click', async (e) => {
         td1.appendChild(button1);
         console.log(td)
         console.log(td1)
-      })
+      }
     })
 
 
@@ -527,7 +548,7 @@ async function unBook(el) {
     console.log(oCells)
     let rideId = oCells[0].innerHTML;
     let finishurl = 'http://localhost:8080/CarPool/ride/unbookride/' + rideId +"/"+ poolerId;
-    let res = await fetch(finishurl, { method: 'DELETE' })
+    let res = await fetch(finishurl, { method: 'POST' })
     let data = await res.json();
     if (data.rideId)
       alert('Ride UnBooked')
@@ -575,57 +596,62 @@ prevbtn.addEventListener('click', async (e) => {
   let uprideurl = "http://localhost:8080/CarPool/pooler/getallprevridebypoolerid/" + poolerId;
   await fetch(uprideurl, {
     method: "GET"
-  }).then((res) => res.json())
-    .then((uprides) => {
-      uprides.forEach(async (item) => {
-        let rideId = item.rideId;
-        let ridefetchurl = 'http://localhost:8080/CarPool/ride/getridebyrideid/' + rideId;
-        let rideInfo = await fetch(ridefetchurl, { method: 'GET' })
-        let rideData = await rideInfo.json();
-        let ownerId = rideData.ownerId
-        let tr = allprevrides.insertRow(-1);
-        let carId = rideData.carId;
-        let rideDate = rideData.rideDate;
-        let carinfourl = 'http://localhost:8080/CarPool/car/getcar' + carId;
-        let resp = await fetch(carinfourl, { method: "GET" })
-        let carofride = await resp.json();
-        let oInfourl = 'http://localhost:8080/CarPool/owner/owner:' + ownerId;
-        let reso = await fetch(oInfourl, {method : "GET"})
-        let owner = await reso.json()
-        let citiyrl = 'http://localhost:8080/CarPool/city/getcitybyid/'
-        let ny1 = citiyrl + item.startCityId;
-        let rescity1 = await fetch(ny1, {method : "GET"})
-        let city1 = await rescity1.json()
-        let ny2 = citiyrl + item.endCityId
-        let rescity2 = await fetch(ny2, {method : "GET"})
-        let city2 = await rescity2.json()
-        var tableDataArrayOfRide = new Array();
-        tableDataArrayOfRide = [rideId, carofride.carName,owner.ownerName, owner.ownerMob, city1.cityName, city2.cityName, rideDate];
-
-        for (var i = 0; i < tableDataArrayOfRide.length; i++) {
-
-          var td = tr.insertCell(-1);
-          td.innerHTML = tableDataArrayOfRide[i];
+  }).then(async (res) => await res.json())
+    .then(async (uprides) => {
+        console.log(uprides)
+        for(const item of uprides) {
+            let rideId = item.rideId;
+            let ridefetchurl = 'http://localhost:8080/CarPool/ride/getridebyrideid/' + rideId;
+            let rideInfo = await fetch(ridefetchurl, { method: 'GET' })
+            let rideData = await rideInfo.json();
+            
+            console.log(rideData)
+            let ownerId = rideData.ownerId
+            let tr = allprevrides.insertRow(-1);
+            let carId = rideData.carId;
+            let rideDate = rideData.rideDate;
+            let carinfourl = 'http://localhost:8080/CarPool/car/getcar' + carId;
+            let resp = await fetch(carinfourl, { method: "GET" })
+            let carofride = await resp.json();
+            let oInfourl = 'http://localhost:8080/CarPool/owner/owner:' + ownerId;
+            let reso = await fetch(oInfourl, {method : "GET"})
+            let owner = await reso.json()
+            let citiyrl = 'http://localhost:8080/CarPool/city/getcitybyid/'
+            let ny1 = citiyrl + item.startCityId;
+            let rescity1 = await fetch(ny1, {method : "GET"})
+            let city1 = await rescity1.json()
+            let ny2 = citiyrl + item.endCityId
+            let rescity2 = await fetch(ny2, {method : "GET"})
+            let city2 = await rescity2.json()
+            
+            
+            var tableDataArrayOfRide = new Array();
+            tableDataArrayOfRide = [rideId, carofride.carName,owner.ownerName, owner.ownerMob, city1.cityName, city2.cityName, rideDate];
+    
+            for (var i = 0; i < tableDataArrayOfRide.length; i++) {
+    
+              var td = tr.insertCell(-1);
+              td.innerHTML = tableDataArrayOfRide[i];
+            }
+    
+            var td = tr.insertCell(-1);
+    
+            // add a button
+            var button = document.createElement('button');
+    
+            // set button attributes.
+            button.setAttribute('type', 'button');
+            button.setAttribute('class', 'btn btn-dark')
+            button.innerHTML = 'Delete';
+            // set onclick event.
+            button.setAttribute('onclick', 'delThisRide(this)');
+            td.appendChild(button);
         }
-
-        var td = tr.insertCell(-1);
-
-        // add a button
-        var button = document.createElement('button');
-
-        // set button attributes.
-        button.setAttribute('type', 'button');
-        button.setAttribute('class', 'btn btn-dark')
-        button.innerHTML = 'Delete';
-        // set onclick event.
-        button.setAttribute('onclick', 'delThisRide(this)');
-        td.appendChild(button);
-
-      })
     })
 
 
 })
+
 
 
 async function delThisRide(el) {
@@ -637,13 +663,102 @@ async function delThisRide(el) {
     console.log(oCells)
     let rideId = oCells[0].innerHTML;
     console.log(rideId);
-    let delrideurl = 'http://localhost:8080/CarPool/pooler/deleteride/' + rideId +"/"+poolerId;
+    let delrideurl = 'http://localhost:8080/CarPool/pooler/deleteride/' + rideId +'/'+poolerId;
     let res = await fetch(delrideurl, { method: 'POST' })
     let nres = res.json();
     console.log(nres)
     alert('Ride Deleted')
   }
 
+
+  
+
+  
+const bellicon = document.getElementById("bell-icon")
+bellicon.addEventListener('click', async (e) => {
+  e.preventDefault();
+  let allnotifurl = 'http://localhost:8080/CarPool/pooler/allnotifofpooler/' + poolerId;
+  let data = await fetch(allnotifurl);
+  let allnotif = await data.json();
+  console.log(allnotif)
+
+  
+  const notifytablediv = document.getElementById("notif-table-div")
+  notifytablediv.innerHTML = "";
+  var notifytable = document.createElement('table');
+  notifytable.setAttribute('class', 'table-striped')
+  notifytable.setAttribute('class', 'table')
+  notifytable.setAttribute('class', 'table-hover')
+  notifytable.setAttribute('id', 'notify-table');
+  notifytablediv.appendChild(notifytable);
+
+  var notifytablehead = notifytable.insertRow(0);
+  var tableHeadArray = new Array();
+  tableHeadArray = ['Msg no', 'Message'];
+  // console.log(tableHeadArray)
+  for (var i = 0; i < tableHeadArray.length; i++) {
+    var th = document.createElement('th');
+    th.setAttribute('scope', 'row');
+    th.innerHTML = tableHeadArray[i];
+    notifytablehead.appendChild(th);
+  }
+  console.log(notifytablehead)
+
+
+  allnotif.forEach(async (message) => {
+    let msg = message.message;
+
+    var notiftabledata = new Array();
+    notiftabledata = [message.notificationId, msg];
+
+    var tr = notifytable.insertRow(-1)
+
+    for (var i = 0; i < notiftabledata.length; i++) {
+
+      var td = tr.insertCell(-1);
+      td.innerHTML = notiftabledata[i];
+    }
+    var td = tr.insertCell(-1);
+    var button = document.createElement('button');
+    button.setAttribute('type', 'button');
+    button.setAttribute('class', 'btn btn-dark')
+    button.innerHTML = 'Ok';
+    button.setAttribute('onclick', 'readMsg(this)');
+    td.appendChild(button);
+
+  })
+
+})
+
+
+async function readMsg(el) {
+    var uTable = document.getElementById('notify-table');
+  let index = el.parentNode.parentNode.rowIndex;
+  var oCells = uTable.rows.item(index).cells;
+  let msgId = oCells[0].innerHTML;
+  let readurl = 'http://localhost:8080/CarPool/pooler/msgread/' + msgId;
+  let data = await fetch(readurl, {method : 'POST'})
+  let res = await data.json();
+  console.log(res);
+}
+
+
+function changeImage() {
+    var fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
+    fileInput.onchange = function(event) {
+        var file = event.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function() {
+            var image = document.getElementById("myImage");
+            sessionStorage.setItem('profileurl', reader.result);
+            image.src = sessionStorage.getItem('profileurl');
+        };
+        reader.readAsDataURL(file);
+    };
+    fileInput.click();
+  }
 
 
   

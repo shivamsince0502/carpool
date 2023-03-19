@@ -5,12 +5,15 @@ let ownerEmail = sessionStorage.getItem("ownerEmail")
 let ownerMob = sessionStorage.getItem("ownerMob");
 let ownerId = sessionStorage.getItem("ownerId");
 
-if(sessionStorage.getItem("loggedIn") != "true"){
+
+
+if (sessionStorage.getItem("loggedIn") != "true") {
   window.location.href = "HomePage.html";
 }
 
 document.getElementById('doj').min = new Date().toISOString().split("T")[0];
 document.getElementById('edit-doj').min = new Date().toISOString().split("T")[0];
+document.getElementById("myImage").setAttribute('src', sessionStorage.getItem('profileurl'))
 
 // console.log(userName);
 document.getElementById("ownerName").innerHTML = ownerName;
@@ -19,6 +22,8 @@ document.getElementById("ownerMob").innerHTML = ownerMob
 document.getElementById("username").innerHTML = userName;
 document.getElementById("side-email").innerHTML = ownerEmail;
 document.getElementById("side-username").innerHTML = ownerName;
+
+
 
 const logout = document.getElementById("logoutbtn")
 logout.addEventListener('click', (e) => {
@@ -32,14 +37,205 @@ window.onload = onloadDOM
 async function onloadDOM() {
   document.getElementById('show-data-curr').style.display = "none"
   document.getElementById('show-data-prev').style.display = "none"
+  document.getElementById('ride-pool-div').style.display = "none"
   document.getElementById('show-user-card').style.display = "block"
+
+  const today = new Date();
+  const myDateInput = document.getElementById("doj");
+  myDateInput.value = today.toISOString().slice(0, 10);
+
+
+
+  let allrequrl = 'http://localhost:8080/CarPool/owner/allpoolrequest/' + ownerId;
+  let data = await fetch(allrequrl);
+  let allreq = await data.json();
+  let allnotfurl = 'http://localhost:8080/CarPool/owner/allactivenotifofowner/'+ownerId
+  let ld = await fetch(allnotfurl)
+  let allnotf = await ld.json()
+  document.getElementById("no-of-notif").innerHTML = allreq.length + allnotf.length
+
+if(allreq.length > 0 && allnotf.length == 0){
+  showreq(allreq, true)
 }
 
+if(allnotf.length > 0 && allreq.length == 0){
+  shownotif(allnotf, true)
+}
+
+if(allnotf.length > 0 && allreq.length > 0) {
+showreq(allreq, true);
+shownotif(allnotf, false)
+  
+}
+  
+
+}
+
+
+
+
+
+function showreq(allreq, cleardiv) {
+
+  const notifytablediv = document.getElementById("notif-table-div")
+  if(cleardiv)
+    notifytablediv.innerHTML = "";
+  var notifytable = document.createElement('table');
+  notifytable.setAttribute('class', 'table-striped')
+  notifytable.setAttribute('class', 'table')
+  notifytable.setAttribute('class', 'table-hover')
+  notifytable.setAttribute('id', 'notify-table');
+  notifytablediv.appendChild(notifytable);
+
+  var notifytablehead = notifytable.insertRow(0);
+
+  var tableHeadArray = new Array();
+  tableHeadArray = ['Ride no', 'Name', 'Mobile', 'Start', 'End', 'Date', 'Accept', 'Reject'];
+  // console.log(tableHeadArray)
+  for (var i = 0; i < tableHeadArray.length; i++) {
+    var th = document.createElement('th');
+    th.setAttribute('scope', 'row');
+    th.innerHTML = tableHeadArray[i];
+    notifytablehead.appendChild(th);
+  }
+  console.log(notifytablehead)
+
+
+  allreq.forEach(async (request) => {
+    let rideId = request.rideId;
+    let poolerId = request.poolerId;
+    let startCityId = request.startCityId;
+    let endCityId = request.endCityId;
+    let getrideurl = 'http://localhost:8080/CarPool/ride/getridebyrideid/' + rideId
+    let res = await fetch(getrideurl, { method: 'GET' })
+    let rideDetails = await res.json();
+
+    let poolerurl = 'http://localhost:8080/CarPool/pooler/pooler:' + poolerId;
+    let pres = await fetch(poolerurl);
+    let pooler = await pres.json();
+
+    let scityurl = 'http://localhost:8080/CarPool/city/getcitybyid/' + startCityId
+    let sres = await fetch(scityurl)
+    let startCity = await sres.json();
+
+    let ecityurl = 'http://localhost:8080/CarPool/city/getcitybyid/' + endCityId
+    let eres = await fetch(ecityurl)
+    let endCity = await eres.json();
+
+    var notiftabledata = new Array();
+    notiftabledata = [rideId, pooler.poolerName, pooler.poolerMob, startCity.cityName, endCity.cityName, rideDetails.rideDate];
+    var tr = notifytable.insertRow(-1)
+
+    for (var i = 0; i < notiftabledata.length; i++) {
+
+      var td = tr.insertCell(-1);
+      td.innerHTML = notiftabledata[i];
+    }
+    var td = tr.insertCell(-1);
+    var button = document.createElement('button');
+    button.setAttribute('type', 'button');
+    button.setAttribute('class', 'btn btn-primary')
+    button.innerHTML = 'Accept';
+    button.setAttribute('onclick', 'acceptRequest(this)');
+    td.appendChild(button);
+    var td1 = tr.insertCell(-1);
+    var button1 = document.createElement('button');
+    button1.setAttribute('type', 'button');
+    button1.setAttribute('class', 'btn btn-danger')
+    button1.innerHTML = 'Reject';
+    button1.setAttribute('onclick', 'rejectRequest(this)');
+    td1.appendChild(button1);
+  })
+}
+
+function shownotif(allnotf, cleardiv) {
+  const notifytablediv = document.getElementById("notif-table-div")
+  if(cleardiv)
+    notifytablediv.innerHTML = "";
+  var notifytable = document.createElement('table');
+  notifytable.setAttribute('class', 'table-striped')
+  notifytable.setAttribute('class', 'table')
+  notifytable.setAttribute('class', 'table-hover')
+  notifytable.setAttribute('id', 'notify-table-notif');
+  notifytablediv.appendChild(notifytable);
+
+  var notifytablehead = notifytable.insertRow(0);
+  var tableHeadArray = new Array();
+  tableHeadArray = ['Msg no', 'Message'];
+  // console.log(tableHeadArray)
+  for (var i = 0; i < tableHeadArray.length; i++) {
+    var th = document.createElement('th');
+    th.setAttribute('scope', 'row');
+    th.innerHTML = tableHeadArray[i];
+    notifytablehead.appendChild(th);
+  }
+  console.log(notifytablehead)
+
+
+  allnotf.forEach(async (message) => {
+    let msg = message.message;
+
+    var notiftabledata = new Array();
+    notiftabledata = [message.notificationId, msg];
+
+    var tr = notifytable.insertRow(-1)
+
+    for (var i = 0; i < notiftabledata.length; i++) {
+
+      var td = tr.insertCell(-1);
+      td.innerHTML = notiftabledata[i];
+    }
+    var td = tr.insertCell(-1);
+    var button = document.createElement('button');
+    button.setAttribute('type', 'button');
+    button.setAttribute('class', 'btn btn-dark')
+    button.innerHTML = 'Ok';
+    button.setAttribute('onclick', 'readMsg(this)');
+    td.appendChild(button);
+
+  })
+
+ 
+
+}
+
+
+function changeImage() {
+  var fileInput = document.createElement("input");
+  fileInput.type = "file";
+  fileInput.accept = "image/*";
+  fileInput.onchange = function(event) {
+      var file = event.target.files[0];
+      var reader = new FileReader();
+      reader.onload = function() {
+          var image = document.getElementById("myImage");
+          sessionStorage.setItem('profileurl', reader.result);
+          image.src = sessionStorage.getItem('profileurl');
+      };
+      reader.readAsDataURL(file);
+  };
+  fileInput.click();
+}
+
+
+async function readMsg(el) {
+  var uTable = document.getElementById('notify-table-notif');
+let index = el.parentNode.parentNode.rowIndex;
+var oCells = uTable.rows.item(index).cells;
+let msgId = oCells[0].innerHTML;
+let readurl = 'http://localhost:8080/CarPool/owner/readnotif/' + msgId;
+let data = await fetch(readurl, {method : 'POST'})
+let res = await data.json();
+console.log(res);
+}
+
+
 const dashbtn = document.getElementById("show-card-dash")
-dashbtn.addEventListener('click', (e) =>{
-    document.getElementById('show-data-prev').style.display = "none"
-    document.getElementById('show-data-curr').style.display = "none"
-    document.getElementById('show-user-card').style.display = "block"
+dashbtn.addEventListener('click', (e) => {
+  document.getElementById('show-data-prev').style.display = "none"
+  document.getElementById('show-data-curr').style.display = "none"
+  document.getElementById('ride-pool-div').style.display = "none"
+  document.getElementById('show-user-card').style.display = "block"
 })
 
 var citiesofride = [];
@@ -59,6 +255,7 @@ startJournery.addEventListener('click', async (e) => {
     formDataObject.ownerId = ownerId;
     formDataObject.citiesList = citiesofride;
     let formDataJsonString = JSON.stringify(formDataObject);
+    console.log(formDataJsonString)
 
     if (formDataObject.noOfSeats && formDataObject.carName && citiesofride.length > 1) {
       await fetch('http://localhost:8080/CarPool/ride/createride', {
@@ -112,13 +309,13 @@ startJournery.addEventListener('click', async (e) => {
 
         })
     } else {
-      if(formDataObject.noOfSeats === "0") {
+      if (formDataObject.noOfSeats === "0") {
         alert("please fill no of seats.")
-      }else if(formDataObject.carName === ""){
+      } else if (formDataObject.carName === "") {
         alert('Please fill car details.')
-      }else if(citiesofride.length > 1){
+      } else if (citiesofride.length > 1) {
         alert('Please fill locations of your ride.')
-      }else {
+      } else {
         alert("Please fill all the credentials")
       }
     }
@@ -173,6 +370,7 @@ startJournery.addEventListener('click', async (e) => {
 
   let optionText = document.createTextNode(cname);
   option.appendChild(optionText);
+  citiesdrop1.appendChild(option);
 
   for (let i = 0; i < data.length; i++) {
     let cityname = data[i].cityName
@@ -326,6 +524,7 @@ myjourneybtn.addEventListener('click', async (e) => {
 
   document.getElementById('show-user-card').style.display = "none"
   document.getElementById('show-data-curr').style.display = "none"
+  document.getElementById('ride-pool-div').style.display = "none"
   document.getElementById('show-data-prev').style.display = "block"
 
   const showprevride = document.getElementById("prev-rides")
@@ -424,8 +623,9 @@ async function delThisRide(el) {
 const currjourneybtn = document.getElementById("up-jn")
 currjourneybtn.addEventListener('click', async (e) => {
   document.getElementById('show-user-card').style.display = "none"
-    document.getElementById('show-data-prev').style.display = "none"
-    document.getElementById('show-data-curr').style.display = "block"
+  document.getElementById('show-data-prev').style.display = "none"
+  document.getElementById('ride-pool-div').style.display = "none"
+  document.getElementById('show-data-curr').style.display = "block"
 
 
   const showuprides = document.getElementById("select-ride")
@@ -510,8 +710,8 @@ currjourneybtn.addEventListener('click', async (e) => {
         // set onclick event.
         button1.setAttribute('onclick', 'finishThisRide(this)');
         td1.appendChild(button1);
-        console.log(td)
-        console.log(td1)
+        // console.log(td)
+        // console.log(td1)
       })
     })
 
@@ -526,6 +726,8 @@ async function editThisRide(el) {
   let index = el.parentNode.parentNode.rowIndex;
   var oCells = uTable.rows.item(index).cells;
   let rideId = oCells[0].innerHTML;
+  let rideDate = oCells[5].innerHTML;
+
   console.log(rideId);
   let getrideurl = 'http://localhost:8080/CarPool/ride/getridebyrideid/' + rideId
   let res = await fetch(getrideurl, { method: 'GET' })
@@ -675,3 +877,177 @@ editmodalbtn.addEventListener('click', async (e) => {
 
 
 
+async function acceptRequest(el) {
+  var uTable = document.getElementById('notify-table');
+  let index = el.parentNode.parentNode.rowIndex;
+  var oCells = uTable.rows.item(index).cells;
+  let rideId = oCells[0].innerHTML;
+  let mob = oCells[2].innerHTML
+  console.log(rideId);
+  let req = {
+    poolerMob: mob,
+    rideId: rideId,
+    approved: 1
+  }
+  console.log(req)
+  let res = await fetch('http://localhost:8080/CarPool/owner/requestdecisionbyowner', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(req) })
+  let resData = await res.json();
+  console.log(resData);
+  if (resData.rideId != 0) {
+    alert('Pool Request accepted')
+  } else {
+    alert('Pool Request not accepted')
+  }
+}
+
+
+async function rejectRequest(el) {
+  var uTable = document.getElementById('notify-table');
+  let index = el.parentNode.parentNode.rowIndex;
+  var oCells = uTable.rows.item(index).cells;
+  let rideId = oCells[0].innerHTML;
+  let mob = oCells[2].innerHTML
+  console.log(rideId);
+  let req = {
+    poolerMob: mob,
+    rideId: rideId,
+    approved: 0
+  }
+  console.log(req)
+  let res = await fetch('http://localhost:8080/CarPool/owner/requestdecisionbyowner', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(req) })
+  let resData = await res.json();
+  console.log(resData);
+  if (resData.rideId != 0) {
+    alert('Pool Request rejected')
+  } else {
+    alert('Pool Request not rejected')
+  }
+}
+
+
+
+const rideupdatebtn = document.getElementById("ride-poolers")
+rideupdatebtn.addEventListener('click', async (e) => {
+  e.preventDefault()
+
+  document.getElementById('show-data-curr').style.display = "none"
+  document.getElementById('show-data-prev').style.display = "none"
+  document.getElementById('show-user-card').style.display = "none"
+  document.getElementById('ride-pool-div').style.display = "block"
+  const ridesdrop = document.getElementById("select-ride-id")
+  document.getElementById("head-tb-ride-pool").innerHTML = "All updates of poolers for current and previous rides of " + ownerName
+
+  await fetch('http://localhost:8080/CarPool/owner/allridesofowner/' + ownerId, {
+    method: 'GET'
+  }).then(res => res.json())
+    .then((data) => {
+      let cname = "Select"
+      let option = document.createElement("option")
+      option.setAttribute('value', cname);
+
+      let optionText = document.createTextNode(cname);
+      option.appendChild(optionText);
+
+      ridesdrop.appendChild(option);
+      for (let i = 0; i < data.length; i++) {
+        let rideId = data[i].rideId
+        let option = document.createElement("option")
+        option.setAttribute('value', rideId);
+        let optionText = document.createTextNode(rideId);
+        option.appendChild(optionText);
+        ridesdrop.appendChild(option);
+      }
+
+    })
+})
+
+const ridechange = document.getElementById("select-ride-id");
+ridechange.addEventListener(`change`, async (e) => {
+  document.getElementById("ride-update").innerHTML = ""
+  const select = e.target;
+  const rideId = select.options[select.selectedIndex].text;
+  let allpoolerlurl = 'http://localhost:8080/CarPool/ride/allpoolersinride/' + rideId
+  let data = await fetch(allpoolerlurl);
+  let ridepooler = await data.json();
+  console.log(ridepooler)
+
+  const rideupdate = document.getElementById("ride-update")
+  var poolerstable = document.createElement('table');
+  poolerstable.setAttribute('class', 'table-striped')
+  poolerstable.setAttribute('class', 'table')
+  poolerstable.setAttribute('class', 'table-hover')
+  poolerstable.setAttribute('id', 'pooler-table');
+  rideupdate.appendChild(poolerstable);
+
+  var poolertablehead = poolerstable.insertRow(0);
+
+  var tableHeadArray = new Array();
+  tableHeadArray = ['Pool no', 'Name', 'Mobile', 'Email', 'Start', 'End', 'Date', 'Status', 'Remove'];
+  // console.log(tableHeadArray)
+  for (var i = 0; i < tableHeadArray.length; i++) {
+    var th = document.createElement('th');
+    th.setAttribute('scope', 'row');
+    th.innerHTML = tableHeadArray[i];
+    poolertablehead.appendChild(th);
+  }
+  console.log(poolertablehead)
+
+  ridepooler.forEach(async (ridepooler)=>{
+    let getrideurl = 'http://localhost:8080/CarPool/ride/getridebyrideid/' + ridepooler.rideId
+    let res = await fetch(getrideurl, { method: 'GET' })
+    let rideDetails = await res.json();
+
+    let poolerurl = 'http://localhost:8080/CarPool/pooler/pooler:' + ridepooler.poolerId;
+    let pres = await fetch(poolerurl);
+    let pooler = await pres.json();
+
+    let scityurl = 'http://localhost:8080/CarPool/city/getcitybyid/' + ridepooler.startCityId
+    let sres = await fetch(scityurl)
+    let startCity = await sres.json();
+
+    let ecityurl = 'http://localhost:8080/CarPool/city/getcitybyid/' + ridepooler.endCityId
+    let eres = await fetch(ecityurl)
+    let endCity = await eres.json();
+
+    let status = 'Finished'
+    if(ridepooler.isActive) status = 'Active'
+
+    var notiftabledata = new Array();
+    notiftabledata = [ridepooler.ridePoolerId, pooler.poolerName, pooler.poolerMob, pooler.poolerEmail, startCity.cityName, endCity.cityName, rideDetails.rideDate, status];
+    var tr = poolerstable.insertRow(-1)
+
+    for (var i = 0; i < notiftabledata.length; i++) {
+
+      var td = tr.insertCell(-1);
+      td.innerHTML = notiftabledata[i];
+    }
+    var td = tr.insertCell(-1);
+    var button = document.createElement('button');
+    button.setAttribute('type', 'button');
+    button.setAttribute('class', 'btn btn-primary')
+    button.innerHTML = 'Remove';
+    button.setAttribute('onclick', 'removePooler(this)');
+    td.appendChild(button);
+
+
+  })
+
+
+
+});
+
+
+async function removePooler(el) {
+  var uTable = document.getElementById('pooler-table');
+  let index = el.parentNode.parentNode.rowIndex;
+  var oCells = uTable.rows.item(index).cells;
+  let ridepoolid = oCells[0].innerHTML;
+  let res = await fetch('http://localhost:8080/CarPool/owner/removepoolerfromrride'+ ridepoolid, { method: 'POST', headers: { 'Content-Type': 'application/json' }})
+  let resData = await res.json();
+  console.log(resData);
+  if (resData.rideId != 0) {
+    alert('Pooler Ride Removed')
+  } else {
+    alert('Pooler Ride not Removed')
+  }
+}

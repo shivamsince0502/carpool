@@ -31,6 +31,7 @@ form.addEventListener('submit', (e)=>{
           sessionStorage.setItem("username", res.userName)
           sessionStorage.setItem("ownerId", res.ownerId)
           sessionStorage.setItem("loggedIn", "true"); 
+          sessionStorage.setItem("profileurl", "images/user.png");
           window.location.href = 'ownerDashboard.html'
       }else {
           alert("User not found")

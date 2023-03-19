@@ -20,7 +20,6 @@ form.addEventListener('submit', (e) => {
     alert("Username can't be empty.")
   }
   else {
-
   fetch('http://localhost:8080/CarPool/pooler/create', {
     method: 'POST',
     //Set the headers that specify you're sending a JSON body request and accepting JSON response
