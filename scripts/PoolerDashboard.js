@@ -4,6 +4,7 @@ var ridecitiesMap = new Map();
 var rideMap = new Map();
 var rides;
 
+const serverurl = 'http://localhost:8080/CarPool/'
 
 // document.getElementById('title').value = poolerName
 
@@ -19,7 +20,6 @@ dashbtn.addEventListener('click', (e) => {
 document.getElementById('doj').min = new Date().toISOString().split("T")[0];
 
 document.getElementById('edoj').min = new Date().toISOString().split("T")[0];
-console.log(sessionStorage.getItem('profileurl'))
 document.getElementById("myImage").setAttribute('src', sessionStorage.getItem('profileurl'))
 
 
@@ -68,7 +68,7 @@ async function getallcities() {
     const myDateInput1 = document.getElementById("edoj");
     myDateInput1.value = today.toISOString().slice(0, 10);
 
-    let allnotifurl = 'http://localhost:8080/CarPool/pooler/allnotifofpooler/' + poolerId;
+    let allnotifurl = serverurl + 'pooler/allnotifofpooler/' + poolerId;
     let data = await fetch(allnotifurl);
     let allnotif = await data.json();
     const notifpop = document.getElementById("no-of-notif")
@@ -83,7 +83,7 @@ async function getallcities() {
         notifpop.innerHTML = allnotif.length
     }
 
-    await fetch('http://localhost:8080/CarPool/city/allcities', {
+    await fetch(serverurl + 'city/allcities', {
         method: 'GET',
     }).then(res => res.json())
         .then((data) => {
@@ -139,6 +139,16 @@ cd2.addEventListener(`change`, (e) => {
     document.getElementById("end").value = desc;
     const formData = new FormData(form);
     let formDataObject = Object.fromEntries(formData.entries());
+    let startD = formDataObject.dateOfJourney
+    let endD = formDataObject.endOfJourney
+    let startDate = new Date(startD)
+    let startTs = startDate.getTime()
+    let endDate = new Date(endD)
+    let endTs = endDate.getTime()
+    console.log(startTs)
+    console.log(endTs)
+    formDataObject.dateOfJourney = startTs
+    formDataObject.endOfJourney = endTs
     // {dateOfJourney: '', start: 'Kankarbagh', end: 'Bermo'}
     sessionStorage.setItem("startPoint", formDataObject.start)
     sessionStorage.setItem("endPoint", formDataObject.end);
@@ -147,7 +157,7 @@ cd2.addEventListener(`change`, (e) => {
     console.log(formDataObject)
     let formDataJsonString = JSON.stringify(formDataObject);
 
-    fetch('http://localhost:8080/CarPool/ride/findcars', {
+    fetch(serverurl + 'ride/findcars', {
         method: 'POST',
         //Set the headers that specify you're sending a JSON body request and accepting JSON response
         headers: {
@@ -166,7 +176,7 @@ cd2.addEventListener(`change`, (e) => {
             let ownerId = item.ownerId;
             let carId = item.carId;
             let rideId = item.rideId;
-            let ourl = "http://localhost:8080/CarPool/owner/owner:" + ownerId;
+            let ourl = ser + "owner/owner:" + ownerId;
             fetch(ourl, {
                 method: 'GET',
                 headers: {
@@ -179,7 +189,7 @@ cd2.addEventListener(`change`, (e) => {
                     ownerMap.set(ownerId, owner);
                 })
 
-            let curl = "http://localhost:8080/CarPool/car/getcar" + carId;
+            let curl = serverurl + "car/getcar" + carId;
             fetch(curl, {
                 method: 'GET',
                 headers: {
@@ -192,7 +202,7 @@ cd2.addEventListener(`change`, (e) => {
                     carMap.set(carId, car);
                 })
 
-            let rcurl = "http://localhost:8080/CarPool/ride/allcities/" + rideId;
+            let rcurl = serverurl + "ride/allcities/" + rideId;
             fetch(rcurl, {
                 method: 'GET',
                 headers: {
@@ -324,7 +334,7 @@ async function bookRide(el) {
         console.log(payload);
         payload = JSON.stringify(payload); // last 
 
-        const requrl = "http://localhost:8080/CarPool/ride/bookrequest";
+        const requrl = serverurl + "ride/bookrequest";
         await fetch(requrl, {
             method: 'POST',
             //Set the headers that specify you're sending a JSON body request and accepting JSON response
@@ -339,19 +349,19 @@ async function bookRide(el) {
 
                 let rideId = data.rideId;
 
-                let ridefetchurl = 'http://localhost:8080/CarPool/ride/getridebyrideid/' + rideId;
+                let ridefetchurl = serverurl + 'ride/getridebyrideid/' + rideId;
                 let rideInfo = await fetch(ridefetchurl, { method: 'GET' })
                 let rideData = await rideInfo.json();
                 let carId = rideData.carId;
                 let ownerId = rideData.ownerId
-                let carinfourl = 'http://localhost:8080/CarPool/car/getcar' + carId;
+                let carinfourl = serverurl + 'car/getcar' + carId;
                 let resp = await fetch(carinfourl, { method: "GET" })
                 let carofride = await resp.json();
                 console.log(carofride)
-                let citiesinfourl = 'http://localhost:8080/CarPool/ridecities/getallcitiesbyride/' + rideId;
+                let citiesinfourl = serverurl + 'ridecities/getallcitiesbyride/' + rideId;
                 let respci = await fetch(citiesinfourl, { method: "GET" })
                 let allcitiesofride = await respci.json();
-                let ownerurlride = 'http://localhost:8080/CarPool/owner/owner:' + ownerId;
+                let ownerurlride = serverurl + 'owner/owner:' + ownerId;
                 let ownerofride = await fetch(ownerurlride, { method: 'GET' })
                 let owner = await ownerofride.json()
                 let sub = "Pool Request by " + poolerName
@@ -428,7 +438,7 @@ saveChages.addEventListener('click', (e) => {
     const formData = new FormData(updateuser);
     let formDataObject = Object.fromEntries(formData.entries());
     let formDataJsonString = JSON.stringify(formDataObject);
-    const updateuserurl = "http://localhost:8080/CarPool/pooler/updatepooler/" + poolerId;
+    const updateuserurl = serverurl + "pooler/updatepooler/" + poolerId;
     fetch(updateuserurl, {
         method: 'POST',
         headers: {
@@ -487,27 +497,27 @@ currjourneybtn.addEventListener('click', async (e) => {
     //add cell padding
     alluprides.setAttribute('cellpadding', '10px');
 
-    let uprideurl = "http://localhost:8080/CarPool/pooler/getallupridebypoolerid/" + poolerId;
+    let uprideurl = serverurl + "pooler/getallupridebypoolerid/" + poolerId;
     await fetch(uprideurl, {
         method: "GET"
     }).then((res) => res.json())
         .then(async (uprides) => {
             for (const item of uprides) {
                 let rideId = item.rideId;
-                let ridefetchurl = 'http://localhost:8080/CarPool/ride/getridebyrideid/' + rideId;
+                let ridefetchurl = serverurl + 'ride/getridebyrideid/' + rideId;
                 let rideInfo = await fetch(ridefetchurl, { method: 'GET' })
                 let rideData = await rideInfo.json();
                 let ownerId = rideData.ownerId
                 let tr = alluprides.insertRow(-1);
                 let carId = rideData.carId;
                 let rideDate = rideData.rideDate;
-                let carinfourl = 'http://localhost:8080/CarPool/car/getcar' + carId;
+                let carinfourl = serverurl + 'car/getcar' + carId;
                 let resp = await fetch(carinfourl, { method: "GET" })
                 let carofride = await resp.json();
-                let oInfourl = 'http://localhost:8080/CarPool/owner/owner:' + ownerId;
+                let oInfourl = serverurl + 'owner/owner:' + ownerId;
                 let reso = await fetch(oInfourl, { method: "GET" })
                 let owner = await reso.json()
-                let citiyrl = 'http://localhost:8080/CarPool/city/getcitybyid/'
+                let citiyrl = serverurl + 'city/getcitybyid/'
                 let ny1 = citiyrl + item.startCityId;
                 let rescity1 = await fetch(ny1, { method: "GET" })
                 let city1 = await rescity1.json()
@@ -568,7 +578,7 @@ async function finishThisRide(el) {
     console.log(oCells)
     let rideId = oCells[0].innerHTML;
     console.log(rideId);
-    let finishurl = 'http://localhost:8080/CarPool/ride/finishrideforpooler/' + rideId + "/" + poolerId;
+    let finishurl = serverurl + 'ride/finishrideforpooler/' + rideId + "/" + poolerId;
     let res = await fetch(finishurl, { method: 'POST' })
     let data = await res.json();
     if (data.rideId)
@@ -586,7 +596,7 @@ async function unBook(el) {
     console.log(index);
     console.log(oCells)
     let rideId = oCells[0].innerHTML;
-    let finishurl = 'http://localhost:8080/CarPool/ride/unbookride/' + rideId + "/" + poolerId;
+    let finishurl = serverurl + 'ride/unbookride/' + rideId + "/" + poolerId;
     let res = await fetch(finishurl, { method: 'POST' })
     let data = await res.json();
     if (data.rideId)
@@ -632,7 +642,7 @@ prevbtn.addEventListener('click', async (e) => {
     //add cell padding
     allprevrides.setAttribute('cellpadding', '10px');
 
-    let uprideurl = "http://localhost:8080/CarPool/pooler/getallprevridebypoolerid/" + poolerId;
+    let uprideurl = serverurl + "pooler/getallprevridebypoolerid/" + poolerId;
     await fetch(uprideurl, {
         method: "GET"
     }).then(async (res) => await res.json())
@@ -640,7 +650,7 @@ prevbtn.addEventListener('click', async (e) => {
             console.log(uprides)
             for (const item of uprides) {
                 let rideId = item.rideId;
-                let ridefetchurl = 'http://localhost:8080/CarPool/ride/getridebyrideid/' + rideId;
+                let ridefetchurl = serverurl + 'ride/getridebyrideid/' + rideId;
                 let rideInfo = await fetch(ridefetchurl, { method: 'GET' })
                 let rideData = await rideInfo.json();
 
@@ -649,13 +659,13 @@ prevbtn.addEventListener('click', async (e) => {
                 let tr = allprevrides.insertRow(-1);
                 let carId = rideData.carId;
                 let rideDate = rideData.rideDate;
-                let carinfourl = 'http://localhost:8080/CarPool/car/getcar' + carId;
+                let carinfourl = serverurl + 'car/getcar' + carId;
                 let resp = await fetch(carinfourl, { method: "GET" })
                 let carofride = await resp.json();
-                let oInfourl = 'http://localhost:8080/CarPool/owner/owner:' + ownerId;
+                let oInfourl = serverurl + 'owner/owner:' + ownerId;
                 let reso = await fetch(oInfourl, { method: "GET" })
                 let owner = await reso.json()
-                let citiyrl = 'http://localhost:8080/CarPool/city/getcitybyid/'
+                let citiyrl = serverurl + 'city/getcitybyid/'
                 let ny1 = citiyrl + item.startCityId;
                 let rescity1 = await fetch(ny1, { method: "GET" })
                 let city1 = await rescity1.json()
@@ -702,7 +712,7 @@ async function delThisRide(el) {
     console.log(oCells)
     let rideId = oCells[0].innerHTML;
     console.log(rideId);
-    let delrideurl = 'http://localhost:8080/CarPool/pooler/deleteride/' + rideId + '/' + poolerId;
+    let delrideurl = serverurl + 'pooler/deleteride/' + rideId + '/' + poolerId;
     let res = await fetch(delrideurl, { method: 'POST' })
     let nres = res.json();
     console.log(nres)
@@ -716,7 +726,7 @@ async function delThisRide(el) {
 const bellicon = document.getElementById("bell-icon")
 bellicon.addEventListener('click', async (e) => {
     e.preventDefault();
-    let allnotifurl = 'http://localhost:8080/CarPool/pooler/allnotifofpooler/' + poolerId;
+    let allnotifurl = serverurl + 'pooler/allnotifofpooler/' + poolerId;
     let data = await fetch(allnotifurl);
     let allnotif = await data.json();
     console.log(allnotif)
@@ -775,7 +785,7 @@ async function readMsg(el) {
     let index = el.parentNode.parentNode.rowIndex;
     var oCells = uTable.rows.item(index).cells;
     let msgId = oCells[0].innerHTML;
-    let readurl = 'http://localhost:8080/CarPool/pooler/msgread/' + msgId;
+    let readurl = serverurl + 'pooler/msgread/' + msgId;
     let data = await fetch(readurl, { method: 'POST' })
     let res = await data.json();
     console.log(res);

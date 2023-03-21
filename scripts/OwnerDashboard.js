@@ -5,7 +5,7 @@ let ownerEmail = sessionStorage.getItem("ownerEmail")
 let ownerMob = sessionStorage.getItem("ownerMob");
 let ownerId = sessionStorage.getItem("ownerId");
 
-
+const serverurl = 'http://localhost:8080/CarPool/';
 
 if (sessionStorage.getItem("loggedIn") != "true") {
   window.location.href = "HomePage.html";
@@ -46,10 +46,10 @@ async function onloadDOM() {
 
 
 
-  let allrequrl = 'http://localhost:8080/CarPool/owner/allpoolrequest/' + ownerId;
+  let allrequrl = serverurl + 'owner/allpoolrequest/' + ownerId;
   let data = await fetch(allrequrl);
   let allreq = await data.json();
-  let allnotfurl = 'http://localhost:8080/CarPool/owner/allactivenotifofowner/'+ownerId
+  let allnotfurl = serverurl + 'owner/allactivenotifofowner/'+ownerId
   let ld = await fetch(allnotfurl)
   let allnotf = await ld.json()
   const notifpop = document.getElementById("no-of-notif")
@@ -116,19 +116,19 @@ function showreq(allreq, cleardiv) {
     let poolerId = request.poolerId;
     let startCityId = request.startCityId;
     let endCityId = request.endCityId;
-    let getrideurl = 'http://localhost:8080/CarPool/ride/getridebyrideid/' + rideId
+    let getrideurl = serverurl + 'ride/getridebyrideid/' + rideId
     let res = await fetch(getrideurl, { method: 'GET' })
     let rideDetails = await res.json();
 
-    let poolerurl = 'http://localhost:8080/CarPool/pooler/pooler:' + poolerId;
+    let poolerurl = serverurl + 'pooler/pooler:' + poolerId;
     let pres = await fetch(poolerurl);
     let pooler = await pres.json();
 
-    let scityurl = 'http://localhost:8080/CarPool/city/getcitybyid/' + startCityId
+    let scityurl = serverurl + 'city/getcitybyid/' + startCityId
     let sres = await fetch(scityurl)
     let startCity = await sres.json();
 
-    let ecityurl = 'http://localhost:8080/CarPool/city/getcitybyid/' + endCityId
+    let ecityurl = serverurl + 'city/getcitybyid/' + endCityId
     let eres = await fetch(ecityurl)
     let endCity = await eres.json();
 
@@ -233,7 +233,7 @@ async function readMsg(el) {
 let index = el.parentNode.parentNode.rowIndex;
 var oCells = uTable.rows.item(index).cells;
 let msgId = oCells[0].innerHTML;
-let readurl = 'http://localhost:8080/CarPool/owner/readnotif/' + msgId;
+let readurl =  serverurl + 'owner/readnotif/' + msgId;
 let data = await fetch(readurl, {method : 'POST'})
 let res = await data.json();
 console.log(res);
@@ -263,12 +263,17 @@ startJournery.addEventListener('click', async (e) => {
     const formData = new FormData(startj);
     let formDataObject = Object.fromEntries(formData.entries());
     formDataObject.ownerId = ownerId;
+    let startD = formDataObject.dateOfJourney
+    let startDate = new Date(startD)
+    let startTs = startDate.getTime()
+    formDataObject.dateOfJourney = startTs
+    console.log(startTs)    
     formDataObject.citiesList = citiesofride;
     let formDataJsonString = JSON.stringify(formDataObject);
     console.log(formDataJsonString)
 
     if (formDataObject.noOfSeats && formDataObject.carName && citiesofride.length > 1) {
-      await fetch('http://localhost:8080/CarPool/ride/createride', {
+      await fetch(serverurl + 'ride/createride', {
         method: 'POST',
         //Set the headers that specify you're sending a JSON body request and accepting JSON response
         headers: {
@@ -286,11 +291,11 @@ startJournery.addEventListener('click', async (e) => {
             let rideData = data
             let carId = rideData.carId;
             let ownerId = rideData.ownerId
-            let carinfourl = 'http://localhost:8080/CarPool/car/getcar' + carId;
+            let carinfourl = serverurl + 'car/getcar' + carId;
             let resp = await fetch(carinfourl, { method: "GET" })
             let carofride = await resp.json();
             console.log(carofride)
-            let citiesinfourl = 'http://localhost:8080/CarPool/ridecities/getallcitiesbyride/' + rideId;
+            let citiesinfourl =  serverurl + 'ridecities/getallcitiesbyride/' + rideId;
             let respci = await fetch(citiesinfourl, { method: "GET" })
             let allcitiesofride = await respci.json();
             // let ownerurlride = 'http://localhost:8080/CarPool/owner/owner:' + ownerId;
@@ -335,7 +340,7 @@ startJournery.addEventListener('click', async (e) => {
   const citiesdrop1 = document.getElementById("citiesdropdown1")
   const carsdrop = document.getElementById("carsdropdown")
 
-  await fetch('http://localhost:8080/CarPool/car/getallcarsofowner/' + ownerId, {
+  await fetch(serverurl + 'car/getallcarsofowner/' + ownerId, {
     method: 'GET'
   }).then(res => res.json())
     .then((data) => {
@@ -371,7 +376,7 @@ startJournery.addEventListener('click', async (e) => {
 
     })
 
-  let alldata = await fetch('http://localhost:8080/CarPool/city/allcities', { method: 'GET' })
+  let alldata = await fetch(serverurl + 'city/allcities', { method: 'GET' })
   let data = await alldata.json();
 
   let cname = "Select"
@@ -448,7 +453,7 @@ addcaraction.addEventListener('click', async (e) => {
   formDataObject.ownerId = ownerId;
   let formDataJsonString = JSON.stringify(formDataObject);
   if (formDataObject.carName) {
-    await fetch('http://localhost:8080/CarPool/car/createcar', {
+    await fetch(serverurl + 'car/createcar', {
 
       method: 'POST',
       //Set the headers that specify you're sending a JSON body request and accepting JSON response
@@ -490,7 +495,7 @@ saveChages.addEventListener('click', async (e) => {
   const formData = new FormData(updateuser);
   let formDataObject = Object.fromEntries(formData.entries());
   let formDataJsonString = JSON.stringify(formDataObject);
-  const updateuserurl = "http://localhost:8080/CarPool/owner/updateowner/" + ownerId;
+  const updateuserurl = serverurl + "owner/updateowner/" + ownerId;
   await fetch(updateuserurl, {
     method: 'POST',
     headers: {
@@ -562,7 +567,7 @@ myjourneybtn.addEventListener('click', async (e) => {
   //add cell padding
   allprevrides.setAttribute('cellpadding', '10px');
 
-  let prevrideurl = "http://localhost:8080/CarPool/owner/getallprevrides/" + ownerId;
+  let prevrideurl = serverurl + "owner/getallprevrides/" + ownerId;
   await fetch(prevrideurl, {
     method: "GET"
   }).then((res) => res.json())
@@ -577,11 +582,11 @@ myjourneybtn.addEventListener('click', async (e) => {
         let rideDate = item.rideDate;
 
 
-        let carinfourl = 'http://localhost:8080/CarPool/car/getcar' + carId;
+        let carinfourl = serverurl + 'car/getcar' + carId;
         let resp = await fetch(carinfourl, { method: "GET" })
         let carofride = await resp.json();
         console.log(carofride)
-        let citiesinfourl = 'http://localhost:8080/CarPool/ridecities/getallcitiesbyride/' + rideId;
+        let citiesinfourl = serverurl + 'ridecities/getallcitiesbyride/' + rideId;
         let respci = await fetch(citiesinfourl, { method: "GET" })
         let allcitiesofride = await respci.json();
         console.log(allcitiesofride)
@@ -621,7 +626,7 @@ async function delThisRide(el) {
   console.log(oCells)
   let rideId = oCells[0].innerHTML;
   console.log(rideId);
-  let delrideurl = 'http://localhost:8080/CarPool/ride/deleteride/' + rideId;
+  let delrideurl = serverurl + 'ride/deleteride/' + rideId;
   let res = await fetch(delrideurl, { method: 'POST' })
   let nres = res.json();
   console.log(nres)
@@ -664,7 +669,7 @@ currjourneybtn.addEventListener('click', async (e) => {
   //add cell padding
   alluprides.setAttribute('cellpadding', '10px');
 
-  let uprideurl = "http://localhost:8080/CarPool/owner/getAllUpRides/" + ownerId;
+  let uprideurl = serverurl + "owner/getAllUpRides/" + ownerId;
   console.log(ownerId)
   await fetch(uprideurl, {
     method: "GET"
@@ -678,11 +683,11 @@ currjourneybtn.addEventListener('click', async (e) => {
         let rideDate = item.rideDate;
 
 
-        let carinfourl = 'http://localhost:8080/CarPool/car/getcar' + carId;
+        let carinfourl = serverurl + 'car/getcar' + carId;
         let resp = await fetch(carinfourl, { method: "GET" })
         let carofride = await resp.json();
         console.log(carofride)
-        let citiesinfourl = 'http://localhost:8080/CarPool/ridecities/getallcitiesbyride/' + rideId;
+        let citiesinfourl = serverurl + 'ridecities/getallcitiesbyride/' + rideId;
         let respci = await fetch(citiesinfourl, { method: "GET" })
         let allcitiesofride = await respci.json();
         console.log(allcitiesofride)
@@ -739,15 +744,15 @@ async function editThisRide(el) {
   let rideDate = oCells[5].innerHTML;
 
   console.log(rideId);
-  let getrideurl = 'http://localhost:8080/CarPool/ride/getridebyrideid/' + rideId
+  let getrideurl = serverurl + 'ride/getridebyrideid/' + rideId
   let res = await fetch(getrideurl, { method: 'GET' })
   let rideDetails = await res.json();
   let carId = rideDetails.carId;
-  let carinfourl = 'http://localhost:8080/CarPool/car/getcar' + carId;
+  let carinfourl = serverurl + 'car/getcar' + carId;
   let resp = await fetch(carinfourl, { method: "GET" })
   let carofride = await resp.json();
   console.log(carofride)
-  let citiesinfourl = 'http://localhost:8080/CarPool/ridecities/getallcitiesbyride/' + rideId;
+  let citiesinfourl = serverurl + 'ridecities/getallcitiesbyride/' + rideId;
   let respci = await fetch(citiesinfourl, { method: "GET" })
   let allcitiesofride = await respci.json();
   console.log(allcitiesofride)
@@ -792,7 +797,7 @@ async function editThisRide(el) {
   let editcarsdrop = document.getElementById("editcarsdropdown")
 
 
-  await fetch('http://localhost:8080/CarPool/car/getallcarsofowner/' + ownerId, {
+  await fetch(serverurl + 'car/getallcarsofowner/' + ownerId, {
     method: 'GET'
   }).then(res => res.json())
     .then((data) => {
@@ -845,7 +850,7 @@ async function finishThisRide(el) {
   console.log(oCells)
   let rideId = oCells[0].innerHTML;
   console.log(rideId);
-  let finishurl = 'http://localhost:8080/CarPool/ride/finishride/' + rideId;
+  let finishurl = serverurl + 'ride/finishride/' + rideId;
   let res = await fetch(finishurl, { method: 'POST' })
   let data = await res.json();
   if (data.rideId)
@@ -878,9 +883,13 @@ editmodalbtn.addEventListener('click', async (e) => {
   const formData = new FormData(editjourneyform);
   let formDataObject = Object.fromEntries(formData.entries());
   formDataObject.ownerId = ownerId;
+  let startD = formDataObject.dateOfJourney
+    let startDate = new Date(startD)
+    let startTs = startDate.getTime()
+    formDataObject.dateOfJourney = startTs
   let formDataJsonString = JSON.stringify(formDataObject);
   console.log(formDataJsonString)
-  let rideupdateurl = 'http://localhost:8080/CarPool/ride/updateride';
+  let rideupdateurl = serverurl + 'ride/updateride';
   let res = await fetch(rideupdateurl, {
     method: 'POST',
     //Set the headers that specify you're sending a JSON body request and accepting JSON response
@@ -902,7 +911,6 @@ editmodalbtn.addEventListener('click', async (e) => {
 })
 
 
-
 async function acceptRequest(el) {
   var uTable = document.getElementById('notify-table');
   let index = el.parentNode.parentNode.rowIndex;
@@ -916,20 +924,20 @@ async function acceptRequest(el) {
     approved: 1
   }
   console.log(req)
-  let res = await fetch('http://localhost:8080/CarPool/owner/requestdecisionbyowner', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(req) })
+  let res = await fetch(serverurl + 'owner/requestdecisionbyowner', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(req) })
   let resData = await res.json();
-  let getrideurl = 'http://localhost:8080/CarPool/ride/getridebyrideid/' + resData.rideId
+  let getrideurl = serverurl + 'ride/getridebyrideid/' + resData.rideId
     let resR = await fetch(getrideurl, { method: 'GET' })
     let rideDetails = await resR.json();
-    let scityurl = 'http://localhost:8080/CarPool/city/getcitybyid/' + resData.startCityId
+    let scityurl = serverurl + 'city/getcitybyid/' + resData.startCityId
     let sres = await fetch(scityurl)
     let startCity = await sres.json();
 
-    let ecityurl = 'http://localhost:8080/CarPool/city/getcitybyid/' + resData.endCityId
+    let ecityurl = serverurl + 'city/getcitybyid/' + resData.endCityId
     let eres = await fetch(ecityurl)
     let endCity = await eres.json();
 
-    let poolerurl = 'http://localhost:8080/CarPool/pooler/pooler:' + resData.poolerId;
+    let poolerurl = serverurl + 'pooler/pooler:' + resData.poolerId;
     let pres = await fetch(poolerurl);
     let pooler = await pres.json();
     
@@ -959,21 +967,21 @@ async function rejectRequest(el) {
     approved: 0
   }
   console.log(req)
-  let res = await fetch('http://localhost:8080/CarPool/owner/requestdecisionbyowner', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(req) })
+  let res = await fetch(serverurl + 'owner/requestdecisionbyowner', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(req) })
   let resData = await res.json();
   console.log(resData);
-  let getrideurl = 'http://localhost:8080/CarPool/ride/getridebyrideid/' + resData.rideId
+  let getrideurl = serverurl + 'ride/getridebyrideid/' + resData.rideId
     let resR = await fetch(getrideurl, { method: 'GET' })
     let rideDetails = await resR.json();
-    let scityurl = 'http://localhost:8080/CarPool/city/getcitybyid/' + resData.startCityId
+    let scityurl = serverurl + 'city/getcitybyid/' + resData.startCityId
     let sres = await fetch(scityurl)
     let startCity = await sres.json();
 
-    let ecityurl = 'http://localhost:8080/CarPool/city/getcitybyid/' + resData.endCityId
+    let ecityurl = serverurl + 'city/getcitybyid/' + resData.endCityId
     let eres = await fetch(ecityurl)
     let endCity = await eres.json();
 
-    let poolerurl = 'http://localhost:8080/CarPool/pooler/pooler:' + resData.poolerId;
+    let poolerurl = serverurl + 'pooler/pooler:' + resData.poolerId;
     let pres = await fetch(poolerurl);
     let pooler = await pres.json();
     
@@ -1001,7 +1009,7 @@ rideupdatebtn.addEventListener('click', async (e) => {
   const ridesdrop = document.getElementById("select-ride-id")
   document.getElementById("head-tb-ride-pool").innerHTML = "All updates of poolers for current and previous rides of " + ownerName
 
-  await fetch('http://localhost:8080/CarPool/owner/allridesofowner/' + ownerId, {
+  await fetch(serverurl + 'owner/allridesofowner/' + ownerId, {
     method: 'GET'
   }).then(res => res.json())
     .then((data) => {
@@ -1030,7 +1038,7 @@ ridechange.addEventListener(`change`, async (e) => {
   document.getElementById("ride-update").innerHTML = ""
   const select = e.target;
   const rideId = select.options[select.selectedIndex].text;
-  let allpoolerlurl = 'http://localhost:8080/CarPool/ride/allpoolersinride/' + rideId
+  let allpoolerlurl = serverurl + 'ride/allpoolersinride/' + rideId
   let data = await fetch(allpoolerlurl);
   let ridepooler = await data.json();
   console.log(ridepooler)
@@ -1057,19 +1065,19 @@ ridechange.addEventListener(`change`, async (e) => {
   console.log(poolertablehead)
 
   ridepooler.forEach(async (ridepooler)=>{
-    let getrideurl = 'http://localhost:8080/CarPool/ride/getridebyrideid/' + ridepooler.rideId
+    let getrideurl = serverurl + 'ride/getridebyrideid/' + ridepooler.rideId
     let res = await fetch(getrideurl, { method: 'GET' })
     let rideDetails = await res.json();
 
-    let poolerurl = 'http://localhost:8080/CarPool/pooler/pooler:' + ridepooler.poolerId;
+    let poolerurl = serverurl + 'pooler/pooler:' + ridepooler.poolerId;
     let pres = await fetch(poolerurl);
     let pooler = await pres.json();
 
-    let scityurl = 'http://localhost:8080/CarPool/city/getcitybyid/' + ridepooler.startCityId
+    let scityurl = serverurl + 'city/getcitybyid/' + ridepooler.startCityId
     let sres = await fetch(scityurl)
     let startCity = await sres.json();
 
-    let ecityurl = 'http://localhost:8080/CarPool/city/getcitybyid/' + ridepooler.endCityId
+    let ecityurl = serverurl + 'city/getcitybyid/' + ridepooler.endCityId
     let eres = await fetch(ecityurl)
     let endCity = await eres.json();
 
@@ -1106,16 +1114,16 @@ async function removePooler(el) {
   let index = el.parentNode.parentNode.rowIndex;
   var oCells = uTable.rows.item(index).cells;
   let ridepoolid = oCells[0].innerHTML;
-  let res = await fetch('http://localhost:8080/CarPool/owner/removepoolerfromrride'+ ridepoolid, { method: 'POST', headers: { 'Content-Type': 'application/json' }})
+  let res = await fetch(serverurl + 'owner/removepoolerfromrride'+ ridepoolid, { method: 'POST', headers: { 'Content-Type': 'application/json' }})
   let resData = await res.json();
-  let getrideurl = 'http://localhost:8080/CarPool/ride/getridebyrideid/' + resData.rideId
+  let getrideurl = serverurl + 'ride/getridebyrideid/' + resData.rideId
     let resR = await fetch(getrideurl, { method: 'GET' })
     let rideDetails = await resR.json();
-    let scityurl = 'http://localhost:8080/CarPool/city/getcitybyid/' + resData.startCityId
+    let scityurl = serverurl + 'city/getcitybyid/' + resData.startCityId
     let sres = await fetch(scityurl)
     let startCity = await sres.json();
 
-    let ecityurl = 'http://localhost:8080/CarPool/city/getcitybyid/' + resData.endCityId
+    let ecityurl = serverurl + 'city/getcitybyid/' + resData.endCityId
     let eres = await fetch(ecityurl)
     let endCity = await eres.json();
   console.log(resData);

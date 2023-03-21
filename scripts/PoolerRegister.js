@@ -1,4 +1,5 @@
 
+const serverurl = 'http://localhost:8080/CarPool/'
 const form = document.getElementById('register-form');
 form.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -20,7 +21,7 @@ form.addEventListener('submit', (e) => {
     alert("Username can't be empty.")
   }
   else {
-  fetch('http://localhost:8080/CarPool/pooler/create', {
+  fetch(serverurl + 'pooler/create', {
     method: 'POST',
     //Set the headers that specify you're sending a JSON body request and accepting JSON response
     headers: {

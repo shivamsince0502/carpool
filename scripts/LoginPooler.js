@@ -3,6 +3,7 @@ if(sessionStorage.getItem("loggedIn") == "true") {
     window.location.href = "PoolerDashboard.html";
 }
 
+const serverurl = 'http://localhost:8080/CarPool/'
 const form = document.getElementById('login-form');
 form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -20,7 +21,7 @@ form.addEventListener('submit', (e) => {
     console.log(formDataJsonString);
 
 
-    fetch('http://localhost:8080/CarPool/pooler/loginpooler', {
+    fetch(serverurl + 'pooler/loginpooler', {
         method: 'POST',
         //Set the headers that specify you're sending a JSON body request and accepting JSON response
         headers: {

@@ -83,7 +83,7 @@
         </ul>
       </div>
       
-      <div class="div container-fluid" style="margin-left: 100px;">
+      <div class="div container-fluid" >
         <div class="container  py-5 h-100"  style="background: transparent" id="show-user-card">
           <div
             class="row d-flex justify-content-center align-items-center h-100"
@@ -154,7 +154,10 @@
       <div class="row" id="show-data-curr">
         <div
           class="col-sm-10 jumbotron table-div"
-          style="background: transparent !important; float: left; margin-left: 130px;"
+          style="background: transparent !important; 
+          margin-right: 0;
+          float: right;
+          text-align: center;"
         >
           <div class="card">
             <div class="card-header">
@@ -168,7 +171,10 @@
       <div class="row" id="search-rides-div">
         <div
           class="col-sm-10 jumbotron table-div"
-          style="background: transparent !important; float: left; margin-left: 130px;"
+          style="background: transparent !important ;
+          margin-right: 0;
+          float: right;
+          text-align: center;"
         >
           <div class="card">
             <div class="card-header">
@@ -182,7 +188,10 @@
     <div class="row "  id="show-data-prev">
         <div
           class="col-sm-10 jumbotron table-div"
-          style="background: transparent !important; float: left; margin-left: 130px;"
+          style="background: transparent !important ;
+          margin-right: 0;
+          float: right;
+          text-align: center;"
         >
           <div class="card">
             <div class="card-header">
@@ -332,7 +341,7 @@ aria-hidden="true">
               <div class="form-group fg2">
                 <label for="doj">Start Date</label>
                 <input
-                  type="date"
+                  type="datetime-local"
                   class="form-control datef"
                   id="doj"
                   name="dateOfJourney"
@@ -342,7 +351,7 @@ aria-hidden="true">
               <div class="form-group fg2">
                 <label for="doj">End Date</label>
                 <input
-                  type="date"
+                  type="datetime-local"
                   class="form-control datef"
                   id="edoj"
                   name="endOfJourney"

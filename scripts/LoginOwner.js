@@ -1,4 +1,5 @@
 
+const serverurl = 'http://localhost:8080/CarPool/'
 const form = document.getElementById('login-form');
 form.addEventListener('submit', (e)=>{
     e.preventDefault();
@@ -11,7 +12,7 @@ form.addEventListener('submit', (e)=>{
     let formDataJsonString = JSON.stringify(formDataObject);
 
 
-    fetch('http://localhost:8080/CarPool/owner/loginowner', {
+    fetch(serverurl + 'owner/loginowner', {
         method:'POST', 
          //Set the headers that specify you're sending a JSON body request and accepting JSON response
     headers: {
