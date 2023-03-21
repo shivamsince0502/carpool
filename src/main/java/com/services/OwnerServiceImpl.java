@@ -202,7 +202,7 @@ public class  OwnerServiceImpl implements OwnerService{
                         poolRequest.setApproved(true);
                     }else {
                         ridePooler.setActive(false);
-                        ridePooler.setSeatNo(ride.getNoOfSeats()+1);
+                        ridePooler.setSeatNo(-1);
                         poolRequest.setApproved(false);
                     }
                     session.saveOrUpdate(ridePooler);

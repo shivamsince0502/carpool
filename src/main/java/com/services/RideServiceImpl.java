@@ -382,7 +382,7 @@ public class RideServiceImpl implements RideService{
     public List<RidePooler> allPoolersOfRide(int rideId) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        String sql = "select * from ride_pooler where ride_id = " +rideId;
+        String sql = "select * from ride_pooler where ride_id = " +rideId+ " and seat_no != -1";
         SQLQuery query = session.createSQLQuery(sql);
         query.addEntity(RidePooler.class);
         List result = query.list();
