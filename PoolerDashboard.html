@@ -67,7 +67,7 @@
             <p id="side-email"></p>
           </div>
           <a class="fa fa-bell star-img" id="bell-icon"  data-toggle="modal" data-target="#modalCart">
-            <span class="fa fa-comment"></span>
+            <span class="fa fa-comment" id="comment"></span>
             <span class="num" id="no-of-notif">0</span>
           </a>
         </div>
@@ -107,11 +107,11 @@
                     <div class="card-body p-4">
                       <hr class="mt-0 mb-4" />
                       <div class="row pt-1">
-                        <div class="col-6 mb-3">
+                        <div class="col-12 mb-3">
                           <h6>Email</h6>
                           <p id="poolerEmail" class="text-muted"></p>
                         </div>
-                        <div class="col-6 mb-3">
+                        <div class="col-12 mb-3">
                           <h6>Phone</h6>
                           <p id="poolerMob" class="text-muted"></p>
                         </div>
@@ -332,7 +332,7 @@ aria-hidden="true">
               <div class="form-group fg2">
                 <label for="doj">Start Date</label>
                 <input
-                  type="date"
+                  type="datetime-local"
                   class="form-control datef"
                   id="doj"
                   name="dateOfJourney"
@@ -342,7 +342,7 @@ aria-hidden="true">
               <div class="form-group fg2">
                 <label for="doj">End Date</label>
                 <input
-                  type="date"
+                  type="datetime-local"
                   class="form-control datef"
                   id="edoj"
                   name="endOfJourney"
@@ -402,12 +402,6 @@ aria-hidden="true">
       <!-- <div class="userdetails"> -->
         
 
-        <!-- <div style="background:transparent !important" class="container jumbotron">
-          <h1>Welcome!</h1>
-          <p>We're an awesome company that creates virtual things for portable devices.</p>
-          <p><a class="btn btn-primary btn-lg" role="button">Learn more</a></p>
-      </div> -->
-
         
     <!-- after booking Modal HTML -->
     <div id="afterbooking" class="modal fade">
@@ -459,16 +453,8 @@ aria-hidden="true">
       </div>
     </div>
 
-    <!-- <button
-      type="button"
-      id="prev-ride"
-      class="btn search-btn-ride btn-dark float-prev"
-    >
-      Previous Rides
-    </button>
-    <button type="button" id="curr-ride" class="btn search-btn-ride btn-dark float-curr">Current Rides</button> -->
-
     <script src="scripts/PoolerDashboard.js"></script>
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

@@ -30,13 +30,9 @@ form.addEventListener('submit', (e) => {
     body: formDataJsonString
   }).then(res => res.json())
     .then((res) => {
-      if (res.poolerName) {
-        alert("Registered Successfully")
-        window.location.href = 'PoolerLogin.html'
-      } else {
-        alert("User already exist or wrong data")
-        window.location.href = 'PoolerRegistration.html'
-      }
+      let sub = "Registration for carpool as pooler "
+        let body = "You have registered for as pooler on carpool "
+        sendmail(formDataObject.poolerEmail, sub, body)
       console.log(res)
     })
     .catch((err) => {
@@ -49,4 +45,26 @@ form.addEventListener('submit', (e) => {
 
 if(sessionStorage.getItem("loggedIn") == "true") {
   window.location.href = "PoolerDashboard.html";
+}
+
+function sendmail(to, subjectE, bodyE) {
+  Email.send({
+      Host: "smtp.elasticemail.com",
+      Username: "thenexus6969@gmail.com",
+      Password: "2FC79D41401DD22806E97D74595A174D47AA",
+      From: "kumar.shivam.cse@gmail.com",
+      To: to,
+      Subject: subjectE,
+      Body: bodyE
+  }).then(
+      message => {
+          if(message === 'OK' || message === 'ok' || message === 'Ok') {
+            alert("Registered Successfully")
+            window.location.href = 'PoolerLogin.html'
+        }else {
+            alert("User already exist or wrong data")
+            window.location.href = 'PoolerRegistration.html'
+        }
+      }
+  );
 }

@@ -31,13 +31,10 @@ form.addEventListener('submit', (e)=>{
         body: formDataJsonString
     }).then(res => res.json())
       .then((res) => {
-        if(res.ownerName) {
-          alert("Registered Successfully")
-          window.location.href = 'OwnerLogin.html'
-      }else {
-          alert("User already exist or wrong data")
-          window.location.href = 'OwnerRegistration.html'
-      }
+        let sub = "Registration for carpool as owner "
+        let body = "You have registered for as owner on carpool "
+        sendmail(formDataObject.ownerEmail, sub, body)
+        
         console.log(data)
       
       })
@@ -45,6 +42,27 @@ form.addEventListener('submit', (e)=>{
     }
 });
 
+function sendmail(to, subjectE, bodyE) {
+  Email.send({
+      Host: "smtp.elasticemail.com",
+      Username: "thenexus6969@gmail.com",
+      Password: "2FC79D41401DD22806E97D74595A174D47AA",
+      From: "kumar.shivam.cse@gmail.com",
+      To: to,
+      Subject: subjectE,
+      Body: bodyE
+  }).then(
+      message => {
+          if(message === 'OK' || message === 'ok' || message === 'Ok') {
+            alert("Registered Successfully")
+            window.location.href = 'OwnerLogin.html'
+        }else {
+            alert("User already exist or wrong data")
+            window.location.href = 'OwnerRegistration.html'
+        }
+      }
+  );
+}
 
 
 if(sessionStorage.getItem("loggedIn") == "true") {

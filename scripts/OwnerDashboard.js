@@ -20,7 +20,7 @@ document.getElementById("ownerName").innerHTML = ownerName;
 document.getElementById("ownerEmail").innerHTML = ownerEmail
 document.getElementById("ownerMob").innerHTML = ownerMob
 document.getElementById("username").innerHTML = userName;
-document.getElementById("side-email").innerHTML = ownerEmail;
+document.getElementById("side-email").innerHTML = userName;
 document.getElementById("side-username").innerHTML = ownerName;
 
 
@@ -52,7 +52,17 @@ async function onloadDOM() {
   let allnotfurl = 'http://localhost:8080/CarPool/owner/allactivenotifofowner/'+ownerId
   let ld = await fetch(allnotfurl)
   let allnotf = await ld.json()
-  document.getElementById("no-of-notif").innerHTML = allreq.length + allnotf.length
+  const notifpop = document.getElementById("no-of-notif")
+  const cmnt = document.getElementById("comment")
+    if(allnotf.length + allreq.length <= 0) {
+        notifpop.style.display = "none"
+        cmnt.style.display = "none"
+    }
+    else {
+        notifpop.style.display = "flex"
+        cmnt.style.display = "flex"
+        notifpop.innerHTML =allreq.length + allnotf.length
+    }
 
 if(allreq.length > 0 && allnotf.length == 0){
   showreq(allreq, true)
@@ -748,6 +758,7 @@ async function editThisRide(el) {
   document.getElementById("editRideId").value = rideId;
 
   const editcitiesrideidv = document.getElementById("edit-cities")
+  editcitiesrideidv.innerHTML = ""
   var editcities = document.createElement('table');
   editcities.setAttribute('id', 'edit-cities-list');
   editcities.setAttribute('class', 'table table-hover')
@@ -823,6 +834,7 @@ async function editThisRide(el) {
 }
 
 
+
 async function finishThisRide(el) {
   var uTable = document.getElementById('alluprides');
   console.log(uTable)
@@ -842,6 +854,22 @@ async function finishThisRide(el) {
     alert('Ride not completed')
 }
 
+function sendmail(to, subjectE, bodyE) {
+  Email.send({
+      Host: "smtp.elasticemail.com",
+      Username: "thenexus6969@gmail.com",
+      Password: "2FC79D41401DD22806E97D74595A174D47AA",
+      From: "kumar.shivam.cse@gmail.com",
+      To: to,
+      Subject: subjectE,
+      Body: bodyE
+  }).then(
+      message => {
+          console.log(message)
+          // alert(message)
+      }
+  );
+}
 
 const editmodalbtn = document.getElementById('edit-modal-btn')
 editmodalbtn.addEventListener('click', async (e) => {
@@ -875,8 +903,6 @@ editmodalbtn.addEventListener('click', async (e) => {
 
 
 
-
-
 async function acceptRequest(el) {
   var uTable = document.getElementById('notify-table');
   let index = el.parentNode.parentNode.rowIndex;
@@ -892,6 +918,25 @@ async function acceptRequest(el) {
   console.log(req)
   let res = await fetch('http://localhost:8080/CarPool/owner/requestdecisionbyowner', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(req) })
   let resData = await res.json();
+  let getrideurl = 'http://localhost:8080/CarPool/ride/getridebyrideid/' + resData.rideId
+    let resR = await fetch(getrideurl, { method: 'GET' })
+    let rideDetails = await resR.json();
+    let scityurl = 'http://localhost:8080/CarPool/city/getcitybyid/' + resData.startCityId
+    let sres = await fetch(scityurl)
+    let startCity = await sres.json();
+
+    let ecityurl = 'http://localhost:8080/CarPool/city/getcitybyid/' + resData.endCityId
+    let eres = await fetch(ecityurl)
+    let endCity = await eres.json();
+
+    let poolerurl = 'http://localhost:8080/CarPool/pooler/pooler:' + resData.poolerId;
+    let pres = await fetch(poolerurl);
+    let pooler = await pres.json();
+    
+  console.log(resData);
+  let sub = ownerName + " accepted ride with you";
+  let bodym = ownerName + " has accepted ride with you from " + startCity.cityName + " to " + endCity.cityName + " on "+ rideDetails.rideDate
+  sendmail(pooler.poolerEmail, sub, bodym)
   console.log(resData);
   if (resData.rideId != 0) {
     alert('Pool Request accepted')
@@ -917,6 +962,25 @@ async function rejectRequest(el) {
   let res = await fetch('http://localhost:8080/CarPool/owner/requestdecisionbyowner', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(req) })
   let resData = await res.json();
   console.log(resData);
+  let getrideurl = 'http://localhost:8080/CarPool/ride/getridebyrideid/' + resData.rideId
+    let resR = await fetch(getrideurl, { method: 'GET' })
+    let rideDetails = await resR.json();
+    let scityurl = 'http://localhost:8080/CarPool/city/getcitybyid/' + resData.startCityId
+    let sres = await fetch(scityurl)
+    let startCity = await sres.json();
+
+    let ecityurl = 'http://localhost:8080/CarPool/city/getcitybyid/' + resData.endCityId
+    let eres = await fetch(ecityurl)
+    let endCity = await eres.json();
+
+    let poolerurl = 'http://localhost:8080/CarPool/pooler/pooler:' + resData.poolerId;
+    let pres = await fetch(poolerurl);
+    let pooler = await pres.json();
+    
+  console.log(resData);
+  let sub = ownerName + " rejected ride with you";
+  let bodym = ownerName + " has rejected ride with you from " + startCity.cityName + " to " + endCity.cityName + " on "+ rideDetails.rideDate
+  sendmail(pooler.poolerEmail, sub, bodym)
   if (resData.rideId != 0) {
     alert('Pool Request rejected')
   } else {
@@ -1044,7 +1108,19 @@ async function removePooler(el) {
   let ridepoolid = oCells[0].innerHTML;
   let res = await fetch('http://localhost:8080/CarPool/owner/removepoolerfromrride'+ ridepoolid, { method: 'POST', headers: { 'Content-Type': 'application/json' }})
   let resData = await res.json();
+  let getrideurl = 'http://localhost:8080/CarPool/ride/getridebyrideid/' + resData.rideId
+    let resR = await fetch(getrideurl, { method: 'GET' })
+    let rideDetails = await resR.json();
+    let scityurl = 'http://localhost:8080/CarPool/city/getcitybyid/' + resData.startCityId
+    let sres = await fetch(scityurl)
+    let startCity = await sres.json();
+
+    let ecityurl = 'http://localhost:8080/CarPool/city/getcitybyid/' + resData.endCityId
+    let eres = await fetch(ecityurl)
+    let endCity = await eres.json();
   console.log(resData);
+  let sub = ownerName + "Canceled ride with you";
+  let bodym = ownerName + " has cancelled ride with you from " + startCity.cityName + " to " + endCity.cityName + " on "+ rideDetails.rideDate
   if (resData.rideId != 0) {
     alert('Pooler Ride Removed')
   } else {

@@ -48,7 +48,7 @@
             <p id="side-email"></p>
           </div>
           <a class="fa fa-bell star-img bell-bef" id="bell-icon"    data-toggle="modal" data-target="#modalCart">
-            <span class="fa fa-comment"></span>
+            <span class="fa fa-comment" id="comment"></span>
             <span class="num" id="no-of-notif">0</span>
           </a>
         </div>
@@ -89,11 +89,11 @@
                     <div class="card-body p-4">
                       <hr class="mt-0 mb-4" />
                       <div class="row pt-1">
-                        <div class="col-6 mb-3">
+                        <div class="col-12 mb-3">
                           <h6>Email</h6>
                           <p id="ownerEmail" class="text-muted"></p>
                         </div>
-                        <div class="col-6 mb-3">
+                        <div class="col-12 mb-3">
                           <h6>Phone</h6>
                           <p id="ownerMob" class="text-muted"></p>
                         </div>
@@ -667,6 +667,7 @@
 
 
     <script src="scripts/OwnerDashboard.js"></script>
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
