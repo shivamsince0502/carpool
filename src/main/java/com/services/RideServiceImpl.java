@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 
 @Service
@@ -90,13 +90,16 @@ public class RideServiceImpl implements RideService{
                 rideCities.put(rideNo, cityList);
             }
         }
+
+
+
         long millis=System.currentTimeMillis();
-        java.sql.Date date=new java.sql.Date(millis);
-        java.sql.Date edate=new java.sql.Date(millis);
-        if(!poolerJourneyPayload.getDateOfJourney().equals(""))
-            date = java.sql.Date.valueOf(poolerJourneyPayload.getDateOfJourney());
-        if(!poolerJourneyPayload.getEndDateOfJourney().equals(""))
-            edate = java.sql.Date.valueOf(poolerJourneyPayload.getEndDateOfJourney());
+        Timestamp date=new Timestamp(millis);
+        Timestamp edate=new Timestamp(millis);
+        if(!(poolerJourneyPayload.getDateOfJourney() == 0))
+            date = new Timestamp(poolerJourneyPayload.getDateOfJourney());
+        if(!(poolerJourneyPayload.getEndDateOfJourney() == 0))
+            edate = new Timestamp(poolerJourneyPayload.getEndDateOfJourney());
 
         HashMap<Integer, Integer> distMap = new HashMap<>();
 
@@ -157,7 +160,7 @@ public class RideServiceImpl implements RideService{
     public RidePooler bookingRequest(BookRequestPayload bookRequestPayload) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        java.sql.Date reqDate = java.sql.Date.valueOf(bookRequestPayload.getDateOfJourney());
+        java.sql.Timestamp reqDate = java.sql.Timestamp.valueOf(bookRequestPayload.getDateOfJourney().replace("T"," "));
         int rideId = bookRequestPayload.getRideId();
         int poolerId = bookRequestPayload.getPoolerId();
         List<RidePooler> ridePoolerList1 = poolerService.allUpRideByPoolerId(poolerId);
@@ -201,7 +204,10 @@ public class RideServiceImpl implements RideService{
     public Ride createRide(OwnerRidePayload ownerRidePayload) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        Date date = Date.valueOf(ownerRidePayload.getDateOfJourney());
+        long millis=System.currentTimeMillis();
+        Timestamp date=new Timestamp(millis);
+        if(!(ownerRidePayload.getDateOfJourney() == 0))
+            date = new Timestamp(ownerRidePayload.getDateOfJourney());
 
         List<Ride> allRidesOfOwner = ownerService.getAllUpRides(ownerRidePayload.getOwnerId());
         for(Ride ride : allRidesOfOwner) {
@@ -299,9 +305,9 @@ public class RideServiceImpl implements RideService{
                 }
             }
         }
-        String upDate = updateRidePayload.getDateOfJourney();
-        if(!upDate.equals("")){
-            Date date = Date.valueOf(updateRidePayload.getDateOfJourney());
+        long upDate = updateRidePayload.getDateOfJourney();
+        if(!(upDate == 0)){
+            Timestamp date = new Timestamp(updateRidePayload.getDateOfJourney());
             ride.setRideDate(date);
         }
 
@@ -366,15 +372,15 @@ public class RideServiceImpl implements RideService{
     }
 
     @Override
-    public List<Date> getCurrDate() {
+    public List<Timestamp> getCurrDate() {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         long millis=System.currentTimeMillis();
-        java.sql.Date date=new java.sql.Date(millis);
+        java.sql.Timestamp dateNow=new java.sql.Timestamp(millis);
         Ride ride = session.get(Ride.class, 2);
-        List<Date> dates = new ArrayList<>();
+        List<Timestamp> dates = new ArrayList<>();
         dates.add(ride.getRideDate());
-        dates.add(date);
+        dates.add(dateNow);
         return dates;
     }
 

@@ -9,20 +9,20 @@ public class OwnerRidePayload {
     private int ownerId;
     private List<String> citiesList;
 
-    private String dateOfJourney;
+    private long dateOfJourney;
 
-    public String getDateOfJourney() {
+    public long getDateOfJourney() {
         return dateOfJourney;
     }
 
-    public void setDateOfJourney(String dateOfJourney) {
+    public void setDateOfJourney(long dateOfJourney) {
         this.dateOfJourney = dateOfJourney;
     }
 
     public OwnerRidePayload() {
     }
 
-    public OwnerRidePayload(int noOfSeats, String startPoint, String carName, int ownerId, List<String> citiesList, String dateOfJourney) {
+    public OwnerRidePayload(int noOfSeats, String startPoint, String carName, int ownerId, List<String> citiesList, long dateOfJourney) {
         this.noOfSeats = noOfSeats;
         this.startPoint = startPoint;
         this.carName = carName;

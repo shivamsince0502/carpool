@@ -2,7 +2,7 @@ package com.model;
 
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
@@ -26,7 +26,7 @@ public class Ride {
     private Boolean isActive;
 
     @Column(name = "ride_datetime")
-    private Date rideDate;
+    private Timestamp rideDate;
 
 
     public int getRideId() {
@@ -69,16 +69,16 @@ public class Ride {
         isActive = active;
     }
 
-    public Date getRideDate() {
+    public Timestamp getRideDate() {
         return rideDate;
     }
 
-    public void setRideDate(Date rideDate) {
+    public void setRideDate(Timestamp rideDate) {
         this.rideDate = rideDate;
     }
 
     public Ride(){}
-    public Ride(int rideId, int ownerId, int carId, int noOfSeats, Boolean isActive, Date rideDate) {
+    public Ride(int rideId, int ownerId, int carId, int noOfSeats, Boolean isActive, Timestamp rideDate) {
         this.rideId = rideId;
         this.ownerId = ownerId;
         this.carId = carId;

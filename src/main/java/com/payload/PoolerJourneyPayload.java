@@ -3,24 +3,25 @@ package com.payload;
 public class PoolerJourneyPayload {
     private String start;
     private String end;
-    private String dateOfJourney;
-    private String endOfJourney;
+    private long dateOfJourney;
+    private long endOfJourney;
 
-    public String getEndDateOfJourney() {
+    public long getEndDateOfJourney() {
         return endOfJourney;
     }
 
-    public void setEndDateOfJourney(String endDateOfJourney) {
+    public void setEndDateOfJourney(long endDateOfJourney) {
         this.endOfJourney = endDateOfJourney;
     }
 
-    public String getDateOfJourney() {
+    public long getDateOfJourney() {
         return dateOfJourney;
     }
 
-    public void setDateOfJourney(String dateOfJourney) {
+    public void setDateOfJourney(long dateOfJourney) {
         this.dateOfJourney = dateOfJourney;
     }
+
 
     public PoolerJourneyPayload(){}
     public String getStart() {
@@ -39,7 +40,7 @@ public class PoolerJourneyPayload {
         this.end = end;
     }
 
-    public PoolerJourneyPayload(String start, String end, String dateOfJourney, String endDateOfJourney) {
+    public PoolerJourneyPayload(String start, String end, long dateOfJourney, long endDateOfJourney) {
         this.start = start;
         this.end = end;
         this.dateOfJourney = dateOfJourney;

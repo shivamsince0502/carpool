@@ -133,7 +133,7 @@ public class PoolerServiceImpl implements PoolerService {
             }
         }
 
-        HashMap<Integer, java.sql.Date> ridePoolDateMap = new HashMap<>();
+        HashMap<Integer, java.sql.Timestamp> ridePoolDateMap = new HashMap<>();
         for(RidePooler ridePooler : requiredList) {
             Ride ride = session.get(Ride.class, ridePooler.getRideId());
             ridePoolDateMap.put(ridePooler.getRidePoolerId(), ride.getRideDate());
@@ -172,7 +172,7 @@ public class PoolerServiceImpl implements PoolerService {
                 requiredList.add(ridePooler);
             }
         }
-        HashMap<Integer, java.sql.Date> ridePoolDateMap = new HashMap<>();
+        HashMap<Integer, java.sql.Timestamp> ridePoolDateMap = new HashMap<>();
         for(RidePooler ridePooler : requiredList) {
             Ride ride = session.get(Ride.class, ridePooler.getRideId());
             ridePoolDateMap.put(ridePooler.getRidePoolerId(), ride.getRideDate());

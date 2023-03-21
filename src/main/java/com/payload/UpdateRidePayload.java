@@ -4,7 +4,7 @@ public class UpdateRidePayload {
 
 //    {"noOfSeats":"3","rideId":"79","carName":"MG-HECTRE","dateOfJourney":"2023-03-15","ownerId":"2"}
     private  int rideId;
-    private String dateOfJourney;
+    private long dateOfJourney;
     private  int ownerId;
     private String carName;
     private int noOfSeats;
@@ -12,7 +12,7 @@ public class UpdateRidePayload {
     public UpdateRidePayload() {
     }
 
-    public UpdateRidePayload(int rideId, String dateOfJourney, int ownerId, String carName, int noOfSeats) {
+    public UpdateRidePayload(int rideId, long dateOfJourney, int ownerId, String carName, int noOfSeats) {
         this.rideId = rideId;
         this.dateOfJourney = dateOfJourney;
         this.ownerId = ownerId;
@@ -28,11 +28,11 @@ public class UpdateRidePayload {
         this.rideId = rideId;
     }
 
-    public String getDateOfJourney() {
+    public long getDateOfJourney() {
         return dateOfJourney;
     }
 
-    public void setDateOfJourney(String dateOfJourney) {
+    public void setDateOfJourney(long dateOfJourney) {
         this.dateOfJourney = dateOfJourney;
     }
 
