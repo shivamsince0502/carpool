@@ -5,7 +5,7 @@ import java.util.List;
 public class OwnerRidePayload {
     private int noOfSeats;
     private String startPoint;
-    private String carName;
+    private String carNumber;
     private int ownerId;
     private List<String> citiesList;
 
@@ -22,10 +22,10 @@ public class OwnerRidePayload {
     public OwnerRidePayload() {
     }
 
-    public OwnerRidePayload(int noOfSeats, String startPoint, String carName, int ownerId, List<String> citiesList, long dateOfJourney) {
+    public OwnerRidePayload(int noOfSeats, String startPoint, String carNumber, int ownerId, List<String> citiesList, long dateOfJourney) {
         this.noOfSeats = noOfSeats;
         this.startPoint = startPoint;
-        this.carName = carName;
+        this.carNumber = carNumber;
         this.ownerId = ownerId;
         this.citiesList = citiesList;
         this.dateOfJourney = dateOfJourney;
@@ -47,12 +47,12 @@ public class OwnerRidePayload {
         this.startPoint = startPoint;
     }
 
-    public String getCarName() {
-        return carName;
+    public String getCarNumber() {
+        return carNumber;
     }
 
-    public void setCarName(String carName) {
-        this.carName = carName;
+    public void setCarNumber(String carNumber) {
+        this.carNumber = carNumber;
     }
 
     public int getOwnerId() {

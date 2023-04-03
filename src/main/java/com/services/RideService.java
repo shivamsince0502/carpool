@@ -11,18 +11,16 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public interface RideService {
+
     List<Ride> getAllActiveRides();
-    List<Ride> getAllRides();
 
-    List<Ride> findPoolCars(PoolerJourneyPayload poolerJourneyPayload);
-
-    Ride createRide(NewRidePayload newRidePayload);
+    List<FinPoolResult> findPoolCars(PoolerJourneyPayload poolerJourneyPayload);
 
     List<String> allCitiesOfRide(int id);
 
     RidePooler bookingRequest(BookRequestPayload bookRequestPayload);
 
-    Ride createRide(OwnerRidePayload ownerRidePayload);
+    FinPoolResult createRide(OwnerRidePayload ownerRidePayload);
     Ride deleteRideById(int id);
 
     Ride getRideByRideId(int id);
@@ -31,7 +29,7 @@ public interface RideService {
 
     Ride updateRide(UpdateRidePayload updateRidePayload);
 
-    RidePooler findRideForPooler(int rideId, int poolerId);
+    RidePooler finishRideForPooler(int rideId, int poolerId);
     RidePooler unBookRide(int rideId, int poolerId);
 
     List<Timestamp> getCurrDate();

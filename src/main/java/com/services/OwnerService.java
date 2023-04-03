@@ -4,6 +4,7 @@ import com.model.Owner;
 import com.model.OwnerNotification;
 import com.model.Ride;
 import com.model.RidePooler;
+import com.payload.FinPoolResult;
 import com.payload.LoginPayload;
 import com.payload.OwnerUpdatePayload;
 import com.payload.ReqDecPayload;
@@ -24,9 +25,9 @@ public interface OwnerService {
 
     Owner updateOwner(OwnerUpdatePayload ownerUpdatePayload, int id);
 
-    List<Ride> getAllPrevRidesByOwnerId(int id);
+    List<FinPoolResult> getAllPrevRidesByOwnerId(int id);
 
-    List<Ride> getAllUpRides(int id);
+    List<FinPoolResult> getAllUpRides(int id);
 
     RidePooler approvePoolRequest(ReqDecPayload reqDecPayload);
 

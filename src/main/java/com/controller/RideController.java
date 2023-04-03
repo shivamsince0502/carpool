@@ -4,10 +4,7 @@ import com.model.PoolerNotification;
 import com.model.Ride;
 import com.model.RideCities;
 import com.model.RidePooler;
-import com.payload.BookRequestPayload;
-import com.payload.OwnerRidePayload;
-import com.payload.PoolerJourneyPayload;
-import com.payload.UpdateRidePayload;
+import com.payload.*;
 import com.services.RideService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +26,7 @@ public class RideController {
     }
 
     @PostMapping("/findcars")
-    List<Ride> getAllRequiredPools(@RequestBody PoolerJourneyPayload poolerJourneyPayload){
+    List<FinPoolResult> getAllRequiredPools(@RequestBody PoolerJourneyPayload poolerJourneyPayload){
         return rideService.findPoolCars(poolerJourneyPayload);
     }
 
@@ -44,7 +41,7 @@ public class RideController {
     }
 
     @PostMapping("/createride")
-    Ride createRide(@RequestBody OwnerRidePayload ownerRidePayload) {
+    FinPoolResult createRide(@RequestBody OwnerRidePayload ownerRidePayload) {
         return rideService.createRide(ownerRidePayload);
     }
 
@@ -70,7 +67,7 @@ public class RideController {
 
     @PostMapping("finishrideforpooler/{rid}/{pid}")
     RidePooler finishRideforPooler(@PathVariable("rid") int rideId, @PathVariable("pid") int poolerId){
-        return rideService.findRideForPooler(rideId, poolerId);
+        return rideService.finishRideForPooler(rideId, poolerId);
     }
 
     @PostMapping("unbookride/{rid}/{pid}")

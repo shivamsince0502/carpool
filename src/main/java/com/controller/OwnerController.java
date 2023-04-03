@@ -1,10 +1,7 @@
 package com.controller;
 
 import com.model.*;
-import com.payload.LoginPayload;
-import com.payload.OwnerUpdatePayload;
-import com.payload.PoolerUpdatePayload;
-import com.payload.ReqDecPayload;
+import com.payload.*;
 import com.services.OwnerService;
 import com.services.RideService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,12 +51,12 @@ public class OwnerController {
     }
 
     @GetMapping("/getallprevrides/{id}")
-    List<Ride> getAllPrevRidesByOwner(@PathVariable("id") int id) {
+    List<FinPoolResult> getAllPrevRidesByOwner(@PathVariable("id") int id) {
         return ownerService.getAllPrevRidesByOwnerId(id);
     }
 
     @GetMapping("/getAllUpRides/{id}")
-    List<Ride> getAllUpRides(@PathVariable int id){
+    List<FinPoolResult> getAllUpRides(@PathVariable int id){
         return ownerService.getAllUpRides(id);
     }
 

@@ -5,6 +5,7 @@ import com.model.PoolerNotification;
 import com.model.RidePooler;
 import com.payload.LoginPayload;
 import com.payload.PoolerUpdatePayload;
+import com.payload.UpRidePoolerDet;
 import com.services.PoolerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -50,12 +51,12 @@ public class PoolerController {
     }
 
     @GetMapping("getallupridebypoolerid/{id}")
-    List<RidePooler> getAllUpRideByPoolerId(@PathVariable int id) {
+    List<UpRidePoolerDet> getAllUpRideByPoolerId(@PathVariable int id) {
         return poolerService.allUpRideByPoolerId(id);
     }
 
     @GetMapping("getallprevridebypoolerid/{id}")
-    List<RidePooler> getAllPrevRideByPoolerId(@PathVariable int id) {
+    List<UpRidePoolerDet> getAllPrevRideByPoolerId(@PathVariable int id) {
         return poolerService.allPrevRideByPoolerId(id);
     }
 

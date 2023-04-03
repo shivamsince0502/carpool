@@ -1,6 +1,7 @@
 package com.services;
 
 import com.model.City;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -25,10 +26,12 @@ public class CityServicesImpl implements CityServices{
     }
 
     @Override
-    public List<City> getAllCities() {
+    public List<String> getAllCities() {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        List<City> cities = session.createQuery("from City", City.class).list();
+        String sql = "select city.city_name from city";
+        SQLQuery query = session.createSQLQuery(sql);
+        List<String> cities = query.getResultList();
         transaction.commit();
         session.close();
         return cities;
@@ -43,4 +46,17 @@ public class CityServicesImpl implements CityServices{
         session.close();
         return city;
     }
+
+    @Override
+    public List<String> getAllCitiesByNames(String cityName) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        String sql = "SELECT city_name FROM city WHERE city_name LIKE '"+cityName+"%'";
+        SQLQuery query = session.createSQLQuery(sql);
+        List<String> cities = query.list();
+        transaction.commit();
+        session.close();
+        return cities;
+    }
+
 }

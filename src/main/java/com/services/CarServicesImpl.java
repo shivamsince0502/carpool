@@ -13,6 +13,7 @@ import org.hibernate.loader.custom.sql.SQLQueryParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.management.Query;
 import java.util.ArrayList;
 import java.util.List;
 @Service
@@ -23,7 +24,7 @@ public class CarServicesImpl implements CarServices {
     public List<Car> getAllCars() {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        List<Car> carList = session.createQuery("from Owner", Car.class).list();
+        List<Car> carList = session.createQuery("from Car", Car.class).list();
         transaction.commit();
         session.close();
         return carList;
@@ -33,15 +34,21 @@ public class CarServicesImpl implements CarServices {
     public List<Car> getAllCarsOfUserById(int id) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        List<OwnerCar> ownerCarList = session.createQuery("from OwnerCar", OwnerCar.class).list();
-        List<Car> carList = new ArrayList<>();
-        for(OwnerCar ownerCar : ownerCarList) {
-            if(ownerCar.getOwnerId() == id) {
-                Car car = session.get(Car.class, ownerCar.getCarId());
-                carList.add(car);
-            }
+        String sql = "SELECT car.car_id as carId, car.car_name as carName," +
+                " car.car_color as carColor, car.car_number as carNumber  " +
+                "FROM car INNER JOIN owner_cars ON car.car_id = owner_cars.car_id WHERE owner_cars.owner_id ="+id;
+        SQLQuery query = session.createSQLQuery(sql);
+        List<Car> reqList = new ArrayList<>();
+        List<Object[]> carList = query.list();
+        for (Object[] row : carList) {
+            Car car = new Car();
+            car.setCarId(Integer.parseInt(row[0].toString()));
+            car.setCarName(row[1].toString());
+            car.setCarColor(row[2].toString());
+            car.setCarNumber(row[3].toString());
+            reqList.add(car);
         }
-        return carList;
+        return reqList;
     }
 
     @Override
@@ -51,22 +58,14 @@ public class CarServicesImpl implements CarServices {
         String carName = ownerCarPayload.getCarName();
         String carColor = ownerCarPayload.getCarColor();
         String carNumber = ownerCarPayload.getCarNumber();
-        if(carName == null) return null;
-        List<Car> carList1 = session.createQuery("from Car", Car.class).list();
-        for(Car car : carList1) {
-            if(car.getCarNumber().equals(carNumber)){
-                Car car1 = new Car();
-                return car1;
-            }
-        }
-        Car car = new Car();
-        car.setCarName(carName);
-        car.setCarColor(carColor);
-        car.setCarNumber(carNumber);
-        session.save(car);
-        List<Car> carList = session.createQuery("from Car", Car.class).list();
-        int idx = carList.size();
-        Car car1 = carList.get(idx-1);
+        if(carName.equals("")) return null;
+        String insql = "insert into car (car_name, car_color, car_number) values ('" + carName+ "', '"+ carColor +"', '"+carNumber+"')";
+        SQLQuery inquery = session.createSQLQuery(insql);
+        inquery.executeUpdate();
+        String sql = "select * from car where car_number = '"+carNumber+"'";
+        SQLQuery query = session.createSQLQuery(sql);
+        query.addEntity(Car.class);
+        Car car1 = (Car) query.uniqueResult();
         OwnerCar ownerCar = new OwnerCar();
         ownerCar.setCarId(car1.getCarId());
         int ownerId = ownerCarPayload.getOwnerId();
@@ -81,7 +80,10 @@ public class CarServicesImpl implements CarServices {
     public Car getCarById(int id) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        Car car = session.get(Car.class, id);
+        String sql = "select * from car where car_id = "+id;
+        SQLQuery query = session.createSQLQuery(sql);
+        query.addEntity(Car.class);
+        Car car = (Car) query.uniqueResult();
         transaction.commit();
         session.close();
         return car;

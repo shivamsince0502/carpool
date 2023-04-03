@@ -11,6 +11,7 @@ com\payload\OwnerPayLoad.class
 com\payload\PoolerUpdatePayload.class
 com\model\DeletePoolerRide.class
 com\payload\ReqDecPayload.class
+com\payload\UpRidePoolerDet.class
 com\model\DeleteRide.class
 com\model\OwnerCar.class
 com\payload\RidePayloadResponse.class
@@ -29,10 +30,10 @@ com\controller\RideController.class
 com\model\Pooler.class
 com\payload\LoginPayload.class
 com\services\CarServices.class
-com\services\PoolerServiceImpl$2.class
 com\services\OwnerServiceImpl$3.class
 com\services\RideCitiesServiceImpl.class
 com\controller\CityController.class
+com\payload\FinPoolResult.class
 com\model\Owner.class
 com\payload\BookRequestPayload.class
 com\services\OwnerServiceImpl$1.class
@@ -40,7 +41,6 @@ com\services\CityServicesImpl.class
 com\payload\PoolerJourneyPayload.class
 com\model\Ride.class
 com\model\RidePooler.class
-com\services\PoolerServiceImpl$1.class
 com\controller\OwnerController.class
 com\services\CarServicesImpl.class
 com\services\RideService.class

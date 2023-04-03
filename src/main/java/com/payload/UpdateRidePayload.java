@@ -6,17 +6,17 @@ public class UpdateRidePayload {
     private  int rideId;
     private long dateOfJourney;
     private  int ownerId;
-    private String carName;
+    private String carNumber;
     private int noOfSeats;
 
     public UpdateRidePayload() {
     }
 
-    public UpdateRidePayload(int rideId, long dateOfJourney, int ownerId, String carName, int noOfSeats) {
+    public UpdateRidePayload(int rideId, long dateOfJourney, int ownerId, String carNumber, int noOfSeats) {
         this.rideId = rideId;
         this.dateOfJourney = dateOfJourney;
         this.ownerId = ownerId;
-        this.carName = carName;
+        this.carNumber = carNumber;
         this.noOfSeats = noOfSeats;
     }
 
@@ -44,12 +44,12 @@ public class UpdateRidePayload {
         this.ownerId = ownerId;
     }
 
-    public String getCarName() {
-        return carName;
+    public String getCarNumber() {
+        return carNumber;
     }
 
-    public void setCarName(String carName) {
-        this.carName = carName;
+    public void setCarNumber(String carNumber) {
+        this.carNumber = carNumber;
     }
 
     public int getNoOfSeats() {

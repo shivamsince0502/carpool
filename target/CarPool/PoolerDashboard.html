@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round"
+    />
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"> -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+
+
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+      integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+      integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+      crossorigin="anonymous"
+    ></script>
+
+    <link rel="stylesheet" href="styles/pdashcss.css" />
+    <title id="title">Pooler Dashboard</title>
+  </head>
+  <body>
+       <div class="header container-fluid" >
+      <div class="side-nav">
+        <div class="user">
+          <a  style="display: inline;"><img  class="user-img" id="myImage" onclick="changeImage()"></a>
+          <div>
+            <h2 id="side-username"></h2>
+            <p id="side-email"></p>
+          </div>
+          <a class="fa fa-bell star-img" id="bell-icon"  data-toggle="modal" data-target="#modalCart">
+            <span class="fa fa-comment" id="comment"></span>
+            <span class="num" id="no-of-notif">0</span>
+          </a>
+        </div>
+        <ul>
+          <li><a id="show-card-dash" style="display: inline-flex;"><img src="images/icons8-dashboard-layout-48.png" alt=""><p>Dashboard</p></a></li>
+          <li><a id="curr-ride" style="display: inline-flex;"><img src="images/icons8-upcoming-64.png" alt=""><p>Upcoming Rides</p></a></li>
+          <li><a id="prev-ride" style="display: inline-flex;"><img src="images/icons8-carpool-50.png" alt=""><p>Previous Rides</p></a></li>
+          
+          <li><a id="editDetail" data-toggle="modal" data-target="#editDetailModal" style="display: inline-flex;"><img src="images/icons8-edit-user-32.png" alt=""><p>Edit User</p></a></li>
+        </ul>
+        <ul>
+          <li><a  data-target=".bs-example-modal-sm" data-toggle="modal" style="display: inline-flex;"><img src="images/logout.png" alt=""><p>Logout</p></a></li>
+        </ul>
+      </div>
+      
+      <div class="div container-fluid" >
+        <div class="container  py-5 h-100"  style="background: transparent" id="show-user-card">
+          <div
+            class="row d-flex justify-content-center align-items-center h-100"
+          >
+            <div class="col col-lg-6 mb-4 mb-lg-0 ">
+              <div class="card mb-3" style="border-radius: 0.5rem">
+                <div class="row g-0">
+                  <div
+                    class="col-md-4 gradient-custom text-center text-white"
+                    style="
+                      border-top-left-radius: 0.5rem;
+                      border-bottom-left-radius: 0.5rem;
+                    "
+                  >
+                    <!-- <h3 class="entityname">Pooler</h3> -->
+                    <h3 style="margin-top: 30%">Pooler</h3>
+                    <h5 style="margin-top: 20%" id="poolerName"></h5>
+                    <p id="username"></p>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body p-4">
+                      <hr class="mt-0 mb-4" />
+                      <div class="row pt-1">
+                        <div class="col-12 mb-3">
+                          <h6>Email</h6>
+                          <p id="poolerEmail" class="text-muted"></p>
+                        </div>
+                        <div class="col-12 mb-3">
+                          <h6>Phone</h6>
+                          <p id="poolerMob" class="text-muted"></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+
+          <div class="container">
+            <div
+           class="container col-sm-6 jumbotron"
+           style="background: transparent !important; float: left"
+         >
+           <img
+             src="images/car-bg-rem2.png"
+             class="img img-resposive img-rounded col-sm-12 rounded"
+             alt=""
+             style="object-fit: fill; width: 100%"
+           />
+         </div>
+         <div
+           class="container col-sm-6 jumbotron"
+           style="background: transparent !important; float: left"
+         >
+           <img
+             src="images/carpoolrembg.png"
+             class="img img-resposive img-rounded col-sm-12 rounded"
+             alt=""
+             style="object-fit: fill; width: 100%"
+           />
+         </div>
+         </div>
+          
+        </div>
+
+      <div class="row" id="show-data-curr">
+        <div
+          class="col-sm-10 jumbotron table-div"
+          style="background: transparent !important; 
+          margin-right: 0;
+          float: right;
+          text-align: center;"
+        >
+          <div class="card">
+            <div class="card-header">
+              <strong class="card-title" id="head-tb-curr"></strong>
+            </div>
+            <div class="card-body" id="select-ride"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" id="search-rides-div">
+        <div
+          class="col-sm-10 jumbotron table-div"
+          style="background: transparent !important ;
+          margin-right: 0;
+          float: right;
+          text-align: center;"
+        >
+          <div class="card">
+            <div class="card-header">
+              <strong class="card-title" id="head-tb-search-ride"></strong>
+            </div>
+            <div class="card-body" id="search-ride-tb"></div>
+          </div>
+        </div>
+      </div>
+
+    <div class="row "  id="show-data-prev">
+        <div
+          class="col-sm-10 jumbotron table-div"
+          style="background: transparent !important ;
+          margin-right: 0;
+          float: right;
+          text-align: center;"
+        >
+          <div class="card">
+            <div class="card-header">
+              <strong class="card-title" id="head-tb-prev"></strong>
+            </div>
+            <div class="card-body" id="prev-rides"></div>
+          </div>
+        </div>
+      </div> 
+    </div>
+  </div> 
+
+  
+
+    
+<!-- Modal: modalCart notifications -->
+<div class="modal fade " id="modalCart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog modal-lg" role="document">
+  <div class="modal-content">
+    <!--Header-->
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">Notifications</h4>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <!--Body-->
+    <div class="modal-body" id="notif-table-div">
+    </div>
+  </div>
+</div>
+</div>
+<!-- Modal: modalCart -->
+
+
+
+    <!-- data-backdrop="static" -->
+    <!-- edit user detail Modal -->
+    <div
+      class="modal fade"
+      id="editDetailModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editDetailModalTitle">
+              Change User Details
+            </h5>
+          </div>
+          <div class="modal-body" >
+            <form id="updateUser">
+              <div class="form-group">
+                <label for="pooler-mame">Pooler Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="poolerName"
+                  id="pooler-name"
+                  placeholder="pooler name"
+                />
+              </div>
+              <div class="form-group">
+                <label for="user-mame">User Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="userName"
+                  id="user-name"
+                  placeholder="user name"
+                />
+              </div>
+              <div class="form-group">
+                <label for="user-email">Email address</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  name="poolerEmail"
+                  id="user-email"
+                  aria-describedby="emailHelp"
+                  placeholder="Email"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="user-mob">Mobile Number</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="poolerMob"
+                  id="user-mob"
+                  placeholder="Mobile Number"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              id="saveChanges"
+              data-dismiss="modal"
+              class="btn btn-primary"
+            >
+              Update Pooler
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- search Modal -->
+    <div
+      class="modal fade right"
+      id="searchmodal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+      data-backdrop="static"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Search Rides</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form method="POST" id="search-form">
+              <div class="form-group fg2">
+                <label for="doj">Start Date</label>
+                <input
+                  type="datetime-local"
+                  class="form-control datef"
+                  id="doj"
+                  name="dateOfJourney"
+                  placeholder="Date of Journey"
+                />
+              </div>
+              <div class="form-group fg2">
+                <label for="doj">End Date</label>
+                <input
+                  type="datetime-local"
+                  class="form-control datef"
+                  id="edoj"
+                  name="endOfJourney"
+                  placeholder="End Date of Journey"
+                />
+              </div>
+              <div class="form-group fg1">
+                <label for="startpoint">Start Point</label>
+                <div class="dropdown">
+                  <select id="citiesdropdown"></select>
+                </div>
+                <input
+                  type="text"
+                  name="start"
+                  class="form-control "
+                  id="start"
+                  placeholder="Start Location"
+                />
+              </div>
+              <div class="form-group fg2">
+                <label for="endpoint">End Point</label>
+                <div class="dropdown">
+                  <select id="citiesdropdown1"></select>
+                </div>
+                <input
+                  type="text"
+                  name="end"
+                  class="form-control"
+                  id="end"
+                  placeholder="End Location"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-dismiss="modal"
+              id="search-rides"
+            >
+              Searh Rides
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="section"> -->
+      <!-- <div class="userdetails"> -->
+        
+
+        
+    <!-- after booking Modal HTML -->
+    <div id="afterbooking" class="modal fade">
+      <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="icon-box">
+              <i class="material-icons">&#xE876;</i>
+            </div>
+            <h4 class="modal-title w-100">Awesome!</h4>
+          </div>
+          <div class="modal-body" id="showbooking">
+            <p class="text-center">Your booking has been sent to the owner.</p>
+            <p class="text-center" id="owner-name"></p>
+            <p class="text-center" id="owner-number"></p>
+            <p class="text-center" id="car-name"></p>
+            <p class="text-center" id="car-color"></p>
+            <p class="text-center" id="car-number"></p>
+            <p class="text-center">Journey route cities are :</p>
+            <ul id="listofcitiesride" class="list-group"></ul>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-success btn-block" data-dismiss="modal">
+              OK
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container button floating-search">
+      <button
+        type="button"
+        data-toggle="modal"
+        data-target="#searchmodal"
+        class="btn btn-secondary search-btn-ride"
+      >Search Ride
+        <i class="fa fa-search"></i>
+      </button>
+    </div>
+
+    <!-- Logout Modal -->
+    <div tabindex="-1" class="modal bs-example-modal-sm" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header"><h4>Logout <i class="fa fa-lock"></i></h4></div>
+          <div class="modal-body"><i class="fa fa-question-circle"></i> Are you sure you want to log-off?</div>
+          <div class="modal-footer"><a id="logoutbtn" class="btn btn-primary btn-block" href="javascript:;">Logout</a></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="scripts/pdash.js"></script>
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+      integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+      integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+      crossorigin="anonymous"
+    ></script>
+    <script src="scripts/serverdetails.js"></script>
+  </body>
+</html>

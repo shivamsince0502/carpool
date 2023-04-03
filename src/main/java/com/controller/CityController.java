@@ -16,13 +16,18 @@ public class CityController {
     CityServices cityServices;
 
     @GetMapping("/allcities")
-    List<City> getAllCities() {
+    List<String> getAllCities() {
         return cityServices.getAllCities();
     }
 
     @GetMapping("getcitybyid/{id}")
     City getCityById(@PathVariable int id){
         return cityServices.getCityById(id);
+    }
+
+    @GetMapping("/getcitybyname/{name}")
+    List<String> geallCitiesByName(@PathVariable("name") String cityName) {
+        return cityServices.getAllCitiesByNames(cityName);
     }
 
 }

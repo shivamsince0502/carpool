@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 4.0//EN"
+        "http://www.tuckey.org/res/dtds/urlrewrite4.0.dtd">
+
+<urlrewrite>
+    <rule>
+        <from>ownerlogin</from>
+        <to>/OwnerLogin.html</to>
+    </rule>
+    <rule>
+        <from>poolerlogin</from>
+        <to>/PoolerLogin.html</to>
+    </rule>
+    <rule>
+        <from>poolerRegister</from>
+        <to>/PoolerRegisteration.html</to>
+    </rule>
+    <rule>
+        <from>ownerRegister</from>
+        <to>/OwnerRegisteration.html</to>
+    </rule>
+    <rule>
+        <from>poolerdashboard</from>
+        <to>/PoolerDashboard.html</to>
+    </rule>
+    <rule>
+        <from>ownerdashboard</from>
+        <to>/OwnerDashboard.html</to>
+    </rule>
+    <rule>
+        <from>home</from>
+        <to>/index.html</to>
+    </rule>
+
+</urlrewrite>

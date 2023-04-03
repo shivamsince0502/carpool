@@ -5,6 +5,7 @@ import com.model.PoolerNotification;
 import com.model.RidePooler;
 import com.payload.LoginPayload;
 import com.payload.PoolerUpdatePayload;
+import com.payload.UpRidePoolerDet;
 
 import java.util.List;
 
@@ -23,8 +24,8 @@ public interface PoolerService {
 
     Pooler updatePooler(PoolerUpdatePayload poolerUpdatePayload, int id);
 
-    List<RidePooler> allUpRideByPoolerId(int id);
-    List<RidePooler> allPrevRideByPoolerId(int id);
+    List<UpRidePoolerDet> allUpRideByPoolerId(int id);
+    List<UpRidePoolerDet> allPrevRideByPoolerId(int id);
 
     RidePooler deleteRidePooler(int rideId, int poolerId);
 

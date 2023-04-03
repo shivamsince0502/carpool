@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface CityServices {
     City addCity(City city);
-    List<City> getAllCities();
+    List<String> getAllCities();
 
     City getCityById(int id);
+    List<String> getAllCitiesByNames(String cityName);
 }

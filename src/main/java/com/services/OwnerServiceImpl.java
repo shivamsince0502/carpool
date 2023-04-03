@@ -1,6 +1,7 @@
 package com.services;
 
 import com.model.*;
+import com.payload.FinPoolResult;
 import com.payload.LoginPayload;
 import com.payload.OwnerUpdatePayload;
 import com.payload.ReqDecPayload;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLData;
+import java.sql.Timestamp;
 import java.util.*;
 
 @Service
@@ -41,17 +43,18 @@ public class  OwnerServiceImpl implements OwnerService{
     public Owner createOwner(Owner owner) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        List<Owner> ownerList = getAllOwners();
-        for(Owner owner1 : ownerList) {
-            if(owner1.getUserName().equals(owner.getUserName()) || owner1.getOwnerEmail().equals(owner.getOwnerEmail()) || owner1.getOwnerMob().equals(owner.getOwnerMob()))
-                return new Owner();
-        }
+        String sql = "select * from owner where owner_username = '"+owner.getUserName()+
+                "' or owner_mob = '"+owner.getOwnerMob()+"' owner_email = '"+owner.getOwnerEmail()+"' ";
+        SQLQuery query = session.createSQLQuery(sql);
+        Owner o = (Owner) query.uniqueResult();
+        if(o != null) new Pooler();
         session.save(owner);
+        sql = "select * from owner where owner_username = '"+owner.getUserName()+
+                "' or owner_mob = '"+owner.getOwnerMob()+"' owner_email = '"+owner.getOwnerEmail()+"' ";
+        query = session.createSQLQuery(sql);
+        Owner owner1 = (Owner) query.uniqueResult();
         transaction.commit();
         session.close();
-        List<Owner> ownerList1 = getAllOwners();
-        int len = ownerList1.size();
-        Owner owner1 = ownerList1.get(len-1);
         return owner1;
     }
 
@@ -87,15 +90,13 @@ public class  OwnerServiceImpl implements OwnerService{
     public Owner isOwner(LoginPayload loginPayload) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        List<Owner> ownerList = session.createQuery("from Owner", Owner.class).list();
-        for(Owner owner : ownerList) {
-            String un = owner.getUserName();
-            String pw = owner.getPassword();
-            if(un.equals(loginPayload.getUsername()) && pw.equals(loginPayload.getPassword())){
-                return owner;
-            }
-        }
-        return null;
+        String sql = "select * from owner where owner_username = '"+loginPayload.getUsername() +
+                "' and owner_password = '"+loginPayload.getPassword()+"'";
+        SQLQuery query = session.createSQLQuery(sql);
+        query.addEntity(Owner.class);
+        Owner owner = (Owner) query.uniqueResult();
+        if(owner == null) return new Owner();
+        return owner;
     }
 
     @Override
@@ -113,63 +114,159 @@ public class  OwnerServiceImpl implements OwnerService{
         return owner;
     }
 
+
     @Override
-    public List<Ride> getAllPrevRidesByOwnerId(int id) {
+    public List<FinPoolResult> getAllPrevRidesByOwnerId(int id) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        List<Ride> rideList = rideService.getAllRides();
-
         java.sql.Date date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.DAY_OF_MONTH, -1);
         date = new java.sql.Date(cal.getTime().getTime());
+        List<String> allcities = cityServices.getAllCities();
+        HashMap<Integer, String> cityMap = new HashMap<>();
+        HashMap<String, Integer> cityMapR = new HashMap<>();
+        HashMap<Integer, Integer> distMap = new HashMap<>();
+        int i = 1;
+        for(String city : allcities) {
+            cityMap.put(i, city);
+            cityMapR.put(city, i);
+            i++;
+        }
 
-        List<DeleteRide> deleteRideList = session.createQuery("from DeleteRide", DeleteRide.class).list();
-        ArrayList<Integer> delRides = new ArrayList<>();
-        for(DeleteRide deleteRide : deleteRideList){
-           delRides.add(deleteRide.getRideId());
-        }
-        List<Ride> requiredRides = new ArrayList<>();
-        for(Ride ride : rideList) {
-            if(ride.getOwnerId() == id && !delRides.contains(ride.getRideId()) && (!ride.getActive() || ride.getRideDate().compareTo(date) < 0)) {
-                requiredRides.add(ride);
+        String sql = "SELECT r.ride_id, r.owner_id as ride_owner_id, r.car_id as ride_car_id, r.no_of_seats, r.is_active, r.ride_datetime, c.*, o.*, GROUP_CONCAT(rc.city_id SEPARATOR ',') AS ride_cities " +
+                "FROM ride AS r " +
+                "JOIN car AS c ON r.car_id = c.car_id " +
+                "JOIN owner AS o ON r.owner_id = o.owner_id " +
+                "JOIN ride_cities AS rc ON r.ride_id = rc.ride_id " +
+                "WHERE  r.owner_id = "+id+" " +
+                "AND r.ride_id NOT IN (SELECT ride_id FROM deletedride) "+
+                "AND (r.ride_datetime  < '"+date+"' " +
+                "OR r.is_active = 0) "+
+                "GROUP BY r.ride_id, c.car_id, o.owner_id, r.ride_datetime " +
+                "ORDER BY r.ride_datetime ASC";
+        SQLQuery query = session.createSQLQuery(sql);
+        List<Object[]> result = query.list();
+        List<FinPoolResult> finPoolResults = new ArrayList<>();
+        for (Object[] row : result) {
+            FinPoolResult finPoolResult = new FinPoolResult();
+            Ride ride = new Ride();
+            Owner owner = new Owner();
+            Car car = new Car();
+            ride.setRideId(Integer.parseInt(row[0].toString()));
+            ride.setRideDate(Timestamp.valueOf(row[5].toString()));
+            ride.setOwnerId(Integer.parseInt(row[1].toString()));
+            ride.setNoOfSeats(Integer.parseInt(row[3].toString()));
+            ride.setCarId(Integer.parseInt(row[2].toString()));
+
+
+            owner.setOwnerId(Integer.parseInt(row[10].toString()));
+            owner.setOwnerName(row[11].toString());
+            owner.setOwnerEmail(row[12].toString());
+            owner.setOwnerMob(row[13].toString());
+
+            car.setCarName(row[7].toString());
+            car.setCarColor(row[8].toString());
+            car.setCarNumber(row[9].toString());
+            car.setCarId(Integer.parseInt(row[6].toString()));
+            finPoolResult.setRide(ride);
+            finPoolResult.setCar(car);
+            finPoolResult.setOwner(owner);
+            List<String> cities = new ArrayList<>();
+            String city = row[16].toString();
+            for(i = 0; i< city.length(); i+=2) {
+                int cId = Character.getNumericValue(city.charAt(i));
+                cities.add(cityMap.get(cId));
             }
+            finPoolResult.setCitiesOfRide(cities);
+            finPoolResults.add(finPoolResult);
         }
-        Collections.sort(requiredRides, new Comparator<Ride>() {
-            public int compare(Ride o1, Ride o2) {
-                return o1.getRideDate().compareTo(o2.getRideDate());
+
+        Collections.sort(finPoolResults, new Comparator<FinPoolResult>() {
+            public int compare(FinPoolResult o1, FinPoolResult o2) {
+                return o1.getRide().getRideDate().compareTo(o2.getRide().getRideDate());
             }
         });
         transaction.commit();
         session.close();
-        return requiredRides;
+        return finPoolResults;
     }
 
     @Override
-    public List<Ride> getAllUpRides(int id) {
+    public List<FinPoolResult> getAllUpRides(int id) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        List<Ride> rides= rideService.getAllRides();
-        List<Ride> requiredList = new ArrayList<>();
         java.sql.Date date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        cal.add(Calendar.DAY_OF_MONTH, -1);
         date = new java.sql.Date(cal.getTime().getTime());
-        for(Ride ride : rides) {
-            if(ride.getActive() && ride.getRideDate().compareTo(date) >= 0 && ride.getOwnerId() == id) {
-                requiredList.add(ride);
-            }
+        List<String> allcities = cityServices.getAllCities();
+        HashMap<Integer, String> cityMap = new HashMap<>();
+        HashMap<String, Integer> cityMapR = new HashMap<>();
+        HashMap<Integer, Integer> distMap = new HashMap<>();
+        int i = 1;
+        for(String city : allcities) {
+            cityMap.put(i, city);
+            cityMapR.put(city, i);
+            i++;
         }
-        Collections.sort(requiredList, new Comparator<Ride>() {
-            public int compare(Ride o1, Ride o2) {
-                return o1.getRideDate().compareTo(o2.getRideDate());
+
+        String sql = "SELECT r.ride_id, r.owner_id as ride_owner_id, r.car_id as ride_car_id, r.no_of_seats, r.is_active, r.ride_datetime, c.*, o.*, GROUP_CONCAT(rc.city_id SEPARATOR ',') AS ride_cities " +
+                "FROM ride AS r " +
+                "JOIN car AS c ON r.car_id = c.car_id " +
+                "JOIN owner AS o ON r.owner_id = o.owner_id " +
+                "JOIN ride_cities AS rc ON r.ride_id = rc.ride_id " +
+                "WHERE  r.owner_id = "+id+" " +
+                "AND r.ride_datetime  >= '"+date+"' " +
+                "AND r.is_active = 1 "+
+                "GROUP BY r.ride_id, c.car_id, o.owner_id, r.ride_datetime " +
+                "ORDER BY r.ride_datetime ASC";
+        SQLQuery query = session.createSQLQuery(sql);
+        List<Object[]> result = query.list();
+        List<FinPoolResult> finPoolResults = new ArrayList<>();
+        for (Object[] row : result) {
+            FinPoolResult finPoolResult = new FinPoolResult();
+            Ride ride = new Ride();
+            Owner owner = new Owner();
+            Car car = new Car();
+            ride.setRideId(Integer.parseInt(row[0].toString()));
+            ride.setRideDate(Timestamp.valueOf(row[5].toString()));
+            ride.setOwnerId(Integer.parseInt(row[1].toString()));
+            ride.setNoOfSeats(Integer.parseInt(row[3].toString()));
+            ride.setCarId(Integer.parseInt(row[2].toString()));
+
+
+            owner.setOwnerId(Integer.parseInt(row[10].toString()));
+            owner.setOwnerName(row[11].toString());
+            owner.setOwnerEmail(row[12].toString());
+            owner.setOwnerMob(row[13].toString());
+
+            car.setCarName(row[7].toString());
+            car.setCarColor(row[8].toString());
+            car.setCarNumber(row[9].toString());
+            car.setCarId(Integer.parseInt(row[6].toString()));
+            finPoolResult.setRide(ride);
+            finPoolResult.setCar(car);
+            finPoolResult.setOwner(owner);
+            List<String> cities = new ArrayList<>();
+            String city = row[16].toString();
+            for(i = 0; i< city.length(); i+=2) {
+                int cId = Character.getNumericValue(city.charAt(i));
+                cities.add(cityMap.get(cId));
+            }
+            finPoolResult.setCitiesOfRide(cities);
+            finPoolResults.add(finPoolResult);
+        }
+
+        Collections.sort(finPoolResults, new Comparator<FinPoolResult>() {
+            public int compare(FinPoolResult o1, FinPoolResult o2) {
+                return o1.getRide().getRideDate().compareTo(o2.getRide().getRideDate());
             }
         });
         transaction.commit();
         session.close();
-        return requiredList;
+        return finPoolResults;
     }
 
     @Override
@@ -186,7 +283,7 @@ public class  OwnerServiceImpl implements OwnerService{
         query.addEntity(Pooler.class);
         Pooler currPooler = (Pooler) query.uniqueResult();
         int poolerId = currPooler.getPoolerId();
-        List<PoolRequest> poolRequests = session.createQuery("from PoolRequest", PoolRequest.class).list();
+        List<PoolRequest> poolRequests = session.createQuery("from PoolRequest PR where PR.isSeen = false", PoolRequest.class).list();
         for(PoolRequest poolRequest : poolRequests) {
             if(!poolRequest.getSeen()) {
                 RidePooler ridePooler = session.get(RidePooler.class, poolRequest.getRidePoolerId());
@@ -232,7 +329,7 @@ public class  OwnerServiceImpl implements OwnerService{
     public List<RidePooler> allPoolRequests(int ownerId) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        List<PoolRequest> poolRequests = session.createQuery("from PoolRequest", PoolRequest.class).list();
+        List<PoolRequest> poolRequests = session.createQuery("from PoolRequest PR where PR.isSeen = false", PoolRequest.class).list();
         List<RidePooler> requiredList = new ArrayList<>();
         for(PoolRequest poolRequest : poolRequests) {
             if(!poolRequest.getSeen()){
@@ -253,7 +350,7 @@ public class  OwnerServiceImpl implements OwnerService{
     public List<Ride> getAllRidesoFOwner(int ownerId) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        String  sql = "select * from ride where owner_id = " +ownerId;
+        String  sql = "select * from ride where owner_id = " + ownerId;
         SQLQuery query = session.createSQLQuery(sql);
         query.addEntity(Ride.class);
         List result = query.list();

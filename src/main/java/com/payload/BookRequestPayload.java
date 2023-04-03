@@ -1,6 +1,7 @@
 package com.payload;
 
 
+import java.sql.Timestamp;
 
 public class BookRequestPayload {
     private int rideId;
@@ -9,12 +10,12 @@ public class BookRequestPayload {
     private String start;
     private String end;
 
-    private String dateOfJourney;
+    private long dateOfJourney;
 
     public BookRequestPayload() {
     }
 
-    public BookRequestPayload(int rideId, int poolerId, String start, String end, String dateOfJourney) {
+    public BookRequestPayload(int rideId, int poolerId, String start, String end, long dateOfJourney) {
         this.rideId = rideId;
         this.poolerId = poolerId;
         this.start = start;
@@ -22,11 +23,11 @@ public class BookRequestPayload {
         this.dateOfJourney = dateOfJourney;
     }
 
-    public String getDateOfJourney() {
+    public long getDateOfJourney() {
         return dateOfJourney;
     }
 
-    public void setDateOfJourney(String dateOfJourney) {
+    public void setDateOfJourney(long dateOfJourney) {
         this.dateOfJourney = dateOfJourney;
     }
 

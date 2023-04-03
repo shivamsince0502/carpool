@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "ride_pooler")
@@ -32,6 +34,16 @@ public class RidePooler {
     @Column(name = "end_id")
     private int endCityId;
 
+    @Column (name = "ride_date")
+    private Timestamp rideDate;
+
+    public Timestamp getRideDate() {
+        return rideDate;
+    }
+
+    public void setRideDate(Timestamp rideDate) {
+        this.rideDate = rideDate;
+    }
 
     public int getRidePoolerId() {
         return ridePoolerId;
@@ -92,7 +104,7 @@ public class RidePooler {
 
 
 
-    public RidePooler(int ridePoolerId, int rideId, int poolerId, int seatNo, Boolean isActive, int startCityId, int endCityId) {
+    public RidePooler(int ridePoolerId, int rideId, int poolerId, int seatNo, Boolean isActive, int startCityId, int endCityId, Timestamp rideDate) {
         this.ridePoolerId = ridePoolerId;
         this.rideId = rideId;
         this.poolerId = poolerId;
@@ -100,5 +112,6 @@ public class RidePooler {
         this.isActive = isActive;
         this.startCityId = startCityId;
         this.endCityId = endCityId;
+        this.rideDate = rideDate;
     }
 }
